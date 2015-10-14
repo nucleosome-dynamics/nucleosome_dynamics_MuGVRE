@@ -1,0 +1,9 @@
+cores	20
+f1	/home/rilla/scratch/nucleosome_dynamics/bam_out/120502_SN365_B_L002_GGM-34.bam
+f2	/home/rilla/scratch/nucleosome_dynamics/bam_out/120502_SN365_B_L002_GGM-35.bam
+type1	paired
+type2	paired
+nucleR	trim	60
+nucleR	hthresh	0.7
+NucDyn	combined	F
+NucDyn	roundPow	7
