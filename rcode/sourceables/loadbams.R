@@ -5,11 +5,12 @@
 
 library(IRanges)
 library(GenomicRanges)
-#library(ShortRead)
 library(Rsamtools)
-SOURCE.DIR <- paste0("/orozco/scratch/xesh0/orozco/rilla/nucleosome_dynamics",
-                     "/webserver/sourced_funs")
-source(paste(SOURCE.DIR, "helperfuns.R", sep="/"))
+
+SOURCE.DIR <- "/home/rilla/nucleServ/rcode/sourceables"
+source(paste(SOURCE.DIR,
+             "helperfuns.R",
+             sep="/"))
 
 loadSingleBam <- function(exp)
 {

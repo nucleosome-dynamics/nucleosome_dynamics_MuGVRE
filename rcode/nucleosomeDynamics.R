@@ -3,11 +3,15 @@
 ## Imports ####################################################################
 
 library(getopt)
-library(NucDynDev)
-SOURCE.DIR <- paste0("/orozco/scratch/xesh0/orozco/rilla/nucleosome_dynamics",
-                     "/webserver/sourced_funs")
-source(paste(SOURCE.DIR, "helperfuns.R", sep="/"))
-source(paste(SOURCE.DIR, "loadbams.R", sep="/"))
+library(NucDyn)
+
+SOURCE.DIR <- "/home/rilla/nucleServ/rcode/sourceables"
+source(paste(SOURCE.DIR,
+             "helperfuns.R",
+             sep="/"))
+source(paste(SOURCE.DIR,
+             "loadbams.R",
+             sep="/"))
 
 ## Parameters and Arguments ###################################################
 
@@ -58,6 +62,46 @@ if (is.null(params$rangeStart) || is.null(params$rangeEnd)) {
 if (is.null(params$maxDiff)) {
     params$maxDiff <- params$readSize/2
 }
+
+#> #> #> #> #> #>
+
+params_ <- list(maxLen         = as.integer(170),
+                equalSize      = FALSE,
+                roundPow       = as.integer(7),
+                readSize       = as.integer(140),
+                maxDiff        = as.integer(70),
+                rangeStart     = NULL,
+                rangeEnd       = NULL,
+                chr            = NULL,
+                combined       = FALSE,
+                same.magnitude = as.integer(2),
+                threshold      = "60%",
+                ARGS           = character(0),
+                input1         = paste0("/orozco/services/R-data/tmp",
+                                        "/120502_SN365_B_L002_GGM-34.RData"),
+                input2         = paste0("/orozco/services/R-data/tmp",
+                                        "/120502_SN365_B_L002_GGM-35.RData"),
+                output         = paste0("/orozco/services/R-data/output",
+                                        "/120502_SN365_B_L002_GGM-",
+                                        "34_120502_SN365_B_L002_GGM-35.gff"),
+                mc.cores       = as.integer(1))
+
+#> #> #> #> #> #>
+
+##params <- params_
+#for (x in names(params)) {
+#    a <- params[[x]]
+#    a_ <- params_[[x]]
+#    if (!identical(a, a_)) {
+#        print(x)
+#        cat(paste(a, class(a), "\n"))
+#        cat(paste(a_, class(a_), "\n"))
+#        cat("\n")
+#    }
+#}
+#q('no')
+
+#params <- params_
 
 ## Pipeline Itself ############################################################
 

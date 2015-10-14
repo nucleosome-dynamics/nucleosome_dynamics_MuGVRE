@@ -7,11 +7,14 @@ library(htSeqTools)
 library(nucleR)
 library(IRanges)
 library(GenomicRanges)
-library(multicore)
-SOURCE.DIR <- paste0("/orozco/scratch/xesh0/orozco/rilla/nucleosome_dynamics",
-                     "/webserver/sourced_funs")
-source(paste(SOURCE.DIR, "helperfuns.R", sep="/"))
-source(paste(SOURCE.DIR, "loadbams.R", sep="/"))
+
+SOURCE.DIR <- "/home/rilla/nucleServ/rcode/sourceables"
+source(paste(SOURCE.DIR,
+             "helperfuns.R",
+             sep="/"))
+source(paste(SOURCE.DIR,
+             "loadbams.R",
+             sep="/"))
 
 ## Parameters and Arguments ###################################################
 
