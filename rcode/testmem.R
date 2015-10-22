@@ -63,6 +63,11 @@ if (is.null(params$maxDiff)) {
     params$maxDiff <- params$readSize/2
 }
 
+#> #> #> #> #> #>
+
+
+#> #> #> #> #> #>
+
 ## Pipeline Itself ############################################################
 
 r1 <- get(load(params$input1))

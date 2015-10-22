@@ -1,8 +1,15 @@
 #!/usr/bin/python3.4
 
+"""
+Miscellanius helper functions
+"""
+
 ###############################################################################
 
 import os
+import subprocess
+
+from defaults import DEFAULT_OPTS
 
 ###############################################################################
 
@@ -13,7 +20,7 @@ def mkdir_p(d):
         pass
 
 
-def read_config(inf, default={"gen":{}, "nucleR":{}, "NucDyn":{}}):
+def read_config(inf, default={"gen": {}, "nucleR": {}, "NucDyn": {}}):
     """
     Read specified options in config_f
     """
@@ -69,7 +76,26 @@ def parse_exp_name(x):
 def flatten(xss):
     return [x for xs in xss for x in xs]
 
+
 def get_args_ls(d):
     return flatten((("--" + k, v) for k, v in d.items()))
+
+
+def get_opts(config_f):
+    """
+    Read and check the input optional arguments.
+    """
+    opts = read_config(config_f, DEFAULT_OPTS)
+    opts["nucleR"] = set_by(opts["nucleR"],
+                            ["dyadlength", "minoverlap"],
+                            "trim")
+    opts["NucDyn"] = set_by(opts["NucDyn"],
+                            ["maxDiff"],
+                            "readSize",
+                            lambda x: str(int(x)//2))
+    for k in ("NucDyn", "nucleR"):
+        opts[k] = rm_nones(opts[k])
+    check_non_optionals(opts["gen"])
+    return opts
 
 ###############################################################################

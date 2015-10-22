@@ -1,6 +1,7 @@
-cores	20
-f1	/home/rilla/scratch/nucleosome_dynamics/bam_out/120502_SN365_B_L002_GGM-34.bam
-f2	/home/rilla/scratch/nucleosome_dynamics/bam_out/120502_SN365_B_L002_GGM-35.bam
+wd	tmp_wd
+cores	1
+f1	120502_SN365_B_L002_GGM-34.bam
+f2	120502_SN365_B_L002_GGM-35.bam
 type1	paired
 type2	paired
 nucleR	trim	60
