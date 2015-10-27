@@ -13,8 +13,8 @@ RUN_R     = "/usr/bin/Rscript"
 LOAD_BAMS = "readBAM.R"
 NUCLER    = "nucleR.R"
 NUCDYN    = "nucleosomeDynamics.R"
-OUT_DIR   = "/orozco/services/R-data"
-IN_DIR    = "/orozco/services/R-data/in_bams"
+# OUT_DIR   = "/orozco/services/R-data"
+# IN_DIR    = "/orozco/services/R-data/in_bams"
 
 ###############################################################################
 

@@ -9,7 +9,6 @@ This will run nucleR and NucDyn on a pair of experiments
 
 import sys
 
-from defaults import OUT_DIR
 from helpers import get_opts, mkdir_p, get_args_ls
 from exp_methods import Experiment, nucleosome_dynamics
 
@@ -21,13 +20,12 @@ def main(config_f):
     opts = get_opts(config_f)
 
     # create the working directory where files will be stored
-    wd = "{0}/{1}".format(OUT_DIR, opts["gen"]["wd"])
-    mkdir_p(wd)
+    mkdir_p(opts["gen"]["wd"])
 
     # wrap the information for each experiment in an Experiment object
     exp1, exp2 = (Experiment(opts["gen"]["f{0}".format(i)],
                              opts["gen"]["type{0}".format(i)],
-                             wd)
+                             opts["gen"]["wd"])
                   for i in (1, 2))
 
     # run nucleR
@@ -37,7 +35,11 @@ def main(config_f):
 
     # run NucDyn
     nucdyn_optargs = get_args_ls(opts["NucDyn"])
-    nucleosome_dynamics(exp1, exp2, wd, opts["gen"]["cores"], *nucdyn_optargs)
+    nucleosome_dynamics(exp1,
+                        exp2,
+                        opts["gen"]["wd"],
+                        opts["gen"]["cores"],
+                        *nucdyn_optargs)
 
     return 0
 

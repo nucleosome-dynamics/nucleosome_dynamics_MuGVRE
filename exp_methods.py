@@ -11,7 +11,7 @@ Also contains a function to run NucDyn from two experiments
 import os
 import subprocess
 
-from defaults import RUN_R, RCODE, LOAD_BAMS, NUCLER, NUCDYN, IN_DIR
+from defaults import RUN_R, RCODE, LOAD_BAMS, NUCLER, NUCDYN
 from helpers import parse_exp_name
 
 ###############################################################################
@@ -28,9 +28,9 @@ class Experiment:
     def __init__(self, fname, type, out_dir, loaded=False):
         # experiments can be single-end or paired-end
         self.type = type
-        self.expname = parse_exp_name(fname)  # name of the experiment
         # path to the experiment bam file
-        self.bamfile = "{0}/{1}.bam".format(IN_DIR, self.expname)
+        self.bamfile = fname
+        self.expname = parse_exp_name(fname)  # name of the experiment
         # where to store the intermediate RData with the preprocessed data
         self.rdatafile = "{0}/{1}.RData".format(out_dir, self.expname)
         # output file for nucleR
