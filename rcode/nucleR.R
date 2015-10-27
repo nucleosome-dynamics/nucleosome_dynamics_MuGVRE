@@ -120,10 +120,10 @@ merged <- mergeCalls(scores,
                      min.overlap=params$min.overlap,
                      mc.cores=params$mc.cores)
 
-merged$type <- getType(merged$score_w,
-                       merged$score_h,
-                       params$score_w.thresh,
-                       params$score_h.thresh)
+merged$class <- getType(merged$score_w,
+                        merged$score_h,
+                        params$score_w.thresh,
+                        params$score_h.thresh)
 
 ## Store the Result ###########################################################
 

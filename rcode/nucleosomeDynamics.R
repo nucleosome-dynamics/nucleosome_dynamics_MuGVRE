@@ -87,6 +87,7 @@ hs <- findHotspots(dyn            = dyn,
                    same.magnitude = params$same.magnitude,
                    threshold      = params$threshold,
                    mc.cores       = params$mc.cores)
+names(hs)[names(hs) == "type"] <- "class"
 
 ## Store the Result ###########################################################
 
