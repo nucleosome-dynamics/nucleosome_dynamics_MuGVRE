@@ -9,47 +9,44 @@ This will run nucleR and NucDyn on a pair of experiments
 
 import sys
 
-from helpers import get_opts, mkdir_p, get_args_ls
+from helpers import parse_args, get_opts, mkdir_p, get_args_ls
 from exp_methods import Experiment, nucleosome_dynamics
 
-############################################################################### 
+###############################################################################
 
-def main(config_f):
-
+def main(config_f, calcs):
     # get the input arguments
     opts = get_opts(config_f)
 
+    wd = opts["gen"]["wd"]
+    cores = opts["gen"]["cores"]
+
     # create the working directory where files will be stored
-    mkdir_p(opts["gen"]["wd"])
+    mkdir_p(wd)
 
     # wrap the information for each experiment in an Experiment object
-    exp1, exp2 = (Experiment(opts["gen"]["f{0}".format(i)],
-                             opts["gen"]["type{0}".format(i)],
-                             opts["gen"]["wd"])
-                  for i in (1, 2))
+    exp1 = Experiment(opts["gen"]["f1"], opts["gen"]["type1"], wd)
+    exp2 = Experiment(opts["gen"]["f2"], opts["gen"]["type2"], wd)
 
-    # run nucleR
     nucleR_optargs = get_args_ls(opts["nucleR"])
-    for e in (exp1, exp2):
-        e.nucleR(opts["gen"]["cores"], *nucleR_optargs)
-
-    # run NucDyn
     nucdyn_optargs = get_args_ls(opts["NucDyn"])
-    nucleosome_dynamics(exp1,
-                        exp2,
-                        opts["gen"]["wd"],
-                        opts["gen"]["cores"],
-                        *nucdyn_optargs)
+
+    actions = {"preproc1": lambda: exp1.load(),
+               "preproc2": lambda: exp2.load(),
+               "nucleR1":  lambda: exp1.nucleR(cores, *nucleR_optargs),
+               "nucleR2":  lambda: exp2.nucleR(cores, *nucleR_optargs),
+               "nucdyn":   lambda: nucleosome_dynamics(exp1, exp2,
+                                                       wd, cores,
+                                                       *nucdyn_optargs)}
+    for c in calcs:
+        actions[c]()
 
     return 0
 
 ###############################################################################
 
 if __name__ == "__main__":
-    try:
-        sys.exit(main(sys.argv[1]))
-    except IndexError:
-        print("An input configuration file must be supplied")
-        sys.exit(1)
+    config_f, calcs = parse_args()
+    sys.exit(main(config_f, calcs))
 
-###############################################################################
+############################################################################### 
