@@ -1,4 +1,4 @@
-#!/opt/R-2.15.3/bin/Rscript
+#!/usr/bin/Rscript
 
 library(getopt)
 

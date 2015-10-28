@@ -1,4 +1,4 @@
-#!/opt/R-2.15.3/bin/Rscript
+#!/usr/bin/Rscript
 
 # Functions to load reads from a BAM file.
 # Can process either single-end or paired-end experiments
