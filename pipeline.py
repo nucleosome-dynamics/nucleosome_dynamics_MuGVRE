@@ -48,10 +48,6 @@ def main(config_f, calcs):
                "nucdyn":   nucDyn}
 
     for c in calcs:
-        print("---")
-        print(c)
-        print("---")
-        print()
         actions[c].go()
 
     return 0
