@@ -14,7 +14,7 @@ from defaults import RUN_R, RCODE, LOAD_BAMS, NUCLER, NUCDYN
 ###############################################################################
 
 def load(exp, wd):
-    subprocess.call([RUN_R, "{}/{}".format(RCODE, LOAD_BAMD),
+    subprocess.call([RUN_R, "{}/{}".format(RCODE, LOAD_BAMS),
                      "--type", exp.type,
                      "--input", exp.bamfile,
                      "--output", "{}/{}".format(wd, exp.rdatafile)])
