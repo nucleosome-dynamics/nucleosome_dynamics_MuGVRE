@@ -18,11 +18,17 @@ def read_info_file(f):
         done = set()
     return done
 
-
 def write_info_file(f, xs):
     with open(f, 'w') as fh:
         for x in xs:
             fh.write(x + '\n')
+
+def mkdir_p(d):
+    try:
+        os.makedirs(d)
+    except FileExistsError:
+        pass
+
 
 class Run:
     """

@@ -13,6 +13,29 @@ from defaults import RUN_R, RCODE, LOAD_BAMS, NUCLER, NUCDYN
 
 ###############################################################################
 
+def load(exp, wd):
+    subprocess.call([RUN_R, "{}/{}".format(RCODE, LOAD_BAMD),
+                     "--type", exp.type,
+                     "--input", exp.bamfile,
+                     "--output", "{}/{}".format(wd, exp.rdatafile)])
+
+def nucleR(exp, cores, wd, *args):
+    subprocess.call([RUN_R, "{}/{}".format(RCODE, NUCLER),
+                     "--input", "{}/{}".format(wd, exp.rdatafile),
+                     "--cores", cores,
+                     "--output", "{}/{}".format(wd, exp.nucler_out),
+                     "--type", exp.type] + list(args))
+
+def nucleosome_dynamics(exp1, exp2, wd, cores, *args):
+    fout = "{}/{}_{}.gff".format(wd, exp1.expname, exp2.expname)
+    cmd = [RUN_R, "{}/{}".format(RCODE, NUCDYN),
+           "--input1", "{}/{}".format(wd, exp1.rdatafile),
+           "--input2", "{}/{}".format(wd, exp2.rdatafile),
+           "--output", fout,
+           "--cores", cores] + list(args)
+    subprocess.call(cmd)
+
+
 class Calculation:
     """
     Class to wrap the different possible kinds of calculations and
@@ -46,13 +69,6 @@ class Load(Calculation):
     Load the experiment into an RData file.
     """
     def __init__(self, exp, id, run):
-
-        def load(exp, wd):
-            subprocess.call([RUN_R, "{}/{}".format(RCODE, LOAD_BAMD),
-                             "--type", exp.type,
-                             "--input", exp.bamfile,
-                             "--output", "{}/{}".format(wd, exp.rdatafile)])
-
         self.deps = []
         self.name = "preproc{}".format(id)
         self.run = run
@@ -64,14 +80,6 @@ class NucleR(Calculation):
     Run nucleR on an experiment
     """
     def __init__(self, exp, optargs, cores, id, run):
-
-        def nucleR(exp, cores, wd, *args):
-            subprocess.call([RUN_R, "{}/{}".format(RCODE, NUCLER),
-                             "--input", "{}/{}".format(wd, exp.rdatafile),
-                             "--cores", cores,
-                             "--output", "{}/{}".format(wd, exp.nucler_out),
-                             "--type", exp.type] + list(args))
-
         self.deps = ["preproc{}".format(id)]
         self.name = "nucleR{}".format(id)
         self.run = run
@@ -83,16 +91,6 @@ class NucDyn(Calculation):
     Run NucDyn on two Experiment objects
     """
     def __init__(self, exp1, exp2, optargs, cores, run):
-
-        def nucleosome_dynamics(exp1, exp2, wd, cores, *args):
-            fout = "{}/{}_{}.gff".format(wd, exp1.expname, exp2.expname)
-            cmd = [RUN_R, "{}/{}".format(RCODE, NUCDYN),
-                   "--input1", "{}/{}".format(wd, exp1.rdatafile),
-                   "--input2", "{}/{}".format(wd, exp2.rdatafile),
-                   "--output", fout,
-                   "--cores", cores] + list(args)
-            subprocess.call(cmd)
-
         self.deps = ["preproc1", "preproc2"]
         self.name = "nucdyn"
         self.run = run

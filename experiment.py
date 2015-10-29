@@ -6,15 +6,14 @@ Class that wraps the information of an experiment
 
 ###############################################################################
 
+def parse_exp_name(x):
+    return x.split('/')[-1].split('.')[0]
+
 class Experiment:
     """
     Class to represent an MNase-seq experiment for nucleosome positioning
     """
     def __init__(self, fname, type):
-
-        def parse_exp_name(x):
-            return x.split('/')[-1].split('.')[0]
-
         # experiments can be single-end or paired-end
         self.type = type
         # path to the experiment bam file

@@ -75,11 +75,6 @@ def parse_args():
 
 ###############################################################################
 
-def mkdir_p(d):
-    try:
-        os.makedirs(d)
-    except FileExistsError:
-        pass
 
 
 def read_config(inf, default={"gen": {}, "nucleR": {}, "NucDyn": {}}):
@@ -129,10 +124,6 @@ def check_non_optionals(d):
         print("Some non-optional parameters were not specified:")
         print("\t-", *unspecified)
         sys.exit(1)
-
-
-def parse_exp_name(x):
-    return x.split('/')[-1].split('.')[0]
 
 
 def flatten(xss):
