@@ -10,7 +10,10 @@ This will run nucleR and NucDyn on a pair of experiments
 import sys
 
 from helpers import parse_args, get_opts, get_args_ls
-from exp_methods import Experiment, Run, Load, NucleR, NucDyn
+
+from experiment import Experiment
+from calculations import Load, NucleR, NucDyn
+from run import Run
 
 ###############################################################################
 
