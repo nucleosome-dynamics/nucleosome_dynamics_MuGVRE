@@ -11,9 +11,9 @@ import sys
 
 from helpers import parse_args, get_opts, get_args_ls
 
-from experiment import Experiment
-from calculations import Load, NucleR, NucDyn
-from run import Run
+from classes.experiment import Experiment
+from classes.calculations import Load, NucleR, NucDyn
+from classes.run import Run
 
 ###############################################################################
 

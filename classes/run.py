@@ -6,9 +6,10 @@ Defition of a class that wraps the state of the whole pipeline
 
 ###############################################################################
 
-from helpers import mkdir_p
+import os
 
 ###############################################################################
+
 
 def read_info_file(f):
     try:
