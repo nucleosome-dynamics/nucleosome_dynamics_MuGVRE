@@ -10,7 +10,7 @@ This will run nucleR and NucDyn on a pair of experiments
 import sys
 
 from helpers import parse_args, get_opts, mkdir_p, get_args_ls
-from exp_methods import Experiment, nucleosome_dynamics
+from exp_methods import Experiment, Load, NucleR, NucDyn
 
 ###############################################################################
 
@@ -31,15 +31,24 @@ def main(config_f, calcs):
     nucleR_optargs = get_args_ls(opts["nucleR"])
     nucdyn_optargs = get_args_ls(opts["NucDyn"])
 
-    actions = {"preproc1": lambda: exp1.load(),
-               "preproc2": lambda: exp2.load(),
-               "nucleR1":  lambda: exp1.nucleR(cores, *nucleR_optargs),
-               "nucleR2":  lambda: exp2.nucleR(cores, *nucleR_optargs),
-               "nucdyn":   lambda: nucleosome_dynamics(exp1, exp2,
-                                                       wd, cores,
-                                                       *nucdyn_optargs)}
+    info_file = wd + "/info.txt"
+
+    load1 = Load(exp1, 1, info_file)
+    load2 = Load(exp2, 2, info_file)
+
+    nucleR1 = NucleR(exp1, nucleR_optargs, cores, 1, info_file)
+    nucleR2 = NucleR(exp2, nucleR_optargs, cores, 2, info_file)
+
+    nucDyn = NucDyn(exp1, exp2, wd, nucdyn_optargs, cores, info_file)
+
+    actions = {"preproc1": load1,
+               "preproc2": load2,
+               "nucleR1":  nucleR1,
+               "nucleR2":  nucleR2,
+               "nucdyn":   nucDyn}
+
     for c in calcs:
-        actions[c]()
+        actions[c].run()
 
     return 0
 
@@ -49,4 +58,4 @@ if __name__ == "__main__":
     config_f, calcs = parse_args()
     sys.exit(main(config_f, calcs))
 
-############################################################################### 
+############################################################################## 

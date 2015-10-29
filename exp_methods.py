@@ -10,6 +10,7 @@ Also contains a function to run NucDyn from two experiments
 
 import os
 import subprocess
+import sys
 
 from defaults import RUN_R, RCODE, LOAD_BAMS, NUCLER, NUCDYN
 from helpers import parse_exp_name
@@ -25,7 +26,7 @@ class Experiment:
     """
     Class to represent an MNase-seq experiment for nucleosome positioning
     """
-    def __init__(self, fname, type, out_dir, loaded=False):
+    def __init__(self, fname, type, out_dir):
         # experiments can be single-end or paired-end
         self.type = type
         # path to the experiment bam file
@@ -35,36 +36,32 @@ class Experiment:
         self.rdatafile = "{0}/{1}.RData".format(out_dir, self.expname)
         # output file for nucleR
         self.nucler_out = "{0}/{1}.gff".format(out_dir, self.expname)
-        # flag to keep track of wheather the experiment has been loaded
-        # and processed into an RData
-        self.loaded = loaded
 
-    def load(self):
-        """
-        Load the experiment into an RData file. Do nothing if it's already
-        loaded.
-        """
-        if self.loaded:
-            pass
-        else:
-            subprocess.call([RUN_R, load_bams,
-                             "--type", self.type,
-                             "--input", self.bamfile,
-                             "--output", self.rdatafile])
-            self.loaded = True
-
-    def nucleR(self, cores, *args):
-        """
-        Run nucleR on that experiment
-        """
-        self.load()
-        subprocess.call([RUN_R, nucleR,
-                         "--input", self.rdatafile,
-                         "--cores", cores,
-                         "--output", self.nucler_out,
-                         "--type", self.type] + list(args))
 
 ###############################################################################
+
+
+def load(exp):
+    """
+    Load the experiment into an RData file. Do nothing if it's already
+    loaded.
+    """
+    subprocess.call([RUN_R, load_bams,
+                     "--type", exp.type,
+                     "--input", exp.bamfile,
+                     "--output", exp.rdatafile])
+
+
+def nucleR(exp, cores, *args):
+    """
+    Run nucleR on that experiment
+    """
+    subprocess.call([RUN_R, nucleR,
+                     "--input", exp.rdatafile,
+                     "--cores", cores,
+                     "--output", exp.nucler_out,
+                     "--type", exp.type] + list(args))
+
 
 def nucleosome_dynamics(exp1, exp2, out_dir, cores, *args):
     """
@@ -82,3 +79,71 @@ def nucleosome_dynamics(exp1, exp2, out_dir, cores, *args):
     subprocess.call(cmd)
 
 ###############################################################################
+
+def read_info_file(f):
+    try:
+        with open(f) as fh:
+            done = set(line.strip() for line in fh)
+    except FileNotFoundError:
+        done = set()
+    return done
+
+def write_info_file(f, x):
+    done = read_info_file(f)
+    if not x in done:
+        with open(f, 'w') as fh:
+            fh.write(x + "\n")
+
+class Calculation:
+    """
+    Class to wrap the different possible kinds of calculations and
+    ensure that things are only run once their calculation dependencies
+    are met
+    """
+    def __init__(self, action, deps, log_f, calc_type, id=1):
+        self.action = action
+        self.deps = deps
+        self.name = "{}{}".format(calc_type, id)
+        self.log_f = log_f
+
+    def run(self):
+        if self.check_deps(self.log_f):
+            self.action()
+            write_info_file(self.log_f, self.name)
+        else:
+            print(("cannot run '{}' because at least one requiered " +
+                   "step have not been performed").format(self.name))
+            print("required steps:")
+            for d in self.deps:
+                print("\t" + d)
+            sys.exit(1)
+
+    def check_deps(self, f):
+        done = read_info_file(self.log_f)
+        return all((d in done for d in self.deps))
+
+
+class Load(Calculation):
+    def __init__(self, exp, id, log_f):
+        self.action = lambda: load(exp)
+        self.deps = []
+        self.name = "load{}".format(id)
+        self.log_f = log_f
+
+
+class NucleR(Calculation):
+    def __init__(self, exp, optargs, cores, id, log_f):
+        self.action = lambda: nucleR(exp, cores, *optargs)
+        self.deps = ["load{}".format(id)]
+        self.name = "nucleR{}".format(id)
+        self.log_f = log_f
+
+
+class NucDyn(Calculation):
+    def __init__(self, exp1, exp2, wd, optargs, cores, log_f):
+        self.action = lambda: nucleosome_dynamics(exp1, exp2,
+                                                  wd, cores,
+                                                  *optargs)
+        self.deps = ["load1", "load2"]
+        self.name = "NucDyn"
+        self.log_f = log_f
