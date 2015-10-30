@@ -27,11 +27,14 @@ def nucleR(exp, cores, wd, *args):
                      "--type", exp.type] + list(args))
 
 def nucleosome_dynamics(exp1, exp2, wd, cores, *args):
-    fout = "{}/{}_{}.gff".format(wd, exp1.expname, exp2.expname)
+    out_name = "{}/{}_{}".format(wd, exp1.expname, exp2.expname)
+    fout_gff = out_name + ".gff"
+    fout_rdata = out_name + ".RData"
     cmd = [RUN_R, "{}/{}".format(RCODE, NUCDYN),
            "--input1", "{}/{}".format(wd, exp1.rdatafile),
            "--input2", "{}/{}".format(wd, exp2.rdatafile),
-           "--output", fout,
+           "--outputGff", fout_gff,
+           "--outputRData", fout_rdata,
            "--cores", cores] + list(args)
     subprocess.call(cmd)
 

@@ -29,7 +29,8 @@ defaults <- list(maxLen         = 170,
 
 spec <- matrix(c("input1",         "a", 1, "character",
                  "input2",         "b", 1, "character",
-                 "output",         "c", 1, "character",
+                 "outputGff",      "c", 1, "character",
+                 "outputRData",    "p", 1, "character",
                  "cores",          "d", 1, "integer",
                  "maxLen",         "e", 1, "integer",
                  "equalSize",      "f", 1, "logical",
@@ -78,6 +79,9 @@ dyn <- nucleosomeDynamics(setA      = r1,
                           maxDiff   = params$maxDiff,
                           mc.cores  = params$mc.cores)
 
+# store dynamics for plotting
+save(dyn, file=params$outputRData)
+
 message("finding hotspots")
 hs <- findHotspots(dyn            = dyn,
                    range          = params$range,
@@ -98,7 +102,7 @@ message("saving output as gff")
 writeGff(df2gff(hs,
                 source="NucleosomeDynamics",
                 feature="Nucleosome change"),
-         params$output)
+         params$outputGff)
 message("done")
 
 ###############################################################################
