@@ -13,8 +13,7 @@ RUN_R     = "/usr/bin/Rscript"
 LOAD_BAMS = "readBAM.R"
 NUCLER    = "nucleR.R"
 NUCDYN    = "nucleosomeDynamics.R"
-# OUT_DIR   = "/orozco/services/R-data"
-# IN_DIR    = "/orozco/services/R-data/in_bams"
+PLOT      = "plot.R"
 
 ###############################################################################
 
@@ -49,6 +48,7 @@ DEFAULT_OPTS = {# General options
                            "rangeStart":     None,
                            "rangeEnd":       None,
                            "chr":            None,
+                           "nuc.width":      "120",
                            "combined":       "TRUE",
                            "same.magnitude": "2",
                            "threshold":      "60%"}}

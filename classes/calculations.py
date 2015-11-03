@@ -9,22 +9,26 @@ Definitions of some classes to represent different calculations
 import subprocess
 import sys
 
-from defaults import RUN_R, RCODE, LOAD_BAMS, NUCLER, NUCDYN
+from defaults import RUN_R, RCODE, LOAD_BAMS, NUCLER, NUCDYN, PLOT
 
 ###############################################################################
 
 def load(exp, wd):
+    output = "{}/{}".format(wd, exp.rdatafile)
     subprocess.call([RUN_R, "{}/{}".format(RCODE, LOAD_BAMS),
                      "--type", exp.type,
                      "--input", exp.bamfile,
-                     "--output", "{}/{}".format(wd, exp.rdatafile)])
+                     "--output", output])
+    return output
 
 def nucleR(exp, cores, wd, *args):
+    output = "{}/{}".format(wd, exp.nucler_out)
     subprocess.call([RUN_R, "{}/{}".format(RCODE, NUCLER),
                      "--input", "{}/{}".format(wd, exp.rdatafile),
                      "--cores", cores,
-                     "--output", "{}/{}".format(wd, exp.nucler_out),
+                     "--output", output,
                      "--type", exp.type] + list(args))
+    return output
 
 def nucleosome_dynamics(exp1, exp2, wd, cores, *args):
     out_name = "{}/{}_{}".format(wd, exp1.expname, exp2.expname)
@@ -37,6 +41,20 @@ def nucleosome_dynamics(exp1, exp2, wd, cores, *args):
            "--outputRData", fout_rdata,
            "--cores", cores] + list(args)
     subprocess.call(cmd)
+    return fout_gff, fout_rdata
+
+def plot_dyn(exp1, exp2, wd, chr, start, end):
+    base = "{}/{}_{}".format(wd, exp1.expname, exp2.expname)
+    in_name = "{}.RData".format(base)
+    out_name = "{}_{}_{}-{}.png".format(base, chr, start, end)
+    cmd = [RUN_R, "{}/{}".format(RCODE, PLOT),
+           "--input", in_name,
+           "--output", out_name,
+           "--start", str(start),
+           "--end", str(end),
+           "--chr", chr]
+    subprocess.call(cmd)
+    return out_name
 
 
 class Calculation:
@@ -53,8 +71,9 @@ class Calculation:
 
     def go(self):
         if self.check_deps():
-            self.action()
+            out = self.action()
             self.run.add(self.name)
+            return out
         else:
             print(("cannot run '{}' because at least one requiered " +
                    "step have not been performed").format(self.name))
@@ -100,5 +119,18 @@ class NucDyn(Calculation):
         self.action = lambda: nucleosome_dynamics(exp1, exp2,
                                                   self.run.wd, cores,
                                                   *optargs)
+
+
+class Plot(Calculation):
+    """
+    Plot NucDyn for a region of the genome
+    """
+    def __init__(self, exp1, exp2, chr, start, end, run):
+        self.deps = ["nucdyn"]
+        self.run = run
+        self.name = "plot_{}_{}-{}".format(chr, start, end)
+        self.action = lambda: plot_dyn(exp1, exp2,
+                                       self.run.wd,
+                                       chr, start, end)
 
 ###############################################################################
