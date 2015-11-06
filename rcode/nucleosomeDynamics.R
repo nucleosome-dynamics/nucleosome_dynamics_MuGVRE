@@ -9,9 +9,6 @@ SOURCE.DIR <- "/home/rilla/nucleServ/rcode/sourceables"
 source(paste(SOURCE.DIR,
              "helperfuns.R",
              sep="/"))
-source(paste(SOURCE.DIR,
-             "loadbams.R",
-             sep="/"))
 
 ## Parameters and Arguments ###################################################
 
@@ -82,7 +79,9 @@ dyn <- nucleosomeDynamics(setA      = r1,
                           mc.cores  = params$mc.cores)
 
 # store dynamics for plotting
-save(dyn, file=params$outputRData)
+plotable <- makePlotable(dyn)
+save(plotable, file=params$outputRData)
+#save(dyn, file=params$outputRData)
 
 message("finding hotspots")
 hs <- findHotspots(dyn            = dyn,

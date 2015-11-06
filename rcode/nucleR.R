@@ -12,9 +12,6 @@ SOURCE.DIR <- "/home/rilla/nucleServ/rcode/sourceables"
 source(paste(SOURCE.DIR,
              "helperfuns.R",
              sep="/"))
-source(paste(SOURCE.DIR,
-             "loadbams.R",
-             sep="/"))
 
 ## Parameters and Arguments ###################################################
 

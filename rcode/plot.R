@@ -1,7 +1,6 @@
 #!/usr/bin/Rscript
 
 library(getopt)
-library(NucDyn)
 
 spec <- matrix(c("input",  "i", 1, "character",
                  "output", "o", 1, "character",
@@ -21,12 +20,19 @@ if (any(!spec[, 1] %in% names(args))) {
     q("no")
 }
 
-png(filename=args[["output"]],
-    width=1000,
-    height=500)
-with(args,
-     plotDynamics(get(load(input)),
-                  chr=chr,
-                  plot.range=c(start, end),
-                  main=""))
+SOURCE.DIR <- "/home/rilla/nucleServ/rcode/sourceables"
+source(paste(SOURCE.DIR,
+             "plot_subset.R",
+             sep="/"))
+source(paste(SOURCE.DIR,
+             "make_plot.R",
+             sep="/"))
+
+library(IRanges)
+
+dyn <- get(load(args$input))
+subdyn <- subsetDyn(dyn, args$chr, args$start, args$end)
+
+png(filename=args[["output"]], width=1000, height=500)
+makePlot(subdyn, args$start, args$end)
 dev.off()

@@ -134,3 +134,24 @@ checkOutF <- function(f)
         stop("An output file must be specified")
     }
 }
+
+makePlotable <- function(dyn)
+{
+    message("building structure to be saved for future plotting")
+
+    useful.types <- c("originals", "right.shifts", "left.shifts", "indels")
+    chrs <- unique(unlist(lapply(seqnames(set.a(dyn)), levels)))
+
+    lapply(
+        list(set.a(dyn), set.b(dyn)),
+        function(set) {
+            by.chrs <- lapply(
+                chrs,
+                function(chr)
+                    as.list(ranges(set[seqnames(set) == chr, ])[useful.types])
+            )
+            names(by.chrs) <- chrs
+            by.chrs
+        }
+    )
+}
