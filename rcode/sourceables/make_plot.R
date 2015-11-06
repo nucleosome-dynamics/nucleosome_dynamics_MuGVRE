@@ -4,17 +4,14 @@ library(IRanges)
 
 makePlot <- function(dyn, plot.start, plot.end)
 {   # Given an already subsetted dynamic, and its start and end, plot it
-    covs <- lapply(dyn,
-                   function(x) coverage(x$originals))
 
-    indel.covs <- lapply(dyn,
-                         function(x) coverage(x$indels))
+    initPlot(x0 = plot.start,
+             y0 = 0,
+             x1 = plot.end,
+             y1 = getMaxVal(dyn))
 
-    initPlot(c(plot.start, plot.end),
-             c(0, max(unlist(lapply(covs, as.vector)))))
-
-    addCovs(covs[[1]], covs[[2]])
-    addIndels(indel.covs[[1]], indel.covs[[2]])
+    addCovs(dyn[[1]]$originals, dyn[[2]]$originals)
+    addIndels(dyn[[1]]$indels, dyn[[2]]$indels)
 
     par.usr <- par("usr")
     par.ypc <- (par.usr[4] - par.usr[3]) / 100
@@ -28,119 +25,98 @@ makePlot <- function(dyn, plot.start, plot.end)
              dyn[[2]]$right.shifts,
              middle,
              par.ypc)
+
+    makeLegend()
 }
 
-initPlot <- function(xlim, ylim)
+getMaxVal <- function(xs)
+    # Get the maximum value that will be plotted
+    max(unlist(lapply(xs, function(x) as.vector(coverage(x$originals)))))
+
+initPlot <- function(x0, y0, x1, y1)
     # Initiate an empty plot with the specified size
     plot(1,
          type='n',
-         xlim=xlim,
-         ylim=ylim,
+         xlim=c(x0, x1),
+         ylim=c(y0, y1),
          xlab="",
          ylab="",
          main="")
 
-addCovs <- function(cov1, cov2)
+addCovs <- function(x, y)
 {   # Plot coverages for the first and second experiment.
     # First experiment will be plotted as a grey area, and second experiment
     # wil be plotted as a black dotted line.
-    lines(cov1, col="grey", type='h', lty=1, lwd=2)
-    lines(cov2, col="black", lty=3, lwd=2)
-
-    legend("topleft",
-           c(paste("Ref1"), paste("Ref2")),
-           col=c("grey", "black"),
-           lty=c(1,3),
-           lwd=c(3,3),
-           bty="n",
-           cex=0.8)
+    lines(coverage(x), col="grey", type='h', lty=1, lwd=2)
+    lines(coverage(y), col="black", lty=3, lwd=2)
 }
 
-addIndels <- function(del.cov, ins.cov)
+addIndels <- function(del, ins)
 {   # Plot the coverages for insertions and delitons.
     # Insertions will be plotted as a green area and deletions as a red one.
-    lines(del.cov, type='h', lwd=2, col="red")
-    lines(ins.cov, type='h', lwd=2, col="green")
-
-    legend("topleft",
-           c("", "",
-             "Inserted reads",
-             "Removed reads"),
-           col=c(NA, NA,
-                 "green", "red"),
-           lty=c(NA, NA, 1, 1),
-           lwd=c(NA, NA, 3, 3),
-           bty="n",
-           cex=0.8)
+    lines(coverage(del), type='h', lwd=2, col="red")
+    lines(coverage(ins), type='h', lwd=2, col="green")
 }
 
 dyadPos <- function(ran)
     # Find the center points of an IRanges
     round((start(ran) + end(ran)) / 2)
 
+addShifts <- function(xs, ys, middle, par.ypc, col, fromMid)
+{   # Add shifts
+    start <- dyadPos(xs)
+    end <- dyadPos(ys)
 
-parseShifts <- function(x, y)
-    # Helper function to compare pairs of shifts and put them in an
-    # easily plotable format
-    IRanges(start=dyadPos(x),
-            end=dyadPos(x) + abs(dyadPos(y) - dyadPos(x)))
+    db <- disjointBins(IRanges(start = mapply(min, start, end),
+                               end   = mapply(max, start, end)))
 
-addLeft <- function(lefts1, lefts2, middle, par.ypc)
-{   # Plot the upstream shifts as dark red arrows
-    left.shifts <- parseShifts(lefts1, lefts2)
-    db.left <- disjointBins(left.shifts)
+    vpos <- fromMid(middle, par.ypc*db)
 
-    for (i in seq_along(left.shifts)) {
-        x1 <- end(left.shifts)[i]
-        y1 <- middle - par.ypc*db.left[i]
-        x2 <- start(left.shifts)[i]
-        y2 <- middle - par.ypc*db.left[i]
-
-        arrows(x1, y1, x2, y2,
-               length=0.05,
-               col="darkred",
-               angle=30,
-               code=2,
-               lwd=1)
-    }
-
-    legend("topleft",
-           c("", "", "", "",
-             "Upstream shift"),
-           col=c(NA, NA, NA, NA,
-                 "darkred"),
-           lty=c(NA, NA, NA, NA, 1),
-           lwd=c(NA, NA, NA, NA, 3),
-           bty="n",
-           cex=0.8)
+    arrows(x0     = start,
+           y0     = vpos,
+           x1     = end,
+           y1     = vpos,
+           length = 0.05,
+           col    = col,
+           angle  = 30,
+           code   = 2,
+           lwd    = 1)
 }
 
-addRight <- function(rights1, rights2, middle, par.ypc)
-{   # Plot the downstream arrows as dark blue arrows
-    right.shifts <- parseShifts(rights1, rights2)
-    db.right <- disjointBins(right.shifts)
+addLeft <- function(xs, ys, middle, par.ypc)
+    # Add left shifts
+    addShifts(xs        = xs,
+              ys        = ys,
+              middle    = middle,
+              par.ypc   = par.ypc,
+              col       = "darkred",
+              fromMid   = `-`)
 
-    for (i in seq_along(right.shifts)) {
-        x1 <- start(right.shifts)[i]
-        y1 <- middle + par.ypc*db.right[i]
-        x2 <- end(right.shifts)[i]
-        y2 <- middle + par.ypc*db.right[i]
+addRight <- function(xs, ys, middle, par.ypc)
+    # Add right shifts
+    addShifts(xs        = xs,
+              ys        = ys,
+              middle    = middle,
+              par.ypc   = par.ypc,
+              col       = "darkblue",
+              fromMid   = `+`)
 
-        arrows(x1, y1, x2, y2,
-               length=0.05,
-               col="darkblue",
-               angle=30,
-               code=2,
-               lwd=1)
-    }
-
+makeLegend <- function()
+    # Add a legend
     legend("topleft",
-           c("", "", "", "", "",
-             "Downstream shift"),
-           col=c(NA, NA, NA, NA, NA,
-                 "darkblue"),
-           lty=c(NA, NA, NA, NA, NA, 1),
-           lwd=c(NA, NA, NA, NA, NA, 3),
-           bty="n",
-           cex=0.8)
-}
+           legend = c("Coverage 1",
+                      "Coverage 2",
+                      "Inserted reads",
+                      "Removed reads",
+                      "Upstream shifts",
+                      "Downstream shifts"),
+           col    = c("grey",
+                      "black",
+                      "green",
+                      "red",
+                      "darkred",
+                      "darkblue"),
+           lty    = c(1, 3, 1, 1, 1, 1),
+           lwd    = 3,
+           bty    = "n",
+           0.8)
