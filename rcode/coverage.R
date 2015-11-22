@@ -13,22 +13,13 @@ source(paste(SOURCE.DIR,
              "helperfuns.R",
              sep="/"))
 
-tobig.bin <- "/home/rilla/nucleServ/wig_utils/wigToBigWig"
-chrom.sizes.f <- "/home/rilla/nucleServ/wig_utils/sacCer3.chrom.sizes"
-
-#params$output <- "/orozco/services/Rdata/tmp_wd/120502_SN365_B_L002_GGM-34.bw"
-#params$mc.cores <- 1
-#params$input <- "/orozco/services/Rdata/tmp_wd/120502_SN365_B_L002_GGM-34.RData"
-#params$type <- "paired"
-
-
 ## Parameters and Arguments ###################################################
 
 defaults <- list(type           = NULL,
                  fdrOverAmp     = 0.05,
                  components     = 1,
                  fragmentLen    = NULL,
-                 trim           = 50,
+                 trim           = 50)
 
 spec <- matrix(c("input",       "a", 1, "character",
                  "output",      "b", 1, "character",
@@ -37,7 +28,7 @@ spec <- matrix(c("input",       "a", 1, "character",
                  "fdrOverAmp",  "d", 1, "double",
                  "components",  "f", 1, "integer",
                  "fragmentLen", "g", 1, "integer",
-                 "trim",        "h", 1, "integer")
+                 "trim",        "h", 1, "integer"),
                byrow=TRUE,
                ncol=4)
 args <- getopt(spec)
@@ -47,11 +38,6 @@ names(args) <- sub("cores", "mc.cores", names(args))
 params <- defaults
 for (i in names(args)) {
     params[[i]] <- args[[i]]
-}
-
-if (!grepl(".bw$", params$output)) {
-    message("Expected output is a big wig file")
-    q("no")
 }
 
 ## Pipeline Itself ############################################################
@@ -84,15 +70,7 @@ cover <- coverage.rpm(prep)
 
 ## Store the Result ###########################################################
 
-# we'll only save non-zero regions in our wig
-splited <- lapply(cover, splitAtZeros)
-
-wigf <- sub(".bw$", ".wig", params$output)
-
-message("writing wig file")
-writeWig(splited, wigf)
-message("converting to bigWig")
-system(paste(tobig.bin, wigf, chrom.sizes.f, params$out))
-file.remove(wigf)
+message("-- saving ", args[["output"]])
+save(cover, file=args[["output"]])
 
 ###############################################################################
