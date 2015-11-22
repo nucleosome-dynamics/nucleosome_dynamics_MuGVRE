@@ -65,7 +65,60 @@ if (is.null(params$min.overlap)) {
     params$min.overlap <- params$trim
 }
 
+###############################################################################
+
+towig.bin <- "/home/rilla/nucleServ/wig_utils/bigWigToWig"
+inf <- "/orozco/services/Rdata/tmp_wd/120502_SN365_B_L002_GGM-34.bw"
+
+wigf <- sub(".bw$", ".wig", inf)
+
+system(paste(towig.bin, inf, wigf))
+
+lines <- readLines(wigf)
+sep.idxs <- grep("^fixedStep", lines)
+
+vals <-  mapply(
+    function(i, j)
+        as.numeric(lines[i:j]),
+    sep.idxs + 1,
+    c(sep.idxs[-1] - 1, length(lines)),
+    SIMPLIFY=FALSE
+)
+
+ids <- lines[sep.idxs]
+
+xs <- unlist(strsplit(ids, " "))
+
+getVal <- function(xs, a)
+    sub(paste0(a, "="), "", grep(a, xs, value=TRUE))
+
+chrs <- getVal(xs, "chrom")
+pos <- as.numeric(getVal(xs, "start"))
+
+chroms <- unique(chrs)
+
+cov <- lapply(
+    chroms,
+    function(chr) {
+        chr.loc <- chrs == chr
+        chr.pos <- pos[chr.loc]
+        chr.vals <- vals[chr.loc]
+        max.pos <- max(chr.pos)
+        s <- max.pos + length(chr.vals[[which(chr.pos == max.pos)]]) - 1
+        x <- rep(0, s)
+        for (i in seq_along(chr.vals)) {
+            val.pos <- chr.pos[i]:(chr.pos[i] + length(chr.vals[[i]]) - 1)
+            x[val.pos] <- chr.vals[[i]]
+        }
+        Rle(x)
+    }
+)
+names(cov) <- chroms
+
 ## Pipeline Itself ############################################################
+
+params$input <- "/orozco/services/Rdata/tmp_wd/120502_SN365_B_L002_GGM-34.RData"
+params$mc.cores <- 1
 
 reads <- get(load(params$input))
 
