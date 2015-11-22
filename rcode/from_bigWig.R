@@ -2,6 +2,7 @@
 
 ## Imports ####################################################################
 
+library(getopt)
 library(IRanges)
 
 ## Parameters and Arguments ###################################################
@@ -31,12 +32,16 @@ args <- getopt(spec)
 
 wigf <- sub(".bw$", ".wig", args$input)
 
-system(paste(towig.bin, inf, wigf))
+message("running bigWigToWig")
+system(paste(towig.bin, args$input, wigf))
+message("loading wig file")
 lines <- readLines(wigf)
+message("removing temporary wig file from disk")
 file.remove(wigf)
 
 ## Parse the wig file into a list of Rle objects ##############################
 
+message("parsing lines from wig file")
 sep.idxs <- grep("^fixedStep", lines)
 
 vals <-  mapply(function(i, j) as.numeric(lines[i:j]),
@@ -68,7 +73,7 @@ cover <- lapply(
         for (i in seq_along(chr.vals)) {
             from <- chr.pos[i]
             to <- from + length(chr.vals[[i]]) - 1
-            x[from:to] <- chr.vals[i]
+            x[from:to] <- chr.vals[[i]]
         }
         Rle(x)
     }
@@ -77,6 +82,7 @@ names(cover) <- chroms
 
 ## Save as an RData ###########################################################
 
+message("stroing output as RData")
 save(cover, file=args[["output"]])
 
 ###############################################################################
