@@ -60,6 +60,44 @@ writeGff <- function(df, outpath) {
                 col.names=FALSE)
 }
 
+readGff <- function(fname)
+{
+    cols <- c("seqname",
+              "source",
+              "feature",
+              "start",
+              "end",
+              "score",
+              "strand",
+              "frame",
+              "attribute")
+
+    df <- read.table(fname,
+                     col.names=cols,
+                     stringsAsFactors=FALSE)
+
+    for (i in colnames(df)) {
+        if (all(df[[i]] == ".")) {
+            df[[i]] <- NULL
+        }
+    }
+    attrs <- df$attribute
+    df$attribute <- NULL
+
+    parseRowAttrs <- function(x) {
+        vals <- c()
+        for (kk in strsplit(x, "=")) {
+            vals[[kk[1]]] <- kk[2]
+        }
+        vals
+    }
+
+    cbind(df,
+          as.data.frame(do.call(rbind,
+                                lapply(strsplit(attrs, ";"),
+                                       parseRowAttrs))))
+}
+
 vectorizedAll <- function(...)
     # Helper function that behaves as a vectorized version of the function
     # `all`
@@ -154,4 +192,98 @@ makePlotable <- function(dyn)
             by.chrs
         }
     )
+}
+
+sortDfBy <- function(df, xs)
+    do.call(compose,
+            lapply(xs,
+                   flip2args(partial),
+                   orderBy))(df)
+
+## FP goodies #################################################################
+
+myFilter <- function(x, f, ...)
+    x[f(x, ...)]
+
+getFirstTx <- function(x, df)
+{
+    entries <- subset(df, GENEID == x)
+    f <- `[[`(list("+"=which.min,
+                   "-"=which.max),
+              unique(entries$TXSTRAND))
+    entries[f(entries$TXSTART), ]
+}
+
+partial <- function(f, ...)
+{
+    capture <- list(...)
+    function(x) do.call(f, c(list(x), capture))
+}
+
+compose <- function(...)
+{
+    comp2 <- function(f, g) {
+        force(f)
+        force(g)
+        function(x) f(g(x))
+    }
+    Reduce(comp2, list(...))
+}
+
+flip2args <- function(f)
+    function(x, y) f(y, x)
+
+orderBy <- function(df, x)
+    df[order(df[, x]), ]
+
+procFun <- function(f, g)
+{
+    force(f)
+    g(f)
+}
+
+subMany <- function (patterns, replacements, x)
+    do.call(compose,
+            mapply(function(p, r) {force(p)
+                                   force(r)
+                                   function(x) sub(p, r, x)},
+                   patterns,
+                   replacements
+    ))(x)
+
+###############################################################################
+
+.check.mc <- function (mc.cores) {
+    lib <- "parallel"
+    if (mc.cores > 1 && !lib %in% loadedNamespaces()) {
+        warning("'",
+                lib,
+                "' library not available, switching to m.cores=1")
+        return(1)
+    } else {
+        return(mc.cores)
+    }
+}
+
+xlapply <- function(X, FUN, ..., mc.cores=1)
+{   # Choose between lapply pr mclapply accordingly
+    actual.cores <- .check.mc(mc.cores)
+    if (actual.cores > 1) {
+        mclapply(X=X,
+                 FUN=FUN,
+                 ...=...,
+                 mc.cores=actual.cores)
+    } else {
+        lapply(X=X,
+               FUN=FUN,
+               ...=...)
+    }
+}
+
+updateVals <- function (df, vals)
+{
+    for (i in names(vals)) {
+        df[[i]] <- vals[[i]]
+    }
+    return(df)
 }

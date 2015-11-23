@@ -47,11 +47,17 @@ spec <- matrix(c("input",       "a", 1, "character",
                ncol=4)
 args <- getopt(spec)
 
-names(args) <- sub("cores", "mc.cores", names(args))
-names(args) <- sub("dyadlength", "dyad.length", names(args))
-names(args) <- sub("minoverlap", "min.overlap", names(args))
-names(args) <- sub("wthresh", "score_w.thresh", names(args))
-names(args) <- sub("hthresh", "score_h.thresh", names(args))
+names(args) <- subMany(c("cores",
+                         "dyadlength",
+                         "minoverlap",
+                         "wthresh",
+                         "hthresh"),
+                       c("mc.cores",
+                         "dyad.length",
+                         "min.overlap",
+                         "score_w.thresh",
+                         "score_h.thresh"),
+                       names(args))
 
 params <- defaults
 for (i in names(args)) {
