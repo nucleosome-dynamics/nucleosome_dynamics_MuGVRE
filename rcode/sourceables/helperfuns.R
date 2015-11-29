@@ -86,8 +86,8 @@ readGff <- function(fname)
 
     parseRowAttrs <- function(x) {
         vals <- c()
-        for (kk in strsplit(x, "=")) {
-            vals[[kk[1]]] <- kk[2]
+        for (x in strsplit(x, "=")) {
+            vals[[x[1]]] <- x[2]
         }
         vals
     }
@@ -287,3 +287,12 @@ updateVals <- function (df, vals)
     }
     return(df)
 }
+
+dyadPos <- function (x)
+    (start(x) + end(x))/2
+
+iterDf <- function(df, fun, ...)
+    lapply(1:nrow(df),
+           function(i) do.call(fun,
+                               c(unname(as.list(df[i, ])),
+                                 list(...))))

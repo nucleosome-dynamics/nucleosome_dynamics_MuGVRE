@@ -20,7 +20,7 @@ args <- getopt(spec)
 
 ## Do it ######################################################################
 
-cover <- readBigWig(args$)
+cover <- readBigWig(args$input)
 
 ## Save as an RData ###########################################################
 

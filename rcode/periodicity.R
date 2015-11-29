@@ -1,47 +1,38 @@
 #!/usr/bin/env Rscript
 
+## Imports ####################################################################
+
 library(IRanges)
 library(parallel)
 library(getopt)
 
 SOURCE.DIR <- "/home/rilla/nucleServ/rcode/sourceables"
-source(paste(SOURCE.DIR,
-             "helperfuns.R",
-             sep="/"))
+sourced <- c("helperfuns", "wig_funs", "get_genes")
+for (x in sourced) {
+    source(paste0(SOURCE.DIR, "/", x, ".R"))
+}
 
-spec <- matrix(c("calls",             "a", 1, "character",
-                 "genome",            "c", 1, "character",
-                 "output",            "d", 1, "character",
-                 "cores",             "e", 1, "integer"),
+## Parameters and Arguments ###################################################
+
+defaults <- list(period = 160)
+
+spec <- matrix(c("calls",       "a", 1, "character",
+                 "genome",      "c", 1, "character",
+                 "output",      "d", 1, "character",
+                 "cores",       "e", 1, "integer",
+                 "periodicity", "f", 1, "double"),
                byrow=TRUE,
                ncol=4)
 args <- getopt(spec)
 
-#genome.name <- "TxDb.Scerevisiae.UCSC.sacCer3.sgdGene"
-#calls.f <- "/orozco/services/Rdata/tmp_wd/120502_SN365_B_L002_GGM-34.gff"
-#out.f <- "/home/rilla/period.bw"
+names(args) <- subMany("cores", "mc.cores", names(args))
 
-# Periodic positioning of nucleosomes from p1.pos and last.pos
-
-period <- 165
-
-# Create coverage given a vector and a period
-ecov <- function(x, period)
-    (1 + sin(pi/2 + 2*pi/period*x)) * 0.8^(abs(x)/period)
-
-###############################################################################
-
-cleanExons <- function (df)
-{
-    dupls <- myFilter(df$GENEID, duplicated)
-    sortDfBy(rbind(subset(df,
-                          !GENEID %in% dupls),
-                   do.call(rbind,
-                           lapply(dupls,
-                                  getFirstTx,
-                                  df))),
-             c("TXCHROM", "TXSTART"))
+params <- defaults
+for (i in names(args)) {
+    params[[i]] <- args[[i]]
 }
+
+## Some function definitions ##################################################
 
 findFirstAndLast <- function(id, start, end, strand, dyads, chr)
 {
@@ -59,6 +50,9 @@ findFirstAndLast <- function(id, start, end, strand, dyads, chr)
         NULL
     }
 }
+
+ecov <- function (x, period)
+    (1 + sin(pi/2 + 2*pi/period*x)) * 0.8^(abs(x)/period)
 
 # Create a coverage for a gene given p1.pos and last.pos and their periodicity
 coverageChr <- function(nuc.start, nuc.end, nuc.length, strand, L, period)
@@ -90,58 +84,24 @@ coverageChr <- function(nuc.start, nuc.end, nuc.length, strand, L, period)
     cov
 }
 
-splitAtZeros <- function (xs)
-{
-    xs <- as.vector(xs)
-    counts <- rle(xs != 0)
+## Load inputs ################################################################
 
-    jdxs <- cumsum(counts$length)
-    idxs <- c(1, jdxs[-length(jdxs)] + 1)
-
-    by.kinds <- mapply(function(i, j) xs[i:j],
-                       idxs, jdxs,
-                       SIMPLIFY=FALSE)
-    names(by.kinds) <- idxs
-    return(by.kinds[counts$values])
-}
-
-writeWig <- function (x, outf)
-{
-    tag.rows <- unlist(lapply(names(x),
-                              function(chr)
-                                  paste("fixedStep",
-                                        paste0("chrom=", chr),
-                                        paste0("start=", names(x[[chr]])),
-                                        "step=1",
-                                        sep=" ")))
-    vals <- unlist(x, recursive=FALSE)
-    idx <- order(c(seq_along(tag.rows), seq_along(vals)))
-    cat(unlist(c(tag.rows, vals)[idx]),
-        sep="\n",
-        file=outf)
-}
-
-message("loading genome")
-library(args$genome, character.only=TRUE)
-genome <- get(args$genom)
-
-genes <- cleanExons(suppressWarnings(select(genome,
-                                            keys=keys(genome),
-                                            columns=c("TXSTART",
-                                                      "TXEND",
-                                                      "TXCHROM",
-                                                      "TXSTRAND"),
-                                            keytype="GENEID")))
-
+message("loading genes")
+genes <- readGenome(params$genome,
+                    cols=c("TXSTART",
+                           "TXEND",
+                           "TXCHROM",
+                           "TXSTRAND"))
 message("reading calls")
-calls.df <- readGff(args$calls)
+calls.df <- readGff(params$calls)
 calls.rd <- with(calls.df,
                  RangedData(space=seqname,
                             range=IRanges(start=start,
                                           end=end)))
 
-chroms <- unique(genes$TXCHROM)
+## Do it ######################################################################
 
+chroms <- unique(genes$TXCHROM)
 message("identifying first and last nucleosomes")
 genes.by.chr <- lapply(chroms,
                        function (chr) subset(genes,
@@ -170,7 +130,7 @@ genes.nucs$nuc.length <- abs(genes.nucs$last - genes.nucs$first)
 
 # Compute Coverage for all genome
 message("calculating theoretic coverage")
-covPredAll <- mclapply(
+covPredAll <- xlapply(
     chroms,
     function (chr)
         do.call(coverageChr,
@@ -181,12 +141,15 @@ covPredAll <- mclapply(
                                                  "nuc.length",
                                                  "strand")))),
                   chr.lens[[chr]] + 500,
-                  period)),
-    mc.cores=1
+                  params$period)),
+    mc.cores=params$mc.cores
 )
 names(covPredAll) <- chroms
 
-message("writting wig output")
+## Store output ###############################################################
+
+message("writting bigWig output")
 splited <- lapply(covPredAll, splitAtZeros)
-wigf <- sub(".bw$", ".wig", args$output)
-writeWig(splited, wigf)
+writeBigWig(splited, params$output, params$genome)
+
+###############################################################################

@@ -9,12 +9,10 @@ library(htSeqTools)
 library(nucleR)
 
 SOURCE.DIR <- "/home/rilla/nucleServ/rcode/sourceables"
-source(paste(SOURCE.DIR,
-             "helperfuns.R",
-             sep="/"))
-source(paste(SOURCE.DIR,
-             "nucleosome_patterns.R",
-             sep="/"))
+sourced <- c("helperfuns", "nucleosome_patterns", "get_genes")
+for (x in sourced) {
+    source(paste0(SOURCE.DIR, "/", x, ".R"))
+}
 
 ## Parameters and Arguments ###################################################
 
@@ -47,31 +45,6 @@ for (i in names(args)) {
 
 ## Some function declarations #################################################
 
-getFirstTx <- function(x, df)
-{
-    entries <- subset(df, GENEID == x)
-    f <- `[[`(list("+"=which.min,
-                   "-"=which.max),
-              unique(entries$TXSTRAND))
-    entries[f(entries$TXSTART), ]
-}
-
-cleanExons <- function(df)
-{
-    dupls <- myFilter(df$GENEID,
-                      duplicated)
-    sortDfBy(rbind(subset(df,
-                          !GENEID %in% dupls),
-                   do.call(rbind,
-                           lapply(dupls,
-                                  getFirstTx,
-                                  df))),
-             c("TXCHROM",
-               "TXSTART"))
-}
-
-## Load the inputs ############################################################
-
 message("-- loading inputs")
 nucs <- with(readGff(params$calls),
              RangedData(ranges  = IRanges(start = as.numeric(start),
@@ -86,13 +59,10 @@ nucs <- with(readGff(params$calls),
 cover <- get(load(params$coverage))
 
 message("-- loading used genome")
-library(params$genome, character.only=TRUE)
-genome <- get(params$genome)
-
-genes <- cleanExons(select(genome,
-                           keys=keys(genome),
-                           columns=c("TXSTART", "TXCHROM", "TXSTRAND"),
-                           keytype="GENEID"))
+genes <- readGenome(params$genome,
+                    cols=c("TXSTART",
+                           "TXCHROM",
+                           "TXSTRAND"))
 
 ## Do it ######################################################################
 

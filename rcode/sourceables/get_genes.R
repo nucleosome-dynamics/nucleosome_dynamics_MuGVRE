@@ -9,7 +9,7 @@ source(paste(SOURCE.DIR,
 
 ###############################################################################
 
-getFirstTx <- function(x, df)
+getFirstTx <- function (x, df)
 {
     entries <- subset(df, GENEID == x)
     f <- `[[`(list("+"=which.min,
@@ -18,7 +18,7 @@ getFirstTx <- function(x, df)
     entries[f(entries$TXSTART), ]
 }
 
-cleanExons <- function(df)
+cleanExons <- function (df)
 {
     dupls <- myFilter(df$GENEID,
                       duplicated)
@@ -34,16 +34,16 @@ cleanExons <- function(df)
 
 readGenome <- function (genome, cols)
 {
-    genome.lib <- paste0("TxDb.Scerevisiae.UCSC",
+    genome.lib <- paste0("TxDb.Scerevisiae.UCSC.",
                          genome,
-                         "sgdGene")
+                         ".sgdGene")
     library(genome.lib,
             character.only=TRUE)
     genome <- get(genome.lib)
-    cleanExons(select(genome,
-                      keys=keys(genome),
-                      columns=cols,
-                      keytype="GENEID"))
+    cleanExons(suppressWarnings(select(genome,
+                                       keys=keys(genome),
+                                       columns=cols,
+                                       keytype="GENEID")))
 }
 
 ###############################################################################
