@@ -6,9 +6,10 @@ library(getopt)
 library(NucDyn)
 
 SOURCE.DIR <- "/home/rilla/nucleServ/rcode/sourceables"
-source(paste(SOURCE.DIR,
-             "helperfuns.R",
-             sep="/"))
+sourced <- c("helperfuns", "gff_funs")
+for (x in sourced) {
+    source(paste0(SOURCE.DIR, "/", x, ".R"))
+}
 
 ## Parameters and Arguments ###################################################
 
