@@ -3,6 +3,11 @@
 library(IRanges)
 library(GenomicRanges)
 
+source(paste(SOURCE.DIR,
+             "fp.R",
+             sep="/"))
+
+
 # Miscelanious helper functions
 
 rd2df <- function(rd)
@@ -200,10 +205,8 @@ sortDfBy <- function(df, xs)
                    flip2args(partial),
                    orderBy))(df)
 
-## FP goodies #################################################################
-
-myFilter <- function(x, f, ...)
-    x[f(x, ...)]
+orderBy <- function(df, x)
+    df[order(df[, x]), ]
 
 getFirstTx <- function(x, df)
 {
@@ -212,34 +215,6 @@ getFirstTx <- function(x, df)
                    "-"=which.max),
               unique(entries$TXSTRAND))
     entries[f(entries$TXSTART), ]
-}
-
-partial <- function(f, ...)
-{
-    capture <- list(...)
-    function(x) do.call(f, c(list(x), capture))
-}
-
-compose <- function(...)
-{
-    comp2 <- function(f, g) {
-        force(f)
-        force(g)
-        function(x) f(g(x))
-    }
-    Reduce(comp2, list(...))
-}
-
-flip2args <- function(f)
-    function(x, y) f(y, x)
-
-orderBy <- function(df, x)
-    df[order(df[, x]), ]
-
-procFun <- function(f, g)
-{
-    force(f)
-    g(f)
 }
 
 subMany <- function (patterns, replacements, x)
