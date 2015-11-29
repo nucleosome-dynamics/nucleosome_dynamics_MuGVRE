@@ -56,7 +56,7 @@ readWig <- function(inf)
 readBigWig <- function(inf)
 {
     wigf <- sub(".bw$", ".wig", inf)
-    system(paste(tobig.bin, inf, wigf))
+    system(paste(towig.bin, inf, wigf))
     cover <- readWig(wigf)
     file.remove(wigf)
     cover
