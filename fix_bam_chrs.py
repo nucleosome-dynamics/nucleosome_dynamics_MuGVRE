@@ -104,6 +104,7 @@ def get_args():
                         required=True,
                         help="bam output file")
     args = parser.parse_args()
+    assert args.input != args.output
     return args.input, args.output
 
 
