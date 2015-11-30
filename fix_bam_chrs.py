@@ -40,11 +40,6 @@ def add_prefix(chr):
         return "chr" + chr
 
 
-def fix_chr(chr):
-    if chr in good_chrs:
-        return chr
-
-
 def make_roman(chr):
     try:
         return int2roman(int(chr))
