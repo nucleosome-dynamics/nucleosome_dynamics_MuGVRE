@@ -3,7 +3,7 @@
 library(IRanges)
 library(GenomicRanges)
 
-rd2df <- function(rd)
+rd2df <- function (rd)
 {   # Convert a RangedData into a data.frame to ease later conversion into
     # gff format.
     # It really just sets the the "space" field to "seqname", and removes the
@@ -12,6 +12,12 @@ rd2df <- function(rd)
     names(df) <- sub("space", "seqname", names(df))
     df[["width"]] <- NULL
     df
+}
+
+df2rd <- function (df)
+{
+    names(df) <- sub("seqname", "space", names(df))
+    RangedData(df)
 }
 
 df2gff <- function (df, ...)
