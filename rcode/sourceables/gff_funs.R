@@ -39,18 +39,23 @@ df2gff <- function (df, ...)
         if (f %in% colnames(df)) {
             out.df[[f]] <- as.vector(df[[f]])
         } else if (f %in% names(kwargs)) {
-            out.df[[f]] <- kwargs[[f]]
+            out.df[[f]] <- rep(kwargs[[f]], nrow(out.df))
         } else {
-            out.df[[f]] <- "."
+            out.df[[f]] <- rep(".", nrow(out.df))
         }
     }
     nonfield.columns <- colnames(df)[!colnames(df) %in% fields]
     attrVal <- function(i, df) sprintf("%s=%s", i, df[[i]])
-    out.df[["attribute"]] <- do.call(paste,
-                                     c(lapply(nonfield.columns,
-                                              attrVal,
-                                              df),
-                                       sep=";"))
+    attrs <- do.call(paste,
+                     c(lapply(nonfield.columns,
+                              attrVal,
+                              df),
+                       sep=";"))
+    if (length(attrs)) {
+        out.df[["attribute"]] <- attrs
+    } else {
+        out.df[["attribute"]] <- rep(".", nrow(out.df))
+    }
     out.df
 }
 
