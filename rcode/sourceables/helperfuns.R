@@ -145,3 +145,10 @@ iterDf <- function(df, fun, ...)
            function(i) do.call(fun,
                                c(unname(as.list(df[i, ])),
                                  list(...))))
+
+###############################################################################
+
+irLs2rd <- function(x)
+    RangedData(ranges=do.call(c, unname(x)),
+               space=rep(names(x),
+                         sapply(x, length)))

@@ -1,15 +1,15 @@
 #!/usr/bin/Rscript
 
-myFilter <- function(x, f, ...)
+myFilter <- function (x, f, ...)
     x[f(x, ...)]
 
-partial <- function(f, ...)
+partial <- function (f, ...)
 {
     capture <- list(...)
     function(x) do.call(f, c(list(x), capture))
 }
 
-compose <- function(...)
+compose <- function (...)
 {
     comp2 <- function(f, g) {
         force(f)
@@ -19,11 +19,14 @@ compose <- function(...)
     Reduce(comp2, list(...))
 }
 
-flip2args <- function(f)
+flip2args <- function (f)
     function(x, y) f(y, x)
 
-procFun <- function(f, g)
+procFun <- function (f, g)
 {
     force(f)
     g(f)
 }
+
+application <- function (f, ...)
+    f(...)

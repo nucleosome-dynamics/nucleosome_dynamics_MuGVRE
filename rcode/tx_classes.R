@@ -58,6 +58,8 @@ nucs <- with(readGff(params$calls),
 
 cover <- get(load(params$coverage))
 
+## Read input #################################################################
+
 message("-- loading used genome")
 genes <- readGenome(params$genome,
                     cols=c("TXSTART",
