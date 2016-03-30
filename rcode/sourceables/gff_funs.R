@@ -1,5 +1,7 @@
 #!/usr/bin/Rscript
 
+# Functions to read, parse and write files in the gff format
+
 library(IRanges)
 library(GenomicRanges)
 
@@ -15,7 +17,7 @@ rd2df <- function (rd)
 }
 
 df2rd <- function (df)
-{
+{   # Convert from data.frame to RangedData
     names(df) <- sub("seqname", "space", names(df))
     RangedData(df)
 }
@@ -71,7 +73,7 @@ writeGff <- function (df, outpath)
 }
 
 readGff <- function (fname)
-{
+{   # Read a gff file
     cols <- c("seqname",
               "source",
               "feature",

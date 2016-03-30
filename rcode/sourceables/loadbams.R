@@ -45,10 +45,10 @@ int2base <- function(x, b=2) {
     ndigits <- (floor(logb(xMax, base=2)) + 1)
     Base.b <- array(NA, dim=c(N, ndigits))
     for (i in 1:ndigits) {
-            Base.b[, ndigits-i+1] <- (x %% b)
-            x <- (x %/% b)
+        Base.b[, ndigits-i+1] <- (x %% b)
+        x <- (x %/% b)
     }
-    if (N ==1) {
+    if (N == 1) {
         Base.b[1, ]
     } else {
         Base.b

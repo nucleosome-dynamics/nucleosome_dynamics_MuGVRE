@@ -1,13 +1,11 @@
 #!/usr/bin/Rscript
 
+# Miscelanious helper functions
+
 library(IRanges)
 library(GenomicRanges)
 
-source(paste(SOURCE.DIR,
-             "fp.R",
-             sep="/"))
-
-# Miscelanious helper functions
+source(paste(SOURCE.DIR, "fp.R", sep="/"))
 
 vectorizedAll <- function(...)
     # Helper function that behaves as a vectorized version of the function
@@ -35,23 +33,6 @@ checkInF <- function(f)
     }
 }
 
-checkType <- function(t)
-{   # Some checks on the sequencing type specified
-    if (is.null(t)) {
-        stop("A type has to be specified")
-    }
-    if (!t %in% c("single", "paired")) {
-        stop("Type must be either `single` or `paired`")
-    }
-}
-
-checkOutF <- function(f)
-{   # Some checks on the output file specified
-    if (is.null(f)) {
-        stop("An output file must be specified")
-    }
-}
-
 makePlotable <- function(dyn)
 {
     message("building structure to be saved for future plotting")
@@ -74,6 +55,7 @@ makePlotable <- function(dyn)
 }
 
 sortDfBy <- function(df, xs)
+    # Sort a data.frame by a given value
     do.call(compose,
             lapply(xs,
                    flip2args(partial),
@@ -92,6 +74,8 @@ getFirstTx <- function(x, df)
 }
 
 subMany <- function (patterns, replacements, x)
+    # Replace a vector of patterns by a vector of replacements with a 1 to 1
+    # equivalence
     do.call(compose,
             mapply(function(p, r) {force(p)
                                    force(r)
@@ -102,7 +86,8 @@ subMany <- function (patterns, replacements, x)
 
 ###############################################################################
 
-.check.mc <- function (mc.cores) {
+.check.mc <- function (mc.cores)
+ {
     lib <- "parallel"
     if (mc.cores > 1 && !lib %in% loadedNamespaces()) {
         warning("'",
@@ -130,7 +115,7 @@ xlapply <- function(X, FUN, ..., mc.cores=1)
 }
 
 updateVals <- function (df, vals)
-{
+{   # Update some values on a data.frame
     for (i in names(vals)) {
         df[[i]] <- vals[[i]]
     }
@@ -138,9 +123,13 @@ updateVals <- function (df, vals)
 }
 
 dyadPos <- function (x)
+    # Given an IRanges representing nucleosomes, return a vector of dyad
+    # positions
     (start(x) + end(x))/2
 
 iterDf <- function(df, fun, ...)
+    # Iterate over the rows of a data.frame.
+    # Possibly dlply from the plyr package is more suiting than this.
     lapply(1:nrow(df),
            function(i) do.call(fun,
                                c(unname(as.list(df[i, ])),
@@ -149,6 +138,7 @@ iterDf <- function(df, fun, ...)
 ###############################################################################
 
 irLs2rd <- function(x)
+    # Convert a list of IRanges to a RangedData
     RangedData(ranges=do.call(c, unname(x)),
                space=rep(names(x),
                          sapply(x, length)))
