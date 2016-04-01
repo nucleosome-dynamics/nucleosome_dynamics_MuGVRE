@@ -5,6 +5,7 @@
 library(IRanges)
 library(GenomicRanges)
 
+SOURCE.DIR <- "/home/rilla/nucleServ/rcode/sourceables"
 source(paste(SOURCE.DIR, "fp.R", sep="/"))
 
 vectorizedAll <- function(...)
@@ -142,3 +143,16 @@ irLs2rd <- function(x)
     RangedData(ranges=do.call(c, unname(x)),
                space=rep(names(x),
                          sapply(x, length)))
+
+sortReads <- function (reads)
+{
+    # Sort reads RangedData format. Sort them first by chromosome, then by
+    # start and then by end
+    sortChrs <- function (rans)
+        rans[order(names(rans))]
+    sortRans <- function (x) {
+        tmp <- x[sort.list(end(x))]
+        tmp[sort.list(start(tmp))]
+    }
+    irLs2rd(lapply(sortChrs(ranges(reads)), sortRans))
+}
