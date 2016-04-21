@@ -16,7 +16,8 @@ for (x in sourced) {
 
 ## Parameters and Arguments ###################################################
 
-defaults <- list(window            = 300,
+defaults <- list(cores             = 1,
+                 window            = 300,
                  p1.max.merge      = 3,
                  p1.max.downstream = 20,
                  open.thresh       = 215,
