@@ -19,7 +19,7 @@ findFirstAndLast <- function(id, start, end, strand, dyads, chr)
         in.gene <- rev(in.gene)
     }
     if (length(in.gene)) {
-        data.frame(afdsafdahikd     = id,
+        data.frame(id     = id,
                    chrom  = chr,
                    strand = strand,
                    start  = start,
@@ -30,18 +30,6 @@ findFirstAndLast <- function(id, start, end, strand, dyads, chr)
         NULL
     }
 }
-
-
-data.frame(foo = id,
-           chrom  = chr,
-           strand = strand,
-           start  = start,
-           end    = end,
-           first  = in.gene[1],
-           last   = in.gene[length(in.gene)])
-
-
-
 
 ecov <- function (x, period)
     (1 + sin(pi/2 + 2*pi/period*x)) * 0.8^(abs(x)/period)
@@ -132,3 +120,48 @@ getPeriodCov <- function (genes.nucs, period, mc.cores=1)
     names(cov) <- chroms
     cov
 }
+
+###############################################################################
+
+getDfi <- function (nl, p)
+    abs(nl - p * round(nl/p))
+
+getAutocor <- function (sig, x0, x1, t, norm=TRUE) {
+    if (norm) {
+        f <- function (t)
+            getAutocor(sig, x0, x1, t, norm=FALSE)
+        f(t) / f (0)
+    } else if (x1 - x0 < t) {
+        NA
+    } else {
+        i <- c(x0 : (x1-t))
+        j <- c((x0+t) : x1)
+        sum(sig[i] * sig[j])
+    }
+}
+
+autocorFromDf <- function (df, cov, period)
+    unlist(dlply(
+        df,
+        "chrom",
+        function (chr.df) {
+            chr <- as.vector(chr.df[1, "chrom"])
+            cover <- as.vector(cov[[chr]])
+            mapply(
+                function (first, last, strand) {
+                    f <- function (x0, x1)
+                        getAutocor(cover, x0, x1, period)
+                    if (strand == "+") {
+                        f(first, last)
+                    } else if (strand == "-") {
+                        f(last, first)
+                    }
+                },
+                chr.df$first,
+                chr.df$last,
+                chr.df$strand
+            )
+        }
+    ))
+
+

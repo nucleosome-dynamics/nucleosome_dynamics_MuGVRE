@@ -52,51 +52,10 @@ calls.rd <- with(calls.df,
 
 ## Do it ######################################################################
 
-getDfi <- function (nl, p)
-    abs(nl - p * round(nl/p))
-
-getAutocor <- function (sig, x0, x1, t, norm=TRUE) {
-    if (norm) {
-        f <- function (t)
-            getAutocor(sig, x0, x1, t, norm=FALSE)
-        f(t) / f (0)
-    } else if (x1 - x0 < t) {
-        NA
-    } else {
-        i <- c(x0 : (x1-t))
-        j <- c((x0+t) : x1)
-        sum(sig[i] * sig[j])
-    }
-}
-
-autocorFromDf <- function (df, cov, period)
-    unlist(dlply(
-        df,
-        "chrom",
-        function (chr.df) {
-            cover <- as.vector(cov[[chr.df[1, "chrom"]]])
-            mapply(
-                function (first, last, strand) {
-                    f <- function (x0, x1)
-                        getAutocor(cover, x0, x1, period)
-                    if (strand == "+") {
-                        f(first, last)
-                    } else if (strand == "-") {
-                        f(last, first)
-                    }
-                },
-                chr.df$first,
-                chr.df$last,
-                chr.df$strand
-            )
-        }
-    ))
-
 message("identifying first and last nucleosomes")
 cov <- get(load(params$coverage))
 
 genes.nucs <- findGenesNucs(genes, calls.rd, params$mc.cores)
-
 genes.nucs$dfi <- getDfi(genes.nucs$nuc.len, params$period)
 genes.nucs$autocor <- autocorFromDf(genes.nucs, cov, params$period)
 
