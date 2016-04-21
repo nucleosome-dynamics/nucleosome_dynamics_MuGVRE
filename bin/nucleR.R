@@ -16,7 +16,8 @@ for (x in sourced) {
 
 ## Parameters and Arguments ###################################################
 
-defaults <- list(type           = NULL,
+defaults <- list(mc.cores       = 1
+                 type           = "paired",
                  fdrOverAmp     = 0.05,
                  components     = 1,
                  fragmentLen    = NULL,
