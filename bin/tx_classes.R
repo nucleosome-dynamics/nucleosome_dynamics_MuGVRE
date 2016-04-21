@@ -16,7 +16,7 @@ for (x in sourced) {
 
 ## Parameters and Arguments ###################################################
 
-defaults <- list(cores             = 1,
+defaults <- list(mc.cores             = 1,
                  window            = 300,
                  p1.max.merge      = 3,
                  p1.max.downstream = 20,
@@ -43,6 +43,14 @@ params <- defaults
 for (i in names(args)) {
     params[[i]] <- args[[i]]
 }
+
+
+
+params$calls="/orozco/services/Rdata/tmp_wd/120502_SN365_B_L002_GGM-34_NR.gff"
+params$coverage="/orozco/services/Rdata/tmp_wd/120502_SN365_B_L002_GGM-34_cov.RData"
+params$output="/orozco/services/Rdata/tmp_wd/120502_SN365_B_L002_GGM-34_txclasses.gff"
+params$genome="R64-1-1"
+
 
 ## Some function declarations #################################################
 

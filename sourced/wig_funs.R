@@ -3,6 +3,10 @@
 ## Imports ####################################################################
 
 library(IRanges)
+SOURCE.DIR <- "/home/rilla/nucleServ/sourced"
+source(paste(SOURCE.DIR,
+             "get_genes.R",
+             sep="/"))
 
 ## Binary paths ###############################################################
 

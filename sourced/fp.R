@@ -33,3 +33,9 @@ application <- function (f, ...)
     # Function application.
     # Useful to apply a list of functions on one same argument
     f(...)
+
+procFun <- function (f, g)
+{
+    force(g)
+    f(g)
+}

@@ -1,4 +1,4 @@
-SOURCE.DIR <- "/home/rilla/nucleServ/rcode/sourced"
+SOURCE.DIR <- "/home/rilla/nucleServ/sourced"
 source(paste(SOURCE.DIR,
              "helperfuns.R",
              sep="/"))
@@ -55,9 +55,7 @@ nucleosomePatterns <- function(calls, cover=NULL, id, chrom, pos, strand="+",
 
     doIt <- do.call(compose,
                     lapply(fs,
-                           procFun,
-                           compose(bind,
-                                   wrapFun)))
+                           function (f) bind(wrapFun(f))))
 
     makeDfRow(doIt(flow)$state)
 }
@@ -134,7 +132,8 @@ getP1 <- function (state, p1.max.downstream, p1.max.merge)
     p1 <- detectNuc(state$nearby,
                     state$pos,
                     p1.max.downstream,
-                    state$strand, "p1")
+                    state$strand,
+                    "p1")
 
     if (!nrow(p1)) {
         return(list(continue=FALSE, vals=list(descr="+1_missing")))

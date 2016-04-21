@@ -3,8 +3,8 @@ coverage -- finished
 NucDyn (no reps) -- finished
 nfr -- finished
 nucleR -- finished
-periodicity -- written
-to_bigWig -- written
+periodicity -- finished
+to_bigWig -- finished
 tx_classes -- written
 plot -- written
 from_bigWig -- written
