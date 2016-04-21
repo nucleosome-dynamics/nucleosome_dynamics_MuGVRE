@@ -90,9 +90,9 @@ if (!is.null(params$dynRData) && file.exists(params$dynRData)) {
                               maxDiff   = params$maxDiff,
                               mc.cores  = params$cores)
 
-    if (!is.null(params$outputRData)) {
+    if (!is.null(params$plotRData)) {
         plotable <- makePlotable(dyn)
-        save(plotable, file=params$outputRData)
+        save(plotable, file=params$plotRData)
     }
 
     message("finding hotspots")
