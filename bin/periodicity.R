@@ -17,8 +17,7 @@ for (x in sourced) {
 ## Parameters and Arguments ###################################################
 
 #defaults <- list(period = 160)
-defaults <- list(cores    = 1,
-                 period   = 165,
+defaults <- list(period   = 165,
                  mc.cores = 1,
                  genome = "R64-1-1")
 
