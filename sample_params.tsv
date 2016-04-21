@@ -1,6 +1,0 @@
-wd	/orozco/services/R-data/tmp_wd
-cores	1
-f1	/orozco/services/R-data/in_bams/120502_SN365_B_L002_GGM-34.bam
-f2	/orozco/services/R-data/in_bams/120502_SN365_B_L002_GGM-35.bam
-type1	paired
-type2	paired

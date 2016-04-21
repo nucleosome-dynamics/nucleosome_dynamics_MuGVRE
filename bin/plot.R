@@ -20,7 +20,7 @@ if (any(!spec[, 1] %in% names(args))) {
     q("no")
 }
 
-SOURCE.DIR <- "/home/rilla/nucleServ/rcode/sourceables"
+SOURCE.DIR <- "/home/rilla/nucleServ/sourced"
 source(paste(SOURCE.DIR,
              "plot_subset.R",
              sep="/"))

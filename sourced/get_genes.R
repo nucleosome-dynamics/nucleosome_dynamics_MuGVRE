@@ -2,7 +2,7 @@
 
 ## Imports ####################################################################
 
-SOURCE.DIR <- "/home/rilla/nucleServ/rcode/sourceables"
+SOURCE.DIR <- "/home/rilla/nucleServ/sourced"
 sourced <- c("helperfuns", "gff_funs")
 for (x in paste0(SOURCE.DIR, "/", sourced, ".R")) {
     source(x)

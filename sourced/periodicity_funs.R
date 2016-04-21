@@ -5,8 +5,7 @@
 library(IRanges)
 library(parallel)
 
-SOURCE.DIR <- "/home/rilla/nucleServ/rcode/sourceables"
-SOURCE.DIR <- "/orozco/scratch/xesh0/orozco/rilla/nucler/nucleServ/rcode/sourceables"
+SOURCE.DIR <- "/home/rilla/nucleServ/rcode/sourced"
 source(paste(SOURCE.DIR,
              "helperfuns.R",
              sep="/"))

@@ -8,7 +8,7 @@ library(nucleR)
 library(IRanges)
 library(GenomicRanges)
 
-SOURCE.DIR <- "/home/rilla/nucleServ/rcode/sourceables"
+SOURCE.DIR <- "/home/rilla/nucleServ/sourced"
 sourced <- c("helperfuns", "gff_funs")
 for (x in sourced) {
     source(paste0(SOURCE.DIR, "/", x, ".R"))

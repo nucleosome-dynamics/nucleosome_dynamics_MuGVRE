@@ -8,7 +8,7 @@ library(GenomicRanges)
 library(htSeqTools)
 library(nucleR)
 
-SOURCE.DIR <- "/home/rilla/nucleServ/rcode/sourceables"
+SOURCE.DIR <- "/home/rilla/nucleServ/sourced"
 sourced <- c("helperfuns", "nucleosome_patterns", "get_genes", "gff_funs")
 for (x in sourced) {
     source(paste0(SOURCE.DIR, "/", x, ".R"))

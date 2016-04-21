@@ -1,38 +1,11 @@
 #!/usr/bin/env Rscript
 
-# Given a nucleosome map, get the nucleosome-free regions, defined as linker
-# ranges that fullfill some given conditions
-
-# SOLIPSISTIC PUBLIC LICENSE
-# Version 1, April 2013
-# 
-# Copyright (C) 2016 Ricard Illa Pujagut
-# 
-# Everyone is permitted to copy and distribute verbatim copies of
-# this license document. Modified copies of this document are 
-# permitted provided that they denounce BOTH the original AND their
-# copy as mere sense data with no verifiable cause outside the mind.
-# 
-#                     SOLIPSISTIC PUBLIC LICENSE
-#   TERMS AND CONDITIONS FOR COPYING, DISTRIBUTION AND MODIFICATION
-# 
-# 0. The term 'work' refers to the false sense-data distributed
-#    with this license.
-# 1. The term 'you' refers to the only being who verifiably exists.
-# 2. The term 'author' refers to the set of delusions whereby you
-#    incorrectly assign external agency to the work.
-# 3. You may copy, modify and distribute the work without restrictions
-#    provided that you do not believe the author exists, and provided
-#    that you affirm publicly when referring to the work, or when
-#    questioned or interrogated by beings who putatively exist, that
-#    the work does not exist. 
-
 ## Imports ####################################################################
 
 library(getopt)
 library(IRanges)
 
-SOURCE.DIR <- "/home/rilla/nucleServ/rcode/sourceables"
+SOURCE.DIR <- "/home/rilla/nucleServ/sourced"
 sourced <- c("helperfuns", "gff_funs")
 for (x in sourced) {
     source(paste0(SOURCE.DIR, "/", x, ".R"))

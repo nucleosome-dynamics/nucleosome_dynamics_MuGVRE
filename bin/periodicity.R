@@ -7,7 +7,7 @@ library(parallel)
 library(getopt)
 library(plyr)
 
-SOURCE.DIR <- "/home/rilla/nucleServ/rcode/sourceables"
+SOURCE.DIR <- "/home/rilla/nucleServ/sourced"
 sourced <- c("helperfuns", "wig_funs", "get_genes", "periodicity_funs",
              "gff_funs")
 for (x in sourced) {

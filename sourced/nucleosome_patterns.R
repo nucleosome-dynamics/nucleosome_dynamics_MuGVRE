@@ -1,4 +1,4 @@
-SOURCE.DIR <- "/home/rilla/nucleServ/rcode/sourceables"
+SOURCE.DIR <- "/home/rilla/nucleServ/rcode/sourced"
 source(paste(SOURCE.DIR,
              "helperfuns.R",
              sep="/"))

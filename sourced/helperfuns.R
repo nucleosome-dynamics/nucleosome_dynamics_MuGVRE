@@ -5,7 +5,7 @@
 library(IRanges)
 library(GenomicRanges)
 
-SOURCE.DIR <- "/home/rilla/nucleServ/rcode/sourceables"
+SOURCE.DIR <- "/home/rilla/nucleServ/sourced"
 source(paste(SOURCE.DIR, "fp.R", sep="/"))
 
 vectorizedAll <- function(...)
