@@ -1,4 +1,3 @@
-
 SOURCE.DIR <- "/home/rilla/nucleServ/rcode/sourceables"
 source(paste(SOURCE.DIR,
              "helperfuns.R",

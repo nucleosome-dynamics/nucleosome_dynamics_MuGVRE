@@ -98,9 +98,7 @@ writeWig <- function(x, outf)
 
 writeBigWig <- function (x, outf, genome)
 {
-    chrom.sizes.f <- paste0("/home/rilla/nucleServ/wig_utils/",
-                            genome,
-                            ".chrom.sizes")
+    chrom.sizes.f <- chromSizesFile(genome)
     wigf <- sub(".bw$", ".wig", outf)
     writeWig(x, wigf)
     system(paste(tobig.bin, wigf, chrom.sizes.f, outf))

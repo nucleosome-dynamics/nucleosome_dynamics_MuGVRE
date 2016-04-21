@@ -6,6 +6,7 @@ library(IRanges)
 library(parallel)
 
 SOURCE.DIR <- "/home/rilla/nucleServ/rcode/sourceables"
+SOURCE.DIR <- "/orozco/scratch/xesh0/orozco/rilla/nucler/nucleServ/rcode/sourceables"
 source(paste(SOURCE.DIR,
              "helperfuns.R",
              sep="/"))
@@ -19,7 +20,7 @@ findFirstAndLast <- function(id, start, end, strand, dyads, chr)
         in.gene <- rev(in.gene)
     }
     if (length(in.gene)) {
-        data.frame(id     = id,
+        data.frame(afdsafdahikd     = id,
                    chrom  = chr,
                    strand = strand,
                    start  = start,
@@ -30,6 +31,18 @@ findFirstAndLast <- function(id, start, end, strand, dyads, chr)
         NULL
     }
 }
+
+
+data.frame(foo = id,
+           chrom  = chr,
+           strand = strand,
+           start  = start,
+           end    = end,
+           first  = in.gene[1],
+           last   = in.gene[length(in.gene)])
+
+
+
 
 ecov <- function (x, period)
     (1 + sin(pi/2 + 2*pi/period*x)) * 0.8^(abs(x)/period)
@@ -66,25 +79,27 @@ coverageChr <- function(nuc.start, nuc.end, nuc.length, strand, L, period)
 
 findGenesNucs <- function (genes, calls, mc.cores=1)
 {
-    chroms <- unique(genes$TXCHROM)
+    chroms <- unique(genes$chrom)
     genes.by.chr <- lapply(chroms,
-                           function (chr) subset(genes,
-                                                 TXCHROM == chr))
+                           function (chr) subset(genes, chrom == chr))
     names(genes.by.chr) <- chroms
     dyads.by.chr <- lapply(ranges(calls), dyadPos)
 
-    used.cols <- c("GENEID", "TXSTART", "TXEND", "TXSTRAND")
+    used.cols <- c("ID", "start", "end", "strand")
+
     genes.nucs <- do.call(rbind, xlapply(
         chroms,
-        function(chr)
-            do.call(rbind,
-                    myFilter(iterDf(genes.by.chr[[chr]][, used.cols],
-                                    findFirstAndLast,
-                                    dyads.by.chr[[chr]],
-                                    chr),
-                             Negate(is.null))),
+        function(chr) {
+            vals <- iterDf(genes.by.chr[[chr]][, used.cols],
+                           findFirstAndLast,
+                           dyads.by.chr[[chr]],
+                           chr)
+            filtered <- vals[!sapply(vals, is.null)]
+            do.call(rbind, filtered)
+        },
         mc.cores=mc.cores
     ))
+
     genes.nucs$nuc.length <- abs(genes.nucs$last - genes.nucs$first)
 
     genes.nucs

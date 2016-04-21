@@ -4,17 +4,45 @@
 
 library(getopt)
 library(NucDyn)
-
 SOURCE.DIR <- "/home/rilla/nucleServ/rcode/sourceables"
 sourced <- c("helperfuns", "gff_funs")
 for (x in sourced) {
     source(paste0(SOURCE.DIR, "/", x, ".R"))
 }
 
-## Parameters and Arguments ###################################################
+### Parameters and Arguments ###################################################
 
-defaults <- list(maxLen         = 170,
+spec <- matrix(c("input1",         "a", 1, "character",
+                 "input2",         "b", 1, "character",
+                 "outputGff",      "c", 1, "character",
+                 "plotRData",      "d", 1, "character",
+                 "dynRData",       "e", 1, "character",
+                 "threshRData",    "f", 1, "character",
+                 "cores",          "g", 1, "integer",
+                 "maxLen",         "h", 1, "integer",
+                 "equalSize",      "i", 1, "logical",
+                 "roundPow",       "j", 1, "integer",
+                 "readSize",       "k", 1, "integer",
+                 "maxDiff",        "l", 1, "integer",
+                 "rangeStart",     "m", 1, "integer",
+                 "rangeEnd",       "n", 1, "integer",
+                 "chr",            "o", 1, "chracter",
+                 "nuc.width",      "p", 1, "integer",
+                 "combined",       "q", 1, "logical",
+                 "same.magnitude", "r", 1, "integer",
+                 "threshold",      "s", 1, "character",
+                 "rep1",           "t", 1, "character",
+                 "rep2",           "u", 1, "character"),
+               byrow=TRUE,
+               ncol=4)
+args <- getopt(spec)
+
+defaults <- list(cores          = 1,
+                 maxLen         = 170,
                  equalSize      = FALSE,
+                 plotRData      = NULL,
+                 dynRData       = NULL,
+                 threshRData    = NULL,
                  roundPow       = 5,
                  readSize       = 140,
                  maxDiff        = NULL,
@@ -24,30 +52,9 @@ defaults <- list(maxLen         = 170,
                  nuc.width      = 120,
                  combined       = TRUE,
                  same.magnitude = 2,
-                 threshold      = "60%")
-
-spec <- matrix(c("input1",         "a", 1, "character",
-                 "input2",         "b", 1, "character",
-                 "outputGff",      "c", 1, "character",
-                 "outputRData",    "p", 1, "character",
-                 "cores",          "d", 1, "integer",
-                 "maxLen",         "e", 1, "integer",
-                 "equalSize",      "f", 1, "logical",
-                 "roundPow",       "g", 1, "integer",
-                 "readSize",       "h", 1, "integer",
-                 "maxDiff",        "i", 1, "integer",
-                 "rangeStart",     "j", 1, "integer",
-                 "rangeEnd",       "k", 1, "integer",
-                 "chr",            "l", 1, "chracter",
-                 "nuc.width",      "q", 1, "integer",
-                 "combined",       "m", 1, "logical",
-                 "same.magnitude", "n", 1, "integer",
-                 "threshold",      "o", 1, "character"),
-               byrow=TRUE,
-               ncol=4)
-args <- getopt(spec)
-
-names(args) <- sub("cores", "mc.cores", names(args))
+                 threshold      = "60%",
+                 rep1           = NULL,
+                 rep2           = NULL)
 
 params <- defaults
 for (i in names(args)) {
@@ -66,39 +73,79 @@ if (is.null(params$maxDiff)) {
 
 ## Pipeline Itself ############################################################
 
-r1 <- get(load(params$input1))
-r2 <- get(load(params$input2))
+if (!is.null(params$dynRData) && file.exists(params$dynRData)) {
+    hs <- get(load(params$dynRData))
 
-message("running NucleosomeDynamics")
-dyn <- nucleosomeDynamics(setA      = r1,
-                          setB      = r2,
-                          maxLen    = params$maxLen,
-                          equalSize = params$equalSize,
-                          roundPow  = params$roundPow,
-                          readSize  = params$readSize,
-                          maxDiff   = params$maxDiff,
-                          mc.cores  = params$mc.cores)
+} else {
+    r1 <- get(load(params$input1))
+    r2 <- get(load(params$input2))
 
-# store dynamics for plotting
-plotable <- makePlotable(dyn)
-save(plotable, file=params$outputRData)
-#save(dyn, file=params$outputRData)
+    message("running NucleosomeDynamics")
+    dyn <- nucleosomeDynamics(setA      = r1,
+                              setB      = r2,
+                              maxLen    = params$maxLen,
+                              equalSize = params$equalSize,
+                              roundPow  = params$roundPow,
+                              readSize  = params$readSize,
+                              maxDiff   = params$maxDiff,
+                              mc.cores  = params$cores)
 
-message("finding hotspots")
-hs <- findHotspots(dyn            = dyn,
-                   range          = params$range,
-                   chr            = params$chr,
-                   nuc.width      = params$nuc.width,
-                   combined       = params$combined,
-                   same.magnitude = params$same.magnitude,
-                   threshold      = params$threshold,
-                   mc.cores       = params$mc.cores)
+    if (!is.null(params$outputRData)) {
+        plotable <- makePlotable(dyn)
+        save(plotable, file=params$outputRData)
+    }
+
+    message("finding hotspots")
+    hs <- findHotspots(dyn            = dyn,
+                       range          = params$range,
+                       chr            = params$chr,
+                       nuc.width      = params$nuc.width,
+                       combined       = FALSE,
+                       same.magnitude = params$same.magnitude,
+                       threshold      = NULL,
+                       mc.cores       = params$cores)
+
+    if (!is.null(params$dynRData)) {
+        save(hs, file=params$dynRData)
+    }
+}
+
+if (!is.null(params$rep1) && !is.null(params$rep1)) {
+
+    if (!is.null(params$threshRData) && file.exists(params$threshRData)) {
+        thresh <- get(load(params$threshRData))
+    } else {
+        rep.fs <- strsplit(c(params$rep1, params$rep2), ",")
+        pairs <- do.call(mapply, c(list, rep.fs, SIMPLIFY=FALSE))
+        reps <- lapply(pairs, lapply, compose(get, load))
+        thresh <- do.call(getVariableThreshold,
+                          c(reps, mc.cores=params$cores))
+
+        if (!is.null(params$threshRData)) {
+            save(thresh, file=params$threshRData)
+        }
+    }
+    thresh@scale <- as.numeric(params$threshold)
+} else if (grepl("%$", params$threshold)) {
+    thresh <- threshold
+} else {
+    thresh <- as.numeric(params$threshold)
+}
+
+hs <- applyThreshold(hs, thresh, scale=0)
+
+if (params$combined) {
+    hs <- combiner(hs,
+                   params$nuc.width,
+                   params$same.magnitude,
+                   mc.cores=params$cores)
+}
+
+### Store the Result ###########################################################
+
 names(hs)[names(hs) == "type"] <- "class"
-
-## Store the Result ###########################################################
-
-names(hs) <- sub("chr", "seqname", names(hs))
-names(hs) <- sub("nreads", "score", names(hs))
+names(hs)[names(hs) == "chr"] <- "seqname"
+names(hs)[names(hs) == "nreads"] <- "score"
 
 message("saving output as gff")
 writeGff(df2gff(hs,

@@ -3,47 +3,58 @@
 ## Imports ####################################################################
 
 SOURCE.DIR <- "/home/rilla/nucleServ/rcode/sourceables"
-source(paste(SOURCE.DIR,
-             "helperfuns.R",
-             sep="/"))
+sourced <- c("helperfuns", "gff_funs")
+for (x in paste0(SOURCE.DIR, "/", sourced, ".R")) {
+    source(x)
+}
 
 ###############################################################################
 
+genomeFile <- function (genome)
+    sprintf("/orozco/services/Rdata/Web/refGenomes/%s/genes.gff",
+            genome)
+
+chromSizesFile <- function (genome)
+    sprintf("/orozco/services/Rdata/Web/refGenomes/%s/%s.fa.chrom.sizes",
+            genome,
+            genome)
+
 getFirstTx <- function (x, df)
 {
-    entries <- subset(df, GENEID == x)
+    entries <- subset(df, ID == x)
     f <- `[[`(list("+"=which.min,
                    "-"=which.max),
-              unique(entries$TXSTRAND))
-    entries[f(entries$TXSTART), ]
+              unique(entries$strand))
+    entries[f(entries$start), ]
 }
 
 cleanExons <- function (df)
 {
-    dupls <- myFilter(df$GENEID,
-                      duplicated)
-    sortDfBy(rbind(subset(df,
-                          !GENEID %in% dupls),
+    dupls <- myFilter(df$ID, duplicated)
+    sortDfBy(rbind(subset(df, !ID %in% dupls),
                    do.call(rbind,
                            lapply(dupls,
                                   getFirstTx,
                                   df))),
-             c("TXCHROM",
-               "TXSTART"))
+             c("seqname", "start"))
 }
 
-readGenome <- function (genome, cols)
+getGenes <- function (genome)
 {
-    genome.lib <- paste0("TxDb.Scerevisiae.UCSC.",
-                         genome,
-                         ".sgdGene")
-    library(genome.lib,
-            character.only=TRUE)
-    genome <- get(genome.lib)
-    cleanExons(suppressWarnings(select(genome,
-                                       keys=keys(genome),
-                                       columns=cols,
-                                       keytype="GENEID")))
+    f <- genomeFile(genome)
+    gff <- readGff(f)
+    res <- cleanExons(gff)
+    names(res)[names(res) == "seqname"] <- "chrom"
+    res
+}
+
+getChromSizes <- function (genome)
+{
+    f <- chromSizesFile(genome)
+    df <- read.table(f, sep="\t")
+    vals <- df$V2
+    names(vals) <- df$V1
+    vals
 }
 
 ###############################################################################

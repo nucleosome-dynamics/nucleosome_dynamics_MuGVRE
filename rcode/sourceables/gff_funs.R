@@ -41,7 +41,11 @@ df2gff <- function (df, ...)
         if (f %in% colnames(df)) {
             out.df[[f]] <- as.vector(df[[f]])
         } else if (f %in% names(kwargs)) {
-            out.df[[f]] <- rep(kwargs[[f]], nrow(out.df))
+            if (length(kwargs[[f]]) == 1) {
+                out.df[[f]] <- rep(kwargs[[f]], nrow(out.df))
+            } else {
+                out.df[[f]] <- kwargs[[f]]
+            }
         } else {
             out.df[[f]] <- rep(".", nrow(out.df))
         }
@@ -72,7 +76,7 @@ writeGff <- function (df, outpath)
                 col.names=FALSE)
 }
 
-readGff <- function (fname)
+readGff <- function (fname, load.attributes=TRUE)
 {   # Read a gff file
     cols <- c("seqname",
               "source",
@@ -84,28 +88,47 @@ readGff <- function (fname)
               "frame",
               "attribute")
 
-    df <- read.table(fname,
-                     col.names=cols,
-                     stringsAsFactors=FALSE)
+    df <- read.csv(fname,
+                   header=FALSE,
+                   col.names=cols,
+                   stringsAsFactors=FALSE,
+                   sep="\t")
 
     for (i in colnames(df)) {
         if (all(df[[i]] == ".")) {
             df[[i]] <- NULL
         }
     }
-    attrs <- df$attribute
-    df$attribute <- NULL
 
-    parseRowAttrs <- function(x) {
-        vals <- c()
-        for (x in strsplit(x, "=")) {
-            vals[[x[1]]] <- x[2]
+    if (load.attributes) {
+        attrs <- df$attribute
+
+        parseRowAttrs <- function(x) {
+            pairs <- strsplit(x, "=")  # separate name-value pairs
+            not.two <- sapply(pairs, length) < 2  # some values might be missing
+            pairs[not.two] <- lapply(pairs[not.two], c, NA)  # set them to NA
+            ns <- sapply(pairs, `[[`, 1)  # get the names
+            vs <- lapply(pairs, `[[`, 2)  # get the values
+            names(vs) <- ns
+            vs
         }
-        vals
+
+        row.attrs <- lapply(strsplit(attrs, ";"), parseRowAttrs)
+        # make sure they all have the same attributes, even if some are NA
+        params <- unique(unlist(lapply(row.attrs, names)))
+        for (i in seq_along(row.attrs)) {
+            xnames <- names(row.attrs[[i]])
+            na.xnames <- params[!(params %in% xnames)]
+            row.attrs[[i]][na.xnames] <- NA
+        }
+
+        m <- do.call(rbind, row.attrs)
+        df.tmp <- as.data.frame(m)
+        attrs.df <- as.data.frame(lapply(df.tmp, unlist), stringsAsFactors=FALSE)
+
+        df <- cbind(df, attrs.df)
     }
 
-    cbind(df,
-          as.data.frame(do.call(rbind,
-                                lapply(strsplit(attrs, ";"),
-                                       parseRowAttrs))))
+    df$attribute <- NULL
+    df
 }

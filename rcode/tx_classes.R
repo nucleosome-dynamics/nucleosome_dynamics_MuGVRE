@@ -61,10 +61,7 @@ cover <- get(load(params$coverage))
 ## Read input #################################################################
 
 message("-- loading used genome")
-genes <- readGenome(params$genome,
-                    cols=c("TXSTART",
-                           "TXCHROM",
-                           "TXSTRAND"))
+genes <- getGenes(params$genome)
 
 ## Do it ######################################################################
 
@@ -73,10 +70,10 @@ tx.classes <- with(params,
                    nucleosomePatternsDF(calls             = nucs,
                                         cover             = cover,
                                         df                = genes,
-                                        col.id            = "GENEID",
-                                        col.chrom         = "TXCHROM",
-                                        col.pos           = "TXSTART",
-                                        col.strand        = "TXSTRAND",
+                                        col.id            = "ID",
+                                        col.chrom         = "chrom",
+                                        col.pos           = "start",
+                                        col.strand        = "strand",
                                         window            = window,
                                         p1.max.merge      = p1.max.merge,
                                         p1.max.downstream = p1.max.downstream,
