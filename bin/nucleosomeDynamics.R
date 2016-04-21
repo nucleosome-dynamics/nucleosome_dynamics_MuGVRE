@@ -132,9 +132,10 @@ if (!is.null(params$rep1) && !is.null(params$rep1)) {
     thresh <- as.numeric(params$threshold)
 }
 
-hs <- applyThreshold(hs, thresh, scale=0)
+hs <- applyThreshold(hs, thresh)
 
 if (params$combined) {
+    message("combining")
     hs <- combiner(hs,
                    params$nuc.width,
                    params$same.magnitude,
