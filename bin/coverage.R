@@ -15,7 +15,8 @@ source(paste(SOURCE.DIR,
 
 ## Parameters and Arguments ###################################################
 
-defaults <- list(type           = NULL,
+defaults <- list(type           = "paired",
+                 mc.cores       = 1,
                  fdrOverAmp     = 0.05,
                  components     = 1,
                  fragmentLen    = NULL,
