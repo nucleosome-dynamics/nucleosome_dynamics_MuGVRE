@@ -127,7 +127,7 @@ if (!is.null(params$rep1) && !is.null(params$rep1)) {
     }
     thresh@scale <- as.numeric(params$threshold)
 } else if (grepl("%$", params$threshold)) {
-    thresh <- threshold
+    thresh <- params$threshold
 } else {
     thresh <- as.numeric(params$threshold)
 }
