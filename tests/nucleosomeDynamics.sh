@@ -12,7 +12,7 @@ outputGff="/orozco/services/Rdata/tmp_wd/nd_34_35.gff"
 #rep1
 #rep2
 
-Rscipt $script             \
+Rscript $script            \
     --input1 $input1       \
     --input2 $input2       \
     --plotRData $plotRData \

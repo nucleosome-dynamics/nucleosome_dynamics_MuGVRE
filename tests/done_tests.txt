@@ -1,1 +1,3 @@
-readBAM
+readBAM -- finished
+coverage -- finished
+nucDyn (no reps) -- running
