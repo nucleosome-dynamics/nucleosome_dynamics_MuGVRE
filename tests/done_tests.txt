@@ -1,8 +1,8 @@
 readBAM -- finished
 coverage -- finished
-NucDyn (no reps) -- running
-nfr -- written
-nucleR -- written
+NucDyn (no reps) -- finished
+nfr -- finished
+nucleR -- finished
 periodicity -- written
 to_bigWig -- written
 tx_classes -- written
