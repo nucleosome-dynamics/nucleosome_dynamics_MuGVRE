@@ -8,4 +8,5 @@ to_bigWig        -- finished
 tx_classes       -- finished
 plot             -- finished
 from_bigWig      -- finished
-NucDyn (reps) -- todo
+NucDyn (reps)    -- todo
+gaussian         -- finished
