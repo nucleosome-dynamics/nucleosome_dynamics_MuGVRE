@@ -1,0 +1,12 @@
+readBAM          -- done
+coverage         -- done
+NucDyn (no reps) -- done
+nfr              -- written
+nucleR           -- written
+periodicity      -- written
+to_bigWig        -- written
+tx_classes       -- written
+plot             -- written
+from_bigWig      -- written
+gaussian         -- written
+NucDyn (reps)    -- todo
