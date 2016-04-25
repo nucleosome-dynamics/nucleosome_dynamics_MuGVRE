@@ -7,7 +7,21 @@ library(parallel)
 library(getopt)
 library(plyr)
 
-SOURCE.DIR <- "/home/rilla/nucleServ/sourced"
+where <- function () {
+    spath <-parent.frame(2)$ofile
+
+    if (is.null(spath)) {
+        args <- commandArgs()
+        filearg <- args[grep("^--file=", args)]
+        fname <- strsplit(filearg, "=")[[1]][2]
+    } else {
+        fname <- spath
+    }
+
+    dirname(normalizePath(fname))
+}
+
+SOURCE.DIR <- paste(where(), "../sourced", sep="/")
 sourced <- c("helperfuns", "wig_funs", "get_genes", "periodicity_funs",
              "gff_funs")
 for (x in sourced) {

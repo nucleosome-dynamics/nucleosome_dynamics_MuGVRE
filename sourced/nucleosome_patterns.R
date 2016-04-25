@@ -1,4 +1,5 @@
-SOURCE.DIR <- "/home/rilla/nucleServ/sourced"
+#!/usr/bin/env Rscript
+
 source(paste(SOURCE.DIR,
              "helperfuns.R",
              sep="/"))

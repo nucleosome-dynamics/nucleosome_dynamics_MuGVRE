@@ -6,7 +6,21 @@ library(getopt)
 library(IRanges)
 library(plyr)
 
-SOURCE.DIR <- "/home/rilla/nucleServ/sourced"
+where <- function () {
+    spath <-parent.frame(2)$ofile
+
+    if (is.null(spath)) {
+        args <- commandArgs()
+        filearg <- args[grep("^--file=", args)]
+        fname <- strsplit(filearg, "=")[[1]][2]
+    } else {
+        fname <- spath
+    }
+
+    dirname(normalizePath(fname))
+}
+
+SOURCE.DIR <- paste(where(), "../sourced", sep="/")
 sourced <- c("gff_funs", "fp", "gauss_funs")
 for (x in paste0(SOURCE.DIR, "/", sourced, ".R")) {
      source(x)

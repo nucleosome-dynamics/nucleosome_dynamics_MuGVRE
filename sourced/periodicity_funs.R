@@ -5,7 +5,6 @@
 library(IRanges)
 library(parallel)
 
-SOURCE.DIR <- "/home/rilla/nucleServ/sourced"
 source(paste(SOURCE.DIR,
              "helperfuns.R",
              sep="/"))
