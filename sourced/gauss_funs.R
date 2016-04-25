@@ -86,7 +86,7 @@ stripZeros <- function (x, a=0, tail=FALSE)
 fitIt <- function (f, tries=10, max.value=35000, max.sd=2000)
 {
     isFitOk <- function (fit)
-        fit$value <= max.value && fit$par[2] <= max.sd
+        fit$value <= max.value && abs(fit$par[2]) <= max.sd
     for (i in 1:tries) {
         par <- 10 * runif(3)
         fit <- optim(par,
@@ -125,7 +125,7 @@ gaussFitCov <- function (xs)
     } else {
         return(do.call(Gaussian,
                        list(m=fit.par[[1]] + shift,
-                            sd=fit.par[[2]],
+                            sd=abs(fit.par[[2]]),
                             k=fit.par[[3]])))
     }
 }
