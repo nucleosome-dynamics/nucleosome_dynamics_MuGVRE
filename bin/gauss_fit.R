@@ -14,11 +14,12 @@ for (x in paste0(SOURCE.DIR, "/", sourced, ".R")) {
 
 ## Command line arguments #####################################################
 
-spec <- matrix(c("calls", "a", 1, "character",
-                 "reads", "b", 1, "character",
-                 "start", "c", 1, "integer",
-                 "end",   "d", 1, "integer",
-                 "chr",   "e", 1, "character"),
+spec <- matrix(c("calls",  "a", 1, "character",
+                 "reads",  "b", 1, "character",
+                 "output", "c", 1, "character",
+                 "start",  "d", 1, "integer",
+                 "end",    "e", 1, "integer",
+                 "chr",    "f", 1, "character"),
                byrow=TRUE,
                ncol=4)
 args <- getopt(spec)
