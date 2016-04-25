@@ -6,7 +6,7 @@ library(getopt)
 library(IRanges)
 library(plyr)
 
-SOURCE.DIR <- "/home/rilla/scratch/nucler/nucleServ/sourced"
+SOURCE.DIR <- "/home/rilla/nucleServ/sourced"
 sourced <- c("gff_funs", "fp", "gauss_funs")
 for (x in paste0(SOURCE.DIR, "/", sourced, ".R")) {
      source(x)
