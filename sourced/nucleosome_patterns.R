@@ -56,7 +56,10 @@ nucleosomePatterns <- function(calls, cover=NULL, id, chrom, pos, strand="+",
 
     doIt <- do.call(compose,
                     lapply(fs,
-                           function (f) bind(wrapFun(f))))
+                           function (f) {
+                               force(f)
+                               bind(wrapFun(f))
+                           }))
 
     makeDfRow(doIt(flow)$state)
 }
