@@ -79,19 +79,27 @@ processStrand <- function(strand, bam, flags)
     # Separate the paired reads
     p1 <- vectorizedAll(is.paired, p1mate, !strand.check)
     p2 <- vectorizedAll(is.paired, p2mate, strand.check)
-    unsorted.reads1 <- lapply(bam, `[`, p1)
-    unsorted.reads2 <- lapply(bam, `[`, p2)
+    #unsorted.reads1 <- lapply(bam, `[`, p1)
+    #unsorted.reads2 <- lapply(bam, `[`, p2)
+
+    unsorted.reads1 <- bam[p1, ]
+    unsorted.reads2 <- bam[p2, ]
+
+    rownames(unsorted.reads1) <- as.vector(unsorted.reads1$qname)
+    rownames(unsorted.reads2) <- as.vector(unsorted.reads2$qname)
 
     # Sort by the name of the reads. Assiming the paired reads will have the
     # same name, this will keep the pairs in the same position
-    message(sprintf("    sorting the reads in strand %s by name", strand))
-    reads1 <- sortBy(unsorted.reads1, "qname")
-    reads2 <- sortBy(unsorted.reads2, "qname")
+    common <- intersect(rownames(unsorted.reads1), rownames(unsorted.reads2))
+
+    reads1 <- unsorted.reads1[common, ]
+    reads2 <- unsorted.reads2[common, ]
 
     # Consistency check
     test <- all(vectorizedAll(reads1$mpos  == reads2$pos,
                               reads2$mpos  == reads1$pos,
                               reads1$rname == reads2$rname))
+
     if (!test) {
         stop(sprintf("ERROR: Mate selection for %s strand is invalid",
                      strand))
@@ -115,7 +123,7 @@ loadPairedBam <- function(file)
               "qwidth",
               "mrnm",
               "mpos")
-    bam <- scanBam(file=file, param=ScanBamParam(what=what))[[1]]
+    bam <- as.data.frame(scanBam(file=file, param=ScanBamParam(what=what))[[1]])
 
     # We will process the flags in R
     # (an alternative is multiple scanBam calls...)
@@ -128,6 +136,9 @@ loadPairedBam <- function(file)
                              processStrand,
                              bam,
                              flags)))
+
+    kk <- processStrand("+", bam, flags)
+
 }
 
 loadBAM <- function(f, type="single")
