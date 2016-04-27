@@ -3,19 +3,11 @@
 ## Imports ####################################################################
 
 library(IRanges)
-
-source(paste(SOURCE.DIR,
-             "get_genes.R",
-             sep="/"))
+source(paste(SOURCE.DIR, "get_genes.R", sep="/"))
 
 ## Binary paths ###############################################################
 
-#towig.bin <- "/home/rilla/nucleServ/wig_utils/bigWigToWig"
-#tobig.bin <- "/home/rilla/nucleServ/wig_utils/wigToBigWig"
-
-#wig.dir <- paste(where(), "../wig_utils", sep="/")
-wig.dir <- "/home/rilla/nucleServ/wig_utils"
-
+wig.dir <- paste(where(), "../wig_utils", sep="/")
 towig.bin <- paste(wig.dir, "bigWigToWig", sep="/")
 tobig.bin <- paste(wig.dir, "wigToBigWig", sep="/")
 

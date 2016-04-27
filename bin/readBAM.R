@@ -16,8 +16,6 @@ where <- function () {
     dirname(normalizePath(fname))
 }
 
-SOURCE.DIR <- "/home/rilla/nucleServ/sourced"
-
 SOURCE.DIR <- paste(where(), "../sourced", sep="/")
 source(paste(SOURCE.DIR,
              "loadbams.R",
