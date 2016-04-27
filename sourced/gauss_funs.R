@@ -149,7 +149,7 @@ doGaussFit <- function (calls, reads, ...)
             chr.reads <- rs[[chr]]
             gaussFitChr(chr.calls, chr.reads, ...)
         }
-        ddply(calls, "seqname", doChrm)
+        ddply(calls, "seqname", doChr)
     } else if (class(reads) == "IRanges") {
         gaussFitChr(calls, reads, ...)
     }
