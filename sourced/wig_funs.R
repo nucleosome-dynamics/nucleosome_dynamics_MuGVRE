@@ -13,7 +13,8 @@ source(paste(SOURCE.DIR,
 #towig.bin <- "/home/rilla/nucleServ/wig_utils/bigWigToWig"
 #tobig.bin <- "/home/rilla/nucleServ/wig_utils/wigToBigWig"
 
-wig.dir <- paste(where(), "../wig_utils", sep="/")
+#wig.dir <- paste(where(), "../wig_utils", sep="/")
+wig.dir <- "/home/rilla/nucleServ/wig_utils"
 
 towig.bin <- paste(wig.dir, "bigWigToWig", sep="/")
 tobig.bin <- paste(wig.dir, "wigToBigWig", sep="/")
@@ -95,12 +96,19 @@ writeWig <- function(x, outf)
                               function(chr)
                                   paste("fixedStep",
                                         paste0("chrom=", chr),
-                                        paste0("start=", names(x[[chr]])),
+                                        paste0("start=",
+                                               format(as.numeric(names(x[[chr]])),
+                                                      trim=TRUE,
+                                                      scientific=FALSE)),
                                         "step=1",
                                         sep=" ")))
     vals <- unlist(x, recursive=FALSE)
-    idx <- order(c(seq_along(tag.rows), seq_along(vals)))
-    cat(unlist(c(tag.rows, vals)[idx]),
+    nonsc.vals <- lapply(vals,
+                         format,
+                         trim=TRUE,
+                         scientific=FALSE)
+    idx <- order(c(seq_along(tag.rows), seq_along(nonsc.vals)))
+    cat(unlist(c(tag.rows, nonsc.vals)[idx]),
         sep="\n",
         file=outf)
 }

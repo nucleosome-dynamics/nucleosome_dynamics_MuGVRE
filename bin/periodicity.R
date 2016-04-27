@@ -21,7 +21,8 @@ where <- function () {
     dirname(normalizePath(fname))
 }
 
-SOURCE.DIR <- paste(where(), "../sourced", sep="/")
+#SOURCE.DIR <- paste(where(), "../sourced", sep="/")
+SOURCE.DIR <- "/home/rilla/nucleServ/sourced/"
 sourced <- c("helperfuns", "wig_funs", "get_genes", "periodicity_funs",
              "gff_funs")
 for (x in sourced) {
