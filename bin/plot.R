@@ -20,8 +20,8 @@ where <- function () {
 }
 
 SOURCE.DIR <- paste(where(), "../sourced", sep="/")
-sourced <- c("plot_subset", "make_plot.R")
-for (x in paste0(SOURCE.DIR, "/", x, ".R") {
+sourced <- c("plot_subset", "make_plot")
+for (x in paste0(SOURCE.DIR, "/", sourced, ".R")) {
     source(x)
 }
 
