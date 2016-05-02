@@ -12,4 +12,5 @@ Rscript $script          \
     --calls $calls       \
     --coverage $coverage \
     --genome $genome     \
-    --output $output
+    --output $output     \
+    --cores 20
