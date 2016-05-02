@@ -113,20 +113,22 @@ readGff <- function (fname, load.attributes=TRUE)
             vs
         }
 
-        row.attrs <- lapply(strsplit(attrs, ";"), parseRowAttrs)
-        # make sure they all have the same attributes, even if some are NA
-        params <- unique(unlist(lapply(row.attrs, names)))
-        for (i in seq_along(row.attrs)) {
-            xnames <- names(row.attrs[[i]])
-            na.xnames <- params[!(params %in% xnames)]
-            row.attrs[[i]][na.xnames] <- NA
+        if (!is.null(attrs)) {
+            row.attrs <- lapply(strsplit(attrs, ";"), parseRowAttrs)
+            # make sure they all have the same attributes, even if some are NA
+            params <- unique(unlist(lapply(row.attrs, names)))
+            for (i in seq_along(row.attrs)) {
+                xnames <- names(row.attrs[[i]])
+                na.xnames <- params[!(params %in% xnames)]
+                row.attrs[[i]][na.xnames] <- NA
+            }
+
+            m <- do.call(rbind, row.attrs)
+            df.tmp <- as.data.frame(m)
+            attrs.df <- as.data.frame(lapply(df.tmp, unlist),
+                                      stringsAsFactors=FALSE)
+            df <- cbind(df, attrs.df)
         }
-
-        m <- do.call(rbind, row.attrs)
-        df.tmp <- as.data.frame(m)
-        attrs.df <- as.data.frame(lapply(df.tmp, unlist), stringsAsFactors=FALSE)
-
-        df <- cbind(df, attrs.df)
     }
 
     df$attribute <- NULL
