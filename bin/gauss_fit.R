@@ -20,7 +20,8 @@ where <- function () {
     dirname(normalizePath(fname))
 }
 
-SOURCE.DIR <- paste(where(), "../sourced", sep="/")
+#SOURCE.DIR <- paste(where(), "../sourced", sep="/")
+SOURCE.DIR <- "/home/rilla/nucleServ/sourced"
 sourced <- c("gff_funs", "fp", "gauss_funs")
 for (x in paste0(SOURCE.DIR, "/", sourced, ".R")) {
      source(x)
@@ -37,6 +38,15 @@ spec <- matrix(c("calls",  "a", 1, "character",
                byrow=TRUE,
                ncol=4)
 args <- getopt(spec)
+
+
+args$calls="/orozco/services/Rdata/tmp_wd/120502_SN365_B_L002_GGM-34_NR.gff"
+args$reads="/orozco/services/Rdata/tmp_wd/120502_SN365_B_L002_GGM-34.RData"
+args$start=1000
+args$end=10000
+args$chr="chrI"
+#args$output="/orozco/services/Rdata/tmp_wd/120502_SN365_B_L002_GGM-34_gauss.gff"
+
 
 ## Subset #####################################################################
 
@@ -61,6 +71,7 @@ if (!is.null(args[["chr"]])) {
 
 message("perfroming the fittings")
 gauss.df <- doGaussFit(calls, reads, .progress="text")
+gauss.df$stiffess <- 1/gauss.df$sd
 
 ## Save output ################################################################
 
