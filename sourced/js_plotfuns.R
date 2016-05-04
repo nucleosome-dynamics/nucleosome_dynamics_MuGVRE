@@ -121,6 +121,7 @@ buildGgplot <- function (mdf, shdf, plot.start, plot.end) {
 
 ggplot2widget <- function (p) {
     pl <- plotly_build(p)
+    file.remove("Rplots.pdf")
     pl[["data"]][[1]][["name"]] <- "Coverage 1"
     pl[["data"]][[2]][["name"]] <- "Coverage 2"
     pl[["data"]][[3]][["name"]] <- "Deletions"
