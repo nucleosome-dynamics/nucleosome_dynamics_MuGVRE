@@ -103,8 +103,8 @@ buildGgplot <- function (mdf, shdf, plot.start, plot.end) {
                                     "left"="darkred",
                                     "right"="darkblue")) +
         scale_fill_manual(name="",
-                          values=c("setA"="#C0C0C0",
-                                   "setB"="#00000000",
+                          values=c("setA"="#909090",
+                                   "setB"="#E0E0E000",
                                    "ins"="#00FF0090",
                                    "dels"="#FF000095",
                                    "left"="darkred",
