@@ -79,7 +79,7 @@ addArrows <- function (sdf, par.ypc, forward=TRUE) {
                    y0=0,
                    x1=0,
                    y1=0,
-                   variable=factor(levels(lsdf$variable)))
+                   variable=factor(levels(sdf$variable)))
     }
 }
 
