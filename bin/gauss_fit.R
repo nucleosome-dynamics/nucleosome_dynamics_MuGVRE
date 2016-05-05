@@ -39,15 +39,6 @@ spec <- matrix(c("calls",  "a", 1, "character",
                ncol=4)
 args <- getopt(spec)
 
-
-args$calls="/orozco/services/Rdata/tmp_wd/120502_SN365_B_L002_GGM-34_NR.gff"
-args$reads="/orozco/services/Rdata/tmp_wd/120502_SN365_B_L002_GGM-34.RData"
-args$start=1000
-args$end=10000
-args$chr="chrI"
-#args$output="/orozco/services/Rdata/tmp_wd/120502_SN365_B_L002_GGM-34_gauss.gff"
-
-
 ## Subset #####################################################################
 
 message("loading inputs")
@@ -78,6 +69,14 @@ gauss.df$stiffess <- 1/gauss.df$sd
 gauss.df$score_w <- NULL
 gauss.df$score_h <- NULL
 gauss.df$nmerge <- NULL
+
+names(gauss.df)[names(gauss.df) == "class"] <- "nucleR class"
+names(gauss.df)[names(gauss.df) == "stiffness"] <- "score stiffness"
+names(gauss.df)[names(gauss.df) == "k"] <- "gauss k"
+names(gauss.df)[names(gauss.df) == "m"] <- "gauss m"
+names(gauss.df)[names(gauss.df) == "sd"] <- "gauss sd"
+
+gauss.df$feature <- "stiffness estimation"
 
 gff <- df2gff(gauss.df)
 writeGff(gff, args[["output"]])

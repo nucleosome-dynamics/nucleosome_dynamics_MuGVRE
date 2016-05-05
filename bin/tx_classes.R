@@ -98,10 +98,20 @@ tx.classes <- with(params,
 
 ## Store output ###############################################################
 
+tx.classes$start <- ifelse(is.na(tx.classes[["m1.pos"]]),
+                           tx.classes$pos - window,
+                           tx.classes[["m1.pos"]])
+
+tx.classes$end <- ifelse(is.na(tx.classes[["p1.pos"]]),
+                         tx.classes$pos + window,
+                         tx.classes[["p1.pos"]])
+
+names(tx.classes)[names(tx.classes) == "m1.pos"] <- "nucleosome -1"
+names(tx.classes)[names(tx.classes) == "p1.pos"] <- "nucleosome +1"
+names(tx.classes)[names(tx.classes) == "chrom"] <- "pos"
+tx.classses$id <- NULL
+
 message("-- saving gff output")
-names(tx.classes) <- subMany(c("chrom",   "pos"),
-                             c("seqname", "start"),
-                             names(tx.classes))
 gff <- df2gff(tx.classes,
               source="nucleR",
               feature="txStart class",
