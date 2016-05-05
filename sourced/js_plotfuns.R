@@ -147,6 +147,10 @@ makeShifts <- function (dyn, middle, par.ypc) {
     rbind(lsdf, rsdf)
 }
 
+simplifier <- function (df, i=2)
+    # remove some points from the plot for efficiency
+    df[1:nrow(df) %% i == 1, ]
+
 makeCovs <- function (dyn) {
     cols <- list(setA=dyn[[1]]$originals,
                  setB=dyn[[2]]$originals,
@@ -158,7 +162,7 @@ makeCovs <- function (dyn) {
     covs <- lapply(cols, function(x) as.vector(coverage(x)))
     valsdf <- as.data.frame(makeEqual(covs))
     valsdf$x <- 1:nrow(valsdf)
-    melt(valsdf, id.vars="x")
+    melt(simplifier(valsdf), id.vars="x")
 }
 
 buildPlot <- function (dyn, start, end) {
@@ -170,3 +174,4 @@ buildPlot <- function (dyn, start, end) {
     gg <- buildGgplot(mdf, shdf, start, end)
     ggplot2widget(gg)
 }
+
