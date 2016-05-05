@@ -3,19 +3,25 @@
 ###############################################################################
 
 script="/home/rilla/nucleServ/bin/gauss_fit.R"
-calls="/orozco/services/Rdata/tmp_wd/120502_SN365_B_L002_GGM-34_NR.gff"
-reads="/orozco/services/Rdata/tmp_wd/120502_SN365_B_L002_GGM-34.RData"
-start=1000
-end=10000
-chr="chrI"
-output="/orozco/services/Rdata/tmp_wd/120502_SN365_B_L002_GGM-34_gauss.gff"
+calls="/home/rilla/scratch/nucler/cell_cycle_data/calcs/g1_nr.gff"
+reads="/home/rilla/scratch/nucler/cell_cycle_data/reads/g1.RData"
+output="/home/rilla/scratch/nucler/cell_cycle_data/reads/gau_g1.gff"
 
 Rscript $script      \
     --calls $calls   \
     --reads $reads   \
-    --start $start   \
-    --output $output \
-    --end $end       \
-    --chr $chr
+    --output $output
+
+###############################################################################
+
+script="/home/rilla/nucleServ/bin/gauss_fit.R"
+calls="/home/rilla/scratch/nucler/cell_cycle_data/calcs/s_nr.gff"
+reads="/home/rilla/scratch/nucler/cell_cycle_data/reads/s.RData"
+output="/home/rilla/scratch/nucler/cell_cycle_data/reads/gau_s.gff"
+
+Rscript $script      \
+    --calls $calls   \
+    --reads $reads   \
+    --output $output
 
 ###############################################################################

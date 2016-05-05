@@ -17,9 +17,24 @@
 ################################################################################
 
 script="/home/rilla/nucleServ/bin/tx_classes.R"
-calls="/orozco/services/Rdata/tmp_wd/120502_SN365_B_L002_GGM-35_NR.gff"
-coverage="/orozco/services/Rdata/tmp_wd/120502_SN365_B_L002_GGM-35_cov.RData"
-output="/orozco/services/Rdata/tmp_wd/120502_SN365_B_L002_GGM-35_tx.gff"
+params$calls="/orozco/scratch/xesh0/orozco/rilla/nucler/cell_cycle_data/calcs/g1_nr.gff"
+params$coverage="/home/rilla/scratch/nucler/cell_cycle_data/calcs/g1_cov.RData"
+params$output="/home/rilla/scratch/nucler/cell_cycle_data/calcs/g1_tx.gff"
+params$genome="R64-1-1"
+
+Rscript $script          \
+    --calls $calls       \
+    --coverage $coverage \
+    --genome $genome     \
+    --output $output     \
+    --cores 20
+
+###############################################################################
+
+script="/home/rilla/nucleServ/bin/tx_classes.R"
+calls="/orozco/scratch/xesh0/orozco/rilla/nucler/cell_cycle_data/calcs/s_nr.gff"
+coverage="/home/rilla/scratch/nucler/cell_cycle_data/calcs/s_cov.RData"
+output="/home/rilla/scratch/nucler/cell_cycle_data/calcs/s_tx.gff"
 genome="R64-1-1"
 
 Rscript $script          \
@@ -30,3 +45,6 @@ Rscript $script          \
     --cores 20
 
 ###############################################################################
+
+
+

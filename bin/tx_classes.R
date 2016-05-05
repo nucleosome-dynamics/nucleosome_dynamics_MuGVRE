@@ -30,7 +30,7 @@ for (x in paste0(SOURCE.DIR, "/", sourced, ".R")) {
 
 ## Parameters and Arguments ###################################################
 
-defaults <- list(mc.cores             = 1,
+defaults <- list(mc.cores          = 1,
                  window            = 300,
                  p1.max.merge      = 3,
                  p1.max.downstream = 20,
@@ -84,7 +84,7 @@ message("-- checking the classes")
 tx.classes <- with(params,
                    nucleosomePatternsDF(calls             = nucs,
                                         cover             = cover,
-                                        df                = genes,
+                                        df                = head(genes),
                                         col.id            = "ID",
                                         col.chrom         = "chrom",
                                         col.pos           = "start",
@@ -99,23 +99,29 @@ tx.classes <- with(params,
 ## Store output ###############################################################
 
 tx.classes$start <- ifelse(is.na(tx.classes[["m1.pos"]]),
-                           tx.classes$pos - window,
+                           tx.classes$pos - params$window,
                            tx.classes[["m1.pos"]])
+tx.classes$start[tx.classes$start < 1] <- 1
 
 tx.classes$end <- ifelse(is.na(tx.classes[["p1.pos"]]),
-                         tx.classes$pos + window,
+                         tx.classes$pos + params$window,
                          tx.classes[["p1.pos"]])
+
+s <- tx.classes$start
+e <- tx.classes$end
+tx.classes$start <- mapply(min, s, e)
+tx.classes$end <- mapply(max, s, e)
 
 names(tx.classes)[names(tx.classes) == "m1.pos"] <- "nucleosome -1"
 names(tx.classes)[names(tx.classes) == "p1.pos"] <- "nucleosome +1"
-names(tx.classes)[names(tx.classes) == "chrom"] <- "pos"
-tx.classses$id <- NULL
+names(tx.classes)[names(tx.classes) == "chrom"] <- "seqname"
+names(tx.classes)[names(tx.classes) == "id"] <- "gene id"
+#tx.classes$id <- NULL
 
 message("-- saving gff output")
 gff <- df2gff(tx.classes,
               source="nucleR",
-              feature="txStart class",
-              end=tx.classes$start)
+              feature="TSS classification")
 writeGff(gff, params$output)
 
 ###############################################################################

@@ -22,13 +22,19 @@
 #
 ################################################################################
 
+script="/home/rilla/nucleServ/bin/coverage.R"
+input="/home/rilla/scratch/nucler/cell_cycle_data/reads/g1.RData"
+output="/home/rilla/scratch/nucler/cell_cycle_data/calcs/g1_cov.RData"
 
+Rscript $script    \
+    --input $input \
+    --output $output
 
 ###############################################################################
 
 script="/home/rilla/nucleServ/bin/coverage.R"
-input="/orozco/services/Rdata/tmp_wd/120502_SN365_B_L002_GGM-35.RData"
-output="/orozco/services/Rdata/tmp_wd/120502_SN365_B_L002_GGM-35_cov.RData"
+input="/home/rilla/scratch/nucler/cell_cycle_data/reads/s.RData"
+output="/home/rilla/scratch/nucler/cell_cycle_data/calcs/s_cov.RData"
 
 Rscript $script    \
     --input $input \

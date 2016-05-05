@@ -3,8 +3,20 @@
 ###############################################################################
 
 script="/home/rilla/nucleServ/bin/to_bigWig.R"
-input="/orozco/services/Rdata/tmp_wd/120502_SN365_B_L002_GGM-34_cov.RData"
-output="/orozco/services/Rdata/tmp_wd/120502_SN365_B_L002_GGM-34_cov.bw"
+input="/home/rilla/scratch/nucler/cell_cycle_data/calcs/g1_cov.RData"
+output="/home/rilla/scratch/nucler/cell_cycle_data/calcs/g1_cov.bw"
+genome="R64-1-1"
+
+Rscript $script      \
+    --input $input   \
+    --output $output \
+    --genome $genome
+
+###############################################################################
+
+script="/home/rilla/nucleServ/bin/to_bigWig.R"
+input="/home/rilla/scratch/nucler/cell_cycle_data/calcs/s_cov.RData"
+output="/home/rilla/scratch/nucler/cell_cycle_data/calcs/s_cov.bw"
 genome="R64-1-1"
 
 Rscript $script      \

@@ -162,7 +162,7 @@ if (params$combined) {
 names(hs)[names(hs) == "type"] <- "class"
 names(hs)[names(hs) == "chr"] <- "seqname"
 names(hs)[names(hs) == "nreads"] <- "score"
-names(hs)[names(hs) == "totalreads"] <- "number of reads"
+names(hs)[names(hs) == "totalReads"] <- "number of reads"
 
 message("saving output as gff")
 writeGff(df2gff(hs,

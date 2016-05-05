@@ -16,6 +16,7 @@ nucleosomePatternsDF <- function(calls, cover=NULL, df, col.id="name",
         if (i %% report.every == 0) {
             message(i, "/", n)
         }
+
         nucleosomePatterns(calls  = calls,
                            cover  = cover,
                            id     = df[i, col.id],
@@ -24,10 +25,10 @@ nucleosomePatternsDF <- function(calls, cover=NULL, df, col.id="name",
                            strand = df[i, col.strand])
     }
     do.call(rbind,
-            xlapply(1:n,
-                    iterRows,
-                    report.every=10,
-                    mc.cores=mc.cores))
+            mclapply(1:n,
+                     iterRows,
+                     report.every=10,
+                     mc.cores=mc.cores))
 }
 
 # Actual main function ########################################################
@@ -60,7 +61,6 @@ nucleosomePatterns <- function(calls, cover=NULL, id, chrom, pos, strand="+",
                                force(f)
                                bind(wrapFun(f))
                            }))
-
     makeDfRow(doIt(flow)$state)
 }
 
@@ -126,7 +126,7 @@ getNearby <- function (state, calls, window)
         return(list(continue=TRUE,
                     vals=list(nearby=calls[sel, ])))
     } else {
-        return(list(continue=TRUE,
+        return(list(continue=FALSE,
                     vals=list()))
     }
 }
