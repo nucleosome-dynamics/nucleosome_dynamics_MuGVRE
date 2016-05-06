@@ -159,7 +159,7 @@ if (params$combined) {
 
 ### Store the Result ###########################################################
 
-names(hs)[names(hs) == "type"] <- "class"
+names(hs)[names(hs) == "type"] <- "classification"
 names(hs)[names(hs) == "chr"] <- "seqname"
 names(hs)[names(hs) == "nreads"] <- "score"
 names(hs)[names(hs) == "totalReads"] <- "number of reads"
