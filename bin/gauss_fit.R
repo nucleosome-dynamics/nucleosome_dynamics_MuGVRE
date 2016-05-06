@@ -29,40 +29,54 @@ for (x in paste0(SOURCE.DIR, "/", sourced, ".R")) {
 
 ## Command line arguments #####################################################
 
+defaults <- list(t = 310.15)
+
 spec <- matrix(c("calls",  "a", 1, "character",
                  "reads",  "b", 1, "character",
                  "output", "c", 1, "character",
                  "start",  "d", 1, "integer",
                  "end",    "e", 1, "integer",
-                 "chr",    "f", 1, "character"),
+                 "chr",    "f", 1, "character",
+                 "t"       "t", 1, "numeric"),
                byrow=TRUE,
                ncol=4)
 args <- getopt(spec)
 
+params <- defaults
+for (i in names(args)) {
+    params[[i]] <- args[[i]]
+}
+
 ## Subset #####################################################################
 
-message("loading inputs")
-calls <- readGff(args[["calls"]])
-reads <- get(load(args[["reads"]]))
+sd2stiffness <- function (sd, t)
+{
+    kB <- 1.38064852e-23
+    kB*t / sqrt(sd)
+}
 
-if (!is.null(args[["chr"]])) {
+message("loading inputs")
+calls <- readGff(params[["calls"]])
+reads <- get(load(params[["reads"]]))
+
+if (!is.null(params[["chr"]])) {
     message("subsetting data")
 
-    calls <- subset(calls, seqname == args[["chr"]])
-    reads <- ranges(reads)[[args[["chr"]]]]
+    calls <- subset(calls, seqname == params[["chr"]])
+    reads <- ranges(reads)[[params[["chr"]]]]
 
-    if (!is.null(args$start) && !is.null(args$end)) {
+    if (!is.null(params$start) && !is.null(params$end)) {
         calls <- subset(calls,
                         isIn(IRanges(start, end),
-                             IRanges(args[["start"]],
-                                     args[["end"]])))
+                             IRanges(params[["start"]],
+                                     params[["end"]])))
         reads <- selectReads(reads, calls)
     }
 }
 
 message("perfroming the fittings")
 gauss.df <- doGaussFit(calls, reads, .progress="text")
-gauss.df$stiffess <- 1/gauss.df$sd
+gauss.df$stiffness <- sd2stiffness(gauss.df$sd, params$t)
 
 ## Save output ################################################################
 
@@ -79,6 +93,6 @@ names(gauss.df)[names(gauss.df) == "sd"] <- "gauss sd"
 gauss.df$feature <- "stiffness estimation"
 
 gff <- df2gff(gauss.df)
-writeGff(gff, args[["output"]])
+writeGff(gff, params[["output"]])
 
 ###############################################################################
