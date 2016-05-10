@@ -3,8 +3,8 @@
 ###############################################################################
 
 script="/home/rilla/nucleServ/bin/nfr.R"
-input="/orozco/services/Rdata/tmp_wd/120502_SN365_B_L002_GGM-34_NR.gff"
-output="/orozco/services/Rdata/tmp_wd/120502_SN365_B_L002_GGM-34_nfr.gff"
+input="/home/rilla/scratch/nucler/cell_cycle_data/calcs/g1_nr.gff"
+output="/home/rilla/scratch/nucler/cell_cycle_data/calcs/g1_nfr.gff"
 
 Rscript $script    \
     --input $input \
@@ -13,8 +13,8 @@ Rscript $script    \
 ###############################################################################
 
 script="/home/rilla/nucleServ/bin/nfr.R"
-input="/orozco/services/Rdata/tmp_wd/120502_SN365_B_L002_GGM-35_NR.gff"
-output="/orozco/services/Rdata/tmp_wd/120502_SN365_B_L002_GGM-35_nfr.gff"
+input="/home/rilla/scratch/nucler/cell_cycle_data/calcs/s_nr.gff"
+output="/home/rilla/scratch/nucler/cell_cycle_data/calcs/s_nfr.gff"
 
 Rscript $script    \
     --input $input \

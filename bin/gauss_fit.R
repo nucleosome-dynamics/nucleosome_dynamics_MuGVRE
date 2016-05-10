@@ -37,7 +37,7 @@ spec <- matrix(c("calls",  "a", 1, "character",
                  "start",  "d", 1, "integer",
                  "end",    "e", 1, "integer",
                  "chr",    "f", 1, "character",
-                 "t"       "t", 1, "double"),
+                 "t",      "t", 1, "double"),
                byrow=TRUE,
                ncol=4)
 args <- getopt(spec)

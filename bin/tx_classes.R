@@ -78,16 +78,18 @@ cover <- get(load(params$coverage))
 message("-- loading used genome")
 genes <- getGenes(params$genome)
 
+genes$tss <- ifelse(genes$strand == "+", genes$start, genes$end)
+
 ## Do it ######################################################################
 
 message("-- checking the classes")
 tx.classes <- with(params,
                    nucleosomePatternsDF(calls             = nucs,
                                         cover             = cover,
-                                        df                = head(genes),
+                                        df                = genes,
                                         col.id            = "ID",
                                         col.chrom         = "chrom",
-                                        col.pos           = "start",
+                                        col.pos           = "tss",
                                         col.strand        = "strand",
                                         window            = window,
                                         p1.max.merge      = p1.max.merge,

@@ -17,10 +17,10 @@
 ################################################################################
 
 script="/home/rilla/nucleServ/bin/tx_classes.R"
-params$calls="/orozco/scratch/xesh0/orozco/rilla/nucler/cell_cycle_data/calcs/g1_nr.gff"
-params$coverage="/home/rilla/scratch/nucler/cell_cycle_data/calcs/g1_cov.RData"
-params$output="/home/rilla/scratch/nucler/cell_cycle_data/calcs/g1_tx.gff"
-params$genome="R64-1-1"
+calls="/orozco/scratch/xesh0/orozco/rilla/nucler/cell_cycle_data/calcs/g1_nr.gff"
+coverage="/home/rilla/scratch/nucler/cell_cycle_data/calcs/g1_cov.RData"
+output="/home/rilla/scratch/nucler/cell_cycle_data/calcs/g1_tss.gff"
+genome="R64-1-1"
 
 Rscript $script          \
     --calls $calls       \
@@ -34,7 +34,7 @@ Rscript $script          \
 script="/home/rilla/nucleServ/bin/tx_classes.R"
 calls="/orozco/scratch/xesh0/orozco/rilla/nucler/cell_cycle_data/calcs/s_nr.gff"
 coverage="/home/rilla/scratch/nucler/cell_cycle_data/calcs/s_cov.RData"
-output="/home/rilla/scratch/nucler/cell_cycle_data/calcs/s_tx.gff"
+output="/home/rilla/scratch/nucler/cell_cycle_data/calcs/s_tss.gff"
 genome="R64-1-1"
 
 Rscript $script          \
