@@ -52,7 +52,8 @@ for (i in names(args)) {
 sd2stiffness <- function (sd, t)
 {
     kB <- 1.38064852e-23
-    kB*t / sqrt(sd)
+    #kB*t / sqrt(sd)
+    1 / sqrt(sd)
 }
 
 message("loading inputs")
@@ -84,11 +85,11 @@ gauss.df$score_w <- NULL
 gauss.df$score_h <- NULL
 gauss.df$nmerge <- NULL
 
-names(gauss.df)[names(gauss.df) == "class"] <- "nucleR class"
-names(gauss.df)[names(gauss.df) == "stiffness"] <- "score stiffness"
-names(gauss.df)[names(gauss.df) == "k"] <- "gauss k"
-names(gauss.df)[names(gauss.df) == "m"] <- "gauss m"
-names(gauss.df)[names(gauss.df) == "sd"] <- "gauss sd"
+names(gauss.df)[names(gauss.df) == "class"] <- "nucleR.class"
+names(gauss.df)[names(gauss.df) == "stiffness"] <- "score.stiffness"
+names(gauss.df)[names(gauss.df) == "k"] <- "gauss.k"
+names(gauss.df)[names(gauss.df) == "m"] <- "gauss.m"
+names(gauss.df)[names(gauss.df) == "sd"] <- "gauss.sd"
 
 gauss.df$feature <- "stiffness estimation"
 
