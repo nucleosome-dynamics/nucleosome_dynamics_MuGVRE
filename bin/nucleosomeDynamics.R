@@ -64,6 +64,7 @@ defaults <- list(cores          = 1,
                  rangeStart     = NULL,
                  rangeEnd       = NULL,
                  chr            = NULL,
+                 scale          = 2,
                  nuc.width      = 120,
                  combined       = TRUE,
                  same.magnitude = 2,
@@ -126,6 +127,9 @@ if (!is.null(params$dynRData) && file.exists(params$dynRData)) {
 }
 
 if (!is.null(params$rep1) && !is.null(params$rep1)) {
+    if (grepl("%$", params$threshold)) {
+        params$threshold <- defaults$scale
+    }
 
     if (!is.null(params$threshRData) && file.exists(params$threshRData)) {
         thresh <- get(load(params$threshRData))
@@ -159,6 +163,7 @@ if (params$combined) {
 
 ### Store the Result ###########################################################
 
+hs$nuc[hs$nuc == 0] <- NA
 names(hs)[names(hs) == "type"] <- "classification"
 names(hs)[names(hs) == "chr"] <- "seqname"
 names(hs)[names(hs) == "nreads"] <- "score"
