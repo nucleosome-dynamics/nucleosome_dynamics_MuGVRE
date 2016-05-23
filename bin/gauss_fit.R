@@ -20,8 +20,7 @@ where <- function () {
     dirname(normalizePath(fname))
 }
 
-#SOURCE.DIR <- paste(where(), "../sourced", sep="/")
-SOURCE.DIR <- "/home/rilla/nucleServ/sourced"
+SOURCE.DIR <- paste(where(), "../sourced", sep="/")
 sourced <- c("gff_funs", "fp", "gauss_funs")
 for (x in paste0(SOURCE.DIR, "/", sourced, ".R")) {
      source(x)
