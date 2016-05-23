@@ -49,7 +49,7 @@ nucleosomePatterns <- function(calls, cover=NULL, id, chrom, pos, strand="+",
                                  dist   = NA,
                                  descr  = NA))
 
-    fs <- rev(list(partial(lookCover, cover, window, max.uncovered),
+    fs <- rev(list(#partial(lookCover, cover, window, max.uncovered),
                    partial(getNearby, calls, window),
                    partial(getP1, p1.max.downstream, p1.max.merge),
                    getM1,
