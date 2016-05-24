@@ -84,35 +84,20 @@ genes$tss <- ifelse(genes$strand == "+", genes$start, genes$end)
 
 message("-- checking the classes")
 tx.classes <- with(params,
-                   nucleosomePatternsDF(calls             = nucs,
-                                        cover             = cover,
-                                        df                = genes,
-                                        col.id            = "ID",
-                                        col.chrom         = "chrom",
-                                        col.pos           = "tss",
-                                        col.strand        = "strand",
-                                        window            = window,
-                                        p1.max.merge      = p1.max.merge,
-                                        p1.max.downstream = p1.max.downstream,
-                                        open.thresh       = open.thresh,
-                                        max.uncovered     = max.uncovered,
-                                        mc.cores          = mc.cores))
+                   patternsByChrDF(calls             = nucs,
+                                   df                = genes,
+                                   col.id            = "ID",
+                                   col.chrom         = "chrom",
+                                   col.pos           = "tss",
+                                   col.strand        = "strand",
+                                   window            = window,
+                                   p1.max.merge      = p1.max.merge,
+                                   p1.max.downstream = p1.max.downstream,
+                                   open.thresh       = open.thresh,
+                                   max.uncovered     = max.uncovered,
+                                   mc.cores          = mc.cores))
 
 ## Store output ###############################################################
-
-tx.classes$start <- ifelse(is.na(tx.classes[["m1.pos"]]),
-                           tx.classes$pos - params$window,
-                           tx.classes[["m1.pos"]])
-tx.classes$start[tx.classes$start < 1] <- 1
-
-tx.classes$end <- ifelse(is.na(tx.classes[["p1.pos"]]),
-                         tx.classes$pos + params$window,
-                         tx.classes[["p1.pos"]])
-
-s <- tx.classes$start
-e <- tx.classes$end
-tx.classes$start <- mapply(min, s, e)
-tx.classes$end <- mapply(max, s, e)
 
 names(tx.classes)[names(tx.classes) == "m1.pos"] <- "nucleosome minus1"
 names(tx.classes)[names(tx.classes) == "p1.pos"] <- "nucleosome plus1"

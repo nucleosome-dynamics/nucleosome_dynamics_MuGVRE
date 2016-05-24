@@ -1,71 +1,12 @@
 #!/usr/bin/env Rscript
 
+library(plyr)
 source(paste(SOURCE.DIR,
              "helperfuns.R",
              sep="/"))
 
 ###############################################################################
-# Top wrapper function ########################################################
-
-nucleosomePatternsDF <- function(calls, cover=NULL, df, col.id="name",
-                                 col.chrom="chrom", col.pos="pos",
-                                 col.strand="strand", mc.cores=1, ...)
-{
-    n <- nrow(df)
-    iterRows <- function(i, report.every=100) {
-        if (i %% report.every == 0) {
-            message(i, "/", n)
-        }
-
-        nucleosomePatterns(calls  = calls,
-                           cover  = cover,
-                           id     = df[i, col.id],
-                           chrom  = df[i, col.chrom],
-                           pos    = df[i, col.pos],
-                           strand = df[i, col.strand])
-    }
-    do.call(rbind,
-            mclapply(1:n,
-                     iterRows,
-                     report.every=10,
-                     mc.cores=mc.cores))
-}
-
-# Actual main function ########################################################
-nucleosomePatterns <- function(calls, cover=NULL, id, chrom, pos, strand="+",
-                               window=300, p1.max.merge=3,
-                               p1.max.downstream=20, open.thresh=215,
-                               max.uncovered=150)
-{   # This function is written in a monadic style. This allows to express in
-    # a more compact way the fact that every computation might be the last one
-    # to be perfomed is some condition is met.
-    flow <- list(continue = TRUE,
-                 state    = list(id     = id,
-                                 chrom  = as.character(chrom),
-                                 strand = as.character(strand),
-                                 pos    = pos,
-                                 p1.pos = NA,
-                                 m1.pos = NA,
-                                 dist   = NA,
-                                 descr  = NA))
-
-    fs <- rev(list(#partial(lookCover, cover, window, max.uncovered),
-                   partial(getNearby, calls, window),
-                   partial(getP1, p1.max.downstream, p1.max.merge),
-                   getM1,
-                   partial(getDescr, open.thresh)))
-
-    doIt <- do.call(compose,
-                    lapply(fs,
-                           function (f) {
-                               force(f)
-                               bind(wrapFun(f))
-                           }))
-    makeDfRow(doIt(flow)$state)
-}
-
-###############################################################################
-# Helper functions ############################################################
+# Helpers #####################################################################
 
 .mid <- function(x)
     floor((start(x)+end(x)) / 2)
@@ -75,19 +16,6 @@ nucleosomePatterns <- function(calls, cover=NULL, id, chrom, pos, strand="+",
     ifelse(x > open.thresh, "open",
     ifelse(x < 120,         "overlap",
                             "close")))
-
-makeDfRow <- function(ls)
-{
-    with(ls,
-         data.frame(id     = id,
-                    chrom  = chrom,
-                    strand = strand,
-                    pos    = pos,
-                    p1.pos = p1.pos,
-                    m1.pos = m1.pos,
-                    dist   = dist,
-                    descr  = descr))
-}
 
 detectNuc <- function (xs, pos, margin, strand, nucpos)
 {
@@ -113,111 +41,158 @@ detectNuc <- function (xs, pos, margin, strand, nucpos)
     x <- subxs[closest(.mid(subxs)), ]
 }
 
-###############################################################################
-# Functions to be used monadically
-
-getNearby <- function (state, calls, window)
+getDescr <- function (dist, m1.class, p1.class, open.thresh)
 {
-    mids <- .mid(calls)
-    sel <- mids > (state$pos - window) &
-           mids < (state$pos + window) &
-           space(calls) == state$chrom
-    if (any(sel)) {
-        return(list(continue=TRUE,
-                    vals=list(nearby=calls[sel, ])))
+    if (!is.null(m1.class) & !is.null(p1.class)) {
+        dist.class <- .gimmeDist(dist, open.thresh)
+        descr <- paste(m1.class, dist.class, p1.class, sep="-")
+    } else if (is.null(p1.class)) {
+        descr <- "+1_missing"
+    } else if (is.null(m1.class)) {
+        descr <- "-1_missing"
     } else {
-        return(list(continue=FALSE,
-                    vals=list()))
+        descr <- NA
     }
+    descr
 }
 
-getP1 <- function (state, p1.max.downstream, p1.max.merge)
-{
-    p1 <- detectNuc(state$nearby,
-                    state$pos,
-                    p1.max.downstream,
-                    state$strand,
-                    "p1")
-
-    if (!nrow(p1)) {
-        return(list(continue=FALSE, vals=list(descr="+1_missing")))
-    } else if (p1$nmerge > p1.max.merge) {
-        return(list(continue=FALSE, vals=list(descr="+1_too_fuzzy")))
-    } else {
-        return(list(continue=TRUE,
-                    vals=list(p1.pos   = .mid(p1),
-                              p1.class = p1$class)))
-    }
-}
-
-getM1 <- function (state)
-{
-    m1 <- detectNuc(state$nearby, state$p1.pos, 0, state$strand, "m1")
-
-    if (!nrow(m1)) {
-        return(list(continue=FALSE, vals=list(descr="-1_missing")))
-    } else {
-        return(list(continue=TRUE,
-                    vals=list(m1.pos   = .mid(m1),
-                              m1.class = m1$class)))
-    }
-}
-
-getDescr <- function (res, open.thresh)
-{
-    dist <- abs(res$p1.pos - res$m1.pos)
-    dist.class <- .gimmeDist(dist, open.thresh)
-    descr <- paste(res$m1.class,
-                   dist.class,
-                   res$p1.class,
-                   sep="-")
-    return(list(continue=FALSE,
-                vals=list(dist=dist,
-                          descr=descr)))
-}
-
-lookCover <- function (state, cover, window, max.uncovered)
-{
-    outOfBounds <- function (pos, chrom, window, cover)
-        (pos-window) < 0 | (pos+window) > length(cover[[chrom]])
-
-    isUncovered <- function (pos, chrom, window, cover, max.uncovered)
-        sum(cover[[chrom]][(pos-window):(pos+window)] == 0) > max.uncovered
-
-    cover.problem <- `&&`(!is.null(cover),
-                          `||`(outOfBounds(state$pos,
-                                           state$chrom,
-                                           window,
-                                           cover),
-                               isUncovered(state$pos,
-                                           state$chrom,
-                                           window,
-                                           cover,
-                                           max.uncovered)))
-    if (cover.problem) {
-        return(list(continue=FALSE, vals=list()))
-    } else {
-        return(list(continue=TRUE, vals=list()))
-    }
-}
+checkPos <- function (nuc.pos, pos, window)
+    nuc.pos > (pos - window) && nuc.pos < (pos + window)
 
 ###############################################################################
-# Some declarations to make the monad work ####################################
+# Top level wrapper ###########################################################
 
-bind <- function (f)
-    # state -> flow -> flow -> flow
-    function (flow)
-        if (flow$continue) {
-            return(f(flow$state))
+patternsByChrDF <- function (calls, df, col.id="name", col.chrom="chrom",
+                             col.pos="pos", col.strand="strand", ...,
+                             mc.cores=1)
+{   # Works by first splitting by chromosomes to save some redundant subsetting
+    iterFun <- function (chr.genes) {
+        chrom <- chr.genes[1, col.chrom]
+        message(chrom)
+        chr.nucs <- calls[space(calls) == chrom, ]
+        if (nrow(chr.nucs) == 0) {
+            emptyChrom(df         = chr.genes,
+                       chrom      = chrom,
+                       col.id     = col.id,
+                       col.pos    = col.pos,
+                       col.strand = col.strand)
         } else {
-            return(flow)
+            res <- nucleosomePatternsDF(calls      = chr.nucs,
+                                        df         = chr.genes,
+                                        col.id     = col.id,
+                                        col.pos    = col.pos,
+                                        col.strand = col.strand,
+                                        ...,
+                                        mc.cores   = mc.cores)
+            res$chrom <- chrom
+            res
+        }
+    }
+    ddply(df, col.chrom, iterFun)
+}
+
+###############################################################################
+# Lower level wrappers ########################################################
+
+nucleosomePatternsDF <- function (calls, df, col.id="name", col.pos="pos",
+                                  col.strand="strand", ..., mc.cores=1)
+{   # Works on the calls and genes of a sigle chromosome
+    n <- nrow(df)
+    iterRows <- function (i, report.every=100) {
+        if (i %% report.every == 0) {
+            message(i, "/", n)
+        }
+        nucleosomePatterns(calls  = calls,
+                           id     = df[i, col.id],
+                           pos    = df[i, col.pos],
+                           strand = df[i, col.strand],
+                           ...)
+    }
+    do.call(rbind,
+            mclapply(1:n,
+                     iterRows,
+                     report.every=10,
+                     mc.cores=mc.cores))
+}
+
+emptyChrom <- function (df, chrom, col.id="name", col.pos="pos",
+                        col.strand="strand")
+    # Return entries filled with NAs for chromosomes with no nucleosomes found
+    data.frame(id     = df[, col.id],
+               chrom  = chrom,
+               strand = df[, col.strand],
+               pos    = df[, col.pos],
+               p1.pos = NA,
+               m1.pos = NA,
+               dist   = NA,
+               descr  = "NA",
+               start  = df[, col.pos],
+               end    = df[, col.pos])
+
+###############################################################################
+# Function that does the actual work ##########################################
+
+nucleosomePatterns <- function (calls, id, pos, strand="+", window=300,
+                                p1.max.merge=3, p1.max.downstream=20,
+                                open.thresh=215, max.uncovered=150)
+{   # The start and end will be the closest nucleosome found nearby the TSS
+    # those positions will also be the p1 and m1 positions if they are within
+    # a -/+ window
+    p1 <- detectNuc(calls, pos, p1.max.downstream, strand, "p1")
+
+    no.p1s <- nrow(p1) == 0  # no nucleosome found upstream of the TSS
+    if (no.p1s) {
+        p1.pos <- pos
+    } else {
+        p1.pos <- .mid(p1)
+    }
+
+    if (!no.p1s && checkPos(p1.pos, pos, window)) {
+        # there's a nucleosome upstream and within the window
+        p1.nuc <- .mid(p1)
+        p1.class <- p1$class
+
+        # look for m1 relative to p1
+        m1 <- detectNuc(calls, p1.nuc, 0, strand, "m1")
+
+        no.m1s <- nrow(m1) == 0
+        if (no.m1s) {
+            m1.pos <- pos
+        } else {
+            m1.pos <- .mid(m1)
         }
 
-wrapFun <- function(f)
-    # state -> vals -> state -> flow
-    function(state)
-        with(f(state),
-             list(continue = continue,
-                  state    = updateVals(state, vals)))
+        if (!no.m1s && checkPos(m1.pos, pos, window)) {
+            # and there's also one donestream
+            m1.class <- m1$class
+            m1.nuc <- .mid(m1)
+        } else {
+            m1.nuc <- NA
+            m1.class <- NULL
+        }
+    } else {
+        p1.nuc <- NA
+        m1.nuc <- NA
+        p1.class <- NULL
+        m1.class <- NULL
 
-###############################################################################
+        # no p1... so look for m1 relative to the TSS
+        m1.pos <- .mid(detectNuc(calls, pos, 0, strand, "m1"))
+        if (length(m1.pos) == 0) {
+            m1.pos <- pos
+        }
+    }
+
+    dist <- abs(p1.nuc - m1.nuc)
+    descr <- getDescr(dist, m1.class, p1.class, open.thresh)
+
+    data.frame(id=id,
+               strand=strand,
+               pos=pos,
+               p1.pos=p1.nuc,
+               m1.pos=m1.nuc,
+               dist=dist,
+               descr=descr,
+               start=min(m1.pos, p1.pos),
+               end=max(m1.pos, p1.pos))
+}
