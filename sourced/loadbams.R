@@ -136,9 +136,6 @@ loadPairedBam <- function(file)
                              processStrand,
                              bam,
                              flags)))
-
-    kk <- processStrand("+", bam, flags)
-
 }
 
 loadBAM <- function(f, type="single")
