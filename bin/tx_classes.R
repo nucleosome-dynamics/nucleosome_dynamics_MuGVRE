@@ -78,7 +78,8 @@ cover <- get(load(params$coverage))
 message("-- loading used genome")
 genes <- getGenes(params$genome)
 
-genes$tss <- ifelse(genes$strand == "+", genes$start, genes$end)
+genes$tss <- as.numeric(genes$tss)
+genes$tts <- as.numeric(genes$tts)
 
 ## Do it ######################################################################
 
@@ -86,7 +87,7 @@ message("-- checking the classes")
 tx.classes <- with(params,
                    patternsByChrDF(calls             = nucs,
                                    df                = genes,
-                                   col.id            = "ID",
+                                   col.id            = "name",
                                    col.chrom         = "chrom",
                                    col.pos           = "tss",
                                    col.strand        = "strand",

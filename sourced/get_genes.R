@@ -42,9 +42,8 @@ getGenes <- function (genome)
 {
     f <- genomeFile(genome)
     gff <- readGff(f)
-    res <- cleanExons(gff)
-    names(res)[names(res) == "seqname"] <- "chrom"
-    res
+    names(gff)[names(gff) == "seqname"] <- "chrom"
+    gff
 }
 
 getChromSizes <- function (genome)

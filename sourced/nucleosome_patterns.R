@@ -105,8 +105,7 @@ nucleosomePatternsDF <- function (calls, df, col.id="name", col.pos="pos",
         nucleosomePatterns(calls  = calls,
                            id     = df[i, col.id],
                            pos    = df[i, col.pos],
-                           strand = df[i, col.strand],
-                           ...)
+                           strand = df[i, col.strand])
     }
     do.call(rbind,
             mclapply(1:n,
@@ -163,7 +162,7 @@ nucleosomePatterns <- function (calls, id, pos, strand="+", window=300,
         }
 
         if (!no.m1s && checkPos(m1.pos, pos, window)) {
-            # and there's also one donestream
+            # and there's also one downstream
             m1.class <- m1$class
             m1.nuc <- .mid(m1)
         } else {
