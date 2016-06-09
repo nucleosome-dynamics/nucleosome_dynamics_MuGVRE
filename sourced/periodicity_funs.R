@@ -65,13 +65,18 @@ coverageChr <- function(nuc.start, nuc.end, nuc.length, strand, L, period)
 
 findGenesNucs <- function (genes, calls, mc.cores=1)
 {
+    genes$tss <- as.numeric(genes$tss)
+    genes$tts <- as.numeric(genes$tts)
+    genes$start <- mapply(min, genes$tss, genes$tts)
+    genes$end <- mapply(min, genes$tss, genes$tts)
+
     chroms <- unique(genes$chrom)
     genes.by.chr <- lapply(chroms,
                            function (chr) subset(genes, chrom == chr))
     names(genes.by.chr) <- chroms
     dyads.by.chr <- lapply(ranges(calls), dyadPos)
 
-    used.cols <- c("ID", "start", "end", "strand")
+    used.cols <- c("name", "start", "end", "strand")
 
     genes.nucs <- do.call(rbind, xlapply(
         chroms,
