@@ -87,6 +87,10 @@ if (is.null(params$min.overlap)) {
     params$min.overlap <- params$trim
 }
 
+if (!grepl("%$", params$threshold)) {
+    params$threshold <- as.numeric(params$threshold)
+}
+
 ## Pipeline Itself ############################################################
 
 reads <- get(load(params$input))
