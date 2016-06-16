@@ -59,7 +59,6 @@ coverageChr <- function(nuc.start, nuc.end, nuc.length, strand, L, period)
         cov[round(x)] <- cov[round(x)] + ecov(a, period)
         cov[round(y)] <- cov[round(y)] + ecov(b, period)
     }
-
     cov
 }
 
@@ -68,7 +67,7 @@ findGenesNucs <- function (genes, calls, mc.cores=1)
     genes$tss <- as.numeric(genes$tss)
     genes$tts <- as.numeric(genes$tts)
     genes$start <- mapply(min, genes$tss, genes$tts)
-    genes$end <- mapply(min, genes$tss, genes$tts)
+    genes$end <- mapply(max, genes$tss, genes$tts)
 
     chroms <- unique(genes$chrom)
     genes.by.chr <- lapply(chroms,
