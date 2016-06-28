@@ -17,15 +17,17 @@ source(paste(SOURCE.DIR,
     ifelse(x < 120,         "overlap",
                             "close")))
 
-detectNuc <- function (xs, pos, margin, strand, nucpos)
+detectNuc <- function (xs, pos, margin, strand, nucpos, position="tss")
 {
     a <- strand == "+" && nucpos == "p1"
     b <- strand == "-" && nucpos == "m1"
     c <- strand == "-" && nucpos == "p1"
     d <- strand == "+" && nucpos == "m1"
 
-    after <- a || b
-    before <- c || d
+    flipper <- ifelse(position == "tss", `(`, `!`)
+
+    after <- flipper(a || b)
+    before <- flipper(c || d)
 
     if (after) {
         shift <- `-`
@@ -105,7 +107,8 @@ nucleosomePatternsDF <- function (calls, df, col.id="name", col.pos="pos",
         nucleosomePatterns(calls  = calls,
                            id     = df[i, col.id],
                            pos    = df[i, col.pos],
-                           strand = df[i, col.strand])
+                           strand = df[i, col.strand],
+                           ...)
     }
     do.call(rbind,
             mclapply(1:n,
@@ -133,11 +136,12 @@ emptyChrom <- function (df, chrom, col.id="name", col.pos="pos",
 
 nucleosomePatterns <- function (calls, id, pos, strand="+", window=300,
                                 p1.max.merge=3, p1.max.downstream=20,
-                                open.thresh=215, max.uncovered=150)
+                                open.thresh=215, max.uncovered=150,
+                                position="tss")
 {   # The start and end will be the closest nucleosome found nearby the TSS
     # those positions will also be the p1 and m1 positions if they are within
     # a -/+ window
-    p1 <- detectNuc(calls, pos, p1.max.downstream, strand, "p1")
+    p1 <- detectNuc(calls, pos, p1.max.downstream, strand, "p1", position)
 
     no.p1s <- nrow(p1) == 0  # no nucleosome found upstream of the TSS
     if (no.p1s) {
@@ -152,7 +156,7 @@ nucleosomePatterns <- function (calls, id, pos, strand="+", window=300,
         p1.class <- p1$class
 
         # look for m1 relative to p1
-        m1 <- detectNuc(calls, p1.nuc, 0, strand, "m1")
+        m1 <- detectNuc(calls, p1.nuc, 0, strand, "m1", position)
 
         no.m1s <- nrow(m1) == 0
         if (no.m1s) {
@@ -176,7 +180,7 @@ nucleosomePatterns <- function (calls, id, pos, strand="+", window=300,
         m1.class <- NULL
 
         # no p1... so look for m1 relative to the TSS
-        m1.pos <- .mid(detectNuc(calls, pos, 0, strand, "m1"))
+        m1.pos <- .mid(detectNuc(calls, pos, 0, strand, "m1", position))
         if (length(m1.pos) == 0) {
             m1.pos <- pos
         }
