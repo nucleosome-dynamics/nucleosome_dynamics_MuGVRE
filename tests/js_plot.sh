@@ -2,11 +2,12 @@
 
 ###############################################################################
 
-script="/home/rilla/nucleServ/bin/js_plot.R"
-input="/orozco/services/Rdata/tmp_wd/nd_34_35_plot.RData"
-output="/orozco/services/Rdata/tmp_wd/nd_34_35_plot.html"
-start="5000"
-end="6000"
+#script="/home/rilla/nucleServ/bin/js_plot.R"
+script="/usr/people/rilla/nucleServ/bin/js_plot.R"
+input="/orozco/services/Rdata/tmp_wd/g1_s_nd_plot.RData"
+output="/usr/people/rilla/public_html/test_plot.html"
+start="27000"
+end="28000"
 chr="chrI"
 
 Rscript $script      \

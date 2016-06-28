@@ -21,17 +21,18 @@ output="/orozco/scratch/xesh0/orozco/rilla/nucler/cell_cycle_data/calcs/g1_nr.gf
 Rscript $script    \
     --input $input \
     --output $output \
+    --threshold 1.02 \
     --cores 20
 
 ###############################################################################
-
-script="/home/rilla/nucleServ/bin/nucleR.R"
-input="/orozco/scratch/xesh0/orozco/rilla/nucler/cell_cycle_data/reads/s.RData"
-output="/orozco/scratch/xesh0/orozco/rilla/nucler/cell_cycle_data/calcs/s_nr.gff"
-
-Rscript $script    \
-    --input $input \
-    --output $output \
-    --cores 20
-
-###############################################################################
+#
+#script="/home/rilla/nucleServ/bin/nucleR.R"
+#input="/orozco/scratch/xesh0/orozco/rilla/nucler/cell_cycle_data/reads/s.RData"
+#output="/orozco/scratch/xesh0/orozco/rilla/nucler/cell_cycle_data/calcs/s_nr.gff"
+#
+#Rscript $script    \
+#    --input $input \
+#    --output $output \
+#    --cores 20
+#
+################################################################################

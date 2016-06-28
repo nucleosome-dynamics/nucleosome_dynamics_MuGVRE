@@ -23,9 +23,9 @@
 #genome="R64-1-1"
 
 script="/home/rilla/nucleServ/bin/tx_classes.R"
-calls="/orozco/scratch/xesh0/orozco/rilla/nucler/cell_cycle_data/calcs/g1_nr.gff"
-coverage="/home/rilla/scratch/nucler/cell_cycle_data/calcs/g1_cov.RData"
-output="/home/rilla/scratch/nucler/cell_cycle_data/calcs/g1_tss_new.gff"
+calls="/home/rilla/scratch/V136_noMet_calls.gff"
+coverage="."
+output="/home/rilla/scratch/V136_noMet_tts.gff"
 genome="R64-1-1"
 
 Rscript $script          \
