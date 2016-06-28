@@ -83,6 +83,13 @@ addArrows <- function (sdf, par.ypc, forward=TRUE) {
     }
 }
 
+colors <- c("setA"  = "dimgray",
+            "setB"  = "gray",
+            "ins"   = "green",
+            "dels"  = "red",
+            "left"  = "darkred",
+            "right" = "darkblue")
+
 buildGgplot <- function (mdf, shdf, plot.start, plot.end) {
     ggplot(mdf, aes(x=x, y=value)) +
         xlim(plot.start, plot.end) +
@@ -90,44 +97,106 @@ buildGgplot <- function (mdf, shdf, plot.start, plot.end) {
         ylab("") +
         geom_area(aes(fill=variable,
                       color=variable,
-                      linetype=variable),
+                      alpha=variable),
                   position="identity") +
         geom_segment(data=shdf,
                      mapping=aes(x=x0, y=y0, xend=x1, yend=y1,
                                  color=variable)) +
-        scale_color_manual(name="",
-                           values=c("setA"="gray",
-                                    "setB"="black",
-                                    "ins"="#00FF0090",
-                                    "dels"="#FF000090",
-                                    "left"="darkred",
-                                    "right"="darkblue")) +
-        scale_fill_manual(name="",
-                          values=c("setA"="#909090",
-                                   "setB"="#E0E0E000",
-                                   "ins"="#00FF0090",
-                                   "dels"="#FF000095",
-                                   "left"="darkred",
-                                   "right"="darkblue")) +
-        scale_linetype_manual(name="",
-                              values=c("setA"="solid",
-                                       "setB"="dashed",
-                                       "ins"="solid",
-                                       "dels"="solid",
-                                       "left"="solid",
-                                       "right"="solid")) +
+        scale_color_manual(name="", values=colors) +
+        scale_fill_manual(name="", values=colors) +
+        scale_alpha_manual(name="",
+                           values=c("setA"=1,
+                                    "setB"=0.7,
+                                    "ins"=0.6,
+                                    "dels"=0.6,
+                                    "left"=1,
+                                    "right"=1)) +
         theme_bw()
+}
+
+#buildGgplot <- function (mdf, shdf, plot.start, plot.end) {
+#    ggplot(mdf, aes(x=x, y=value)) +
+#        xlim(plot.start, plot.end) +
+#        xlab("") +
+#        ylab("") +
+#        geom_area(aes(fill=variable,
+#                      color=variable,
+#                      linetype=variable,
+#                      alpha=variable),
+#                  position="identity") +
+#        geom_segment(data=shdf,
+#                     mapping=aes(x=x0, y=y0, xend=x1, yend=y1,
+#                                 color=variable)) +
+#        scale_color_manual(name="",
+#                           values=c("setA"="gray",
+#                                    "setB"="black",
+#                                    "ins"="#00FF0090",
+#                                    "dels"="#FF000090",
+#                                    "left"="darkred",
+#                                    "right"="darkblue")) +
+#        scale_fill_manual(name="",
+#                          values=c("setA"="#909090",
+#                                   "setB"="#E0E0E000",
+#                                   "ins"="#00FF0090",
+#                                   "dels"="#FF000095",
+#                                   "left"="darkred",
+#                                   "right"="darkblue")) +
+#        scale_linetype_manual(name="",
+#                              values=c("setA"="solid",
+#                                       "setB"="dashed",
+#                                       "ins"="solid",
+#                                       "dels"="solid",
+#                                       "left"="solid",
+#                                       "right"="solid")) +
+#        theme_bw()
+#}
+
+fixShifts <- function (xs, name) {
+    parseShiftTxt <- function (txt)
+        lapply(strsplit(txt, split="<br>"),
+               function (x) {
+                   pairs <- strsplit(x, split=": ")
+                   names <- sapply(pairs, `[`, 1)
+                   vals <- sapply(pairs, `[`, 2)
+                   names(vals) <- names
+                   vals
+               })
+
+    txt.ls <- parseShiftTxt(xs[["text"]])
+    n <- length(xs[["text"]])
+    for (i in seq(from=1, to=n, by=9)) {
+        x0 <- txt.ls[[i]]["x0"]
+        x1 <- txt.ls[[i]]["x1"]
+        for (j in i:(i+8)) {
+            if (j <= n) {
+                xs[["text"]][j] <- sprintf("%s<br>from: %s<br>to: %s",
+                                           name, x0, x1)
+            }
+        }
+    }
+    xs[["name"]] <- paste0(name, "s")
+    xs
+}
+
+fixNonShifts <- function (xs, name) {
+    xs[["name"]] <- name
+    xs[["text"]] <- sprintf("%s<br>position: %d<br>coverage: %d",
+                            name, xs[["x"]], xs[["y"]])
+    xs
 }
 
 ggplot2widget <- function (p) {
     pdf(NULL)
     pl <- plotly_build(p)
-    pl[["data"]][[1]][["name"]] <- "Coverage 1"
-    pl[["data"]][[2]][["name"]] <- "Coverage 2"
-    pl[["data"]][[3]][["name"]] <- "Deletions"
-    pl[["data"]][[4]][["name"]] <- "Insertions"
-    pl[["data"]][[5]][["name"]] <- "Upstream shifts"
-    pl[["data"]][[6]][["name"]] <- "Downstream shifts"
+
+    names <- c("Coverage 1", "Coverage 2", "Deletions", "Insertions")
+    for (i in seq_along(names)) {
+        pl[["data"]][[i]] <- fixNonShifts(pl[["data"]][[i]], names[i])
+    }
+
+    pl[["data"]][[5]] <- fixShifts(pl[["data"]][[5]], "Upstream shift")
+    pl[["data"]][[6]] <- fixShifts(pl[["data"]][[6]], "Downstream shift")
+
     as.widget(pl)
 }
 
@@ -174,4 +243,3 @@ buildPlot <- function (dyn, start, end) {
     gg <- buildGgplot(mdf, shdf, start, end)
     ggplot2widget(gg)
 }
-
