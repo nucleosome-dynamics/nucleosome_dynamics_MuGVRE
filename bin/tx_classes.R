@@ -71,8 +71,6 @@ nucs <- with(readGff(params$calls),
                         nmerge  = as.numeric(nmerge),
                         class   = as.character(class)))
 
-cover <- get(load(params$coverage))
-
 ## Read input #################################################################
 
 message("-- loading used genome")
