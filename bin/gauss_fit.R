@@ -52,7 +52,8 @@ sd2stiffness <- function (sd, t)
 {
     kB <- 1.38064852e-23
     #kB*t / sqrt(sd)
-    1 / sqrt(sd)
+    #1 / sqrt(sd)
+    1 / (sd^2)
 }
 
 message("loading inputs")
