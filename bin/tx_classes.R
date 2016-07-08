@@ -1,5 +1,15 @@
 #!/usr/bin/Rscript
 
+# Position: Region between two nucleosomes surrounding the TSS.
+
+# classification: Descriptor of the Transcription Start Site. See the help for possible options.
+# distance: Distance in base pairs between the nucleosome +1 and the nucleosome -1.
+# id
+# nucleosome minus1: Position of the nucleosome -1.
+# nucleosome plus1: Position of the nucleosome +1
+# TTS_position: Position of the Transcription Start Site.
+
+
 ## Imports ####################################################################
 
 library(getopt)
@@ -68,7 +78,7 @@ nucs <- with(readGff(params$calls),
                         score   = as.numeric(score),
                         score_w = as.numeric(score_w),
                         score_h = as.numeric(score_h),
-                        nmerge  = as.numeric(nmerge),
+                        #nmerge  = as.numeric(nmerge),
                         class   = as.character(class)))
 
 ## Read input #################################################################
@@ -98,17 +108,12 @@ tx.classes <- with(params,
 
 ## Store output ###############################################################
 
-#descr
-#dist
-#gene_id
-#nucleosome_minus1
-#nucleosome_plus1
-#pos
-
+names(tx.classes)[names(tx.classes) == "descr"] <- "classification"
+names(tx.classes)[names(tx.classes) == "dist"] <- "distance"
 names(tx.classes)[names(tx.classes) == "m1.pos"] <- "nucleosome_minus1"
 names(tx.classes)[names(tx.classes) == "p1.pos"] <- "nucleosome_plus1"
 names(tx.classes)[names(tx.classes) == "chrom"] <- "seqname"
-names(tx.classes)[names(tx.classes) == "id"] <- "gene_id"
+#names(tx.classes)[names(tx.classes) == "id"] <- "gene_id"
 
 message("-- saving gff output")
 gff <- df2gff(tx.classes,

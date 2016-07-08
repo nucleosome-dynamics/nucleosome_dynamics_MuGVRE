@@ -1,5 +1,11 @@
 #!/usr/bin/env Rscript
 
+
+# nucleosome_first: First nucleosome of the gene.
+# nucleosme_last: Last nucleosome of the gene.
+# score_phase: Is a measure of the phase between the first and the last nucleosome. A score of 0 means the nucleosome are completely phased and a score of 82 corresponds to totally antiphased nucleosomes.
+# score_autocorrelation: It is directly computed from the experimental coverage and is quantitative measure of the periodicity of nucleosomes inside the gene body.
+
 ## Imports ####################################################################
 
 library(IRanges)
@@ -77,15 +83,8 @@ covPredAll <- getPeriodCov(genes.nucs, params$period, params$mc.cores)
 
 ## Store output ###############################################################
 
-#nucleosome_first
-#nucleosme_last
-#score_phase
-#nucleosome
-#score_autocorrelation
-
-
 names(genes.nucs)[names(genes.nucs) == "chrom"] <- "seqname"
-names(genes.nucs)[names(genes.nucs) == "dfi"] <- "score phase"
+names(genes.nucs)[names(genes.nucs) == "dfi"] <- "score_phase"
 names(genes.nucs)[names(genes.nucs) == "autocor"] <- "score_autocorrelation"
 names(genes.nucs)[names(genes.nucs) == "first"] <- "nucleosome_first"
 names(genes.nucs)[names(genes.nucs) == "last"] <- "nucleosome_last"

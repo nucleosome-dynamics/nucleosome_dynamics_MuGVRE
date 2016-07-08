@@ -1,5 +1,13 @@
 #!/usr/bin/env Rscript
 
+# Score: Stiffness estimation. It's the energy required to move the nucleosome (expressed in cal/bp), it's derived from the gaussian standard deviation.
+
+# nucleR_score: the nucleR score given to that nucleosome
+# nucleR.class: the nucleR class given to that nucleosome
+# gauss_k: the height of the peak of the gaussian curve
+# gauss_m: the position of the peak of the gaussian curve
+# gauss_sd: the standard deviation of the gaussian curve
+
 ## Imports ####################################################################
 
 library(getopt)
@@ -80,13 +88,6 @@ gauss.df <- doGaussFit(calls, reads, .progress="text")
 gauss.df$stiffness <- sd2stiffness(gauss.df$sd, params$t)
 
 ## Save output ################################################################
-
-#score
-#nucleR_class
-#gauss_k
-#gauss_m
-#gauss_sd
-#score_stiffness
 
 gauss.df$score_w <- NULL
 gauss.df$score_h <- NULL

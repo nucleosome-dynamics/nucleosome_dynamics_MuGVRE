@@ -12,13 +12,16 @@ vectorizedAll <- function(...)
     # `all`
     Reduce(`&`, list(...))
 
-getType <- function(score_w, score_h, thresh_w, thresh_h)
+getType <- function(score_w, score_h, thresh_w, thresh_h, nmerge=1)
     # Given a vector of score w, a vector of score h, a threshold for w and a
     # threshold for h, return a vector that tells whether those scores are
     # classified as `well-positioned`, or `fuzzy`.
-    ifelse(`&`(score_w > thresh_w,
-               score_h > thresh_h),
-           "W", "F")
+    ifelse(nmerge > 2,
+           "uncertain",
+           ifelse(`&`(score_w > thresh_w,
+                      score_h > thresh_h),
+                  "W",
+                  "F"))
 
 checkInF <- function(f)
 {   # Some checks on the input file specified

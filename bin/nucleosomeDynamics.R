@@ -1,5 +1,14 @@
 #!/usr/bin/Rscript
 
+# Position: region where the movement happens
+# Type: change in the nucleosome map
+# Score: magnitude of the change
+
+# class: type of hotspot (see help for all possible types)
+# nuc: to which nucleosome the movement belongs. NA means that the hostpot couldn't be unequivocally associated to one nucleosome.
+# number_of_reads: number of reads involved in this movement
+# hreads: number of reads involved in the movement relative to the number of reads present in the area. This value ranges from 0 to 1 and the closest it is to 1, the more significant the movement.
+
 ## Imports ####################################################################
 
 library(getopt)
@@ -175,7 +184,12 @@ hs$nuc[hs$nuc == 0] <- NA
 names(hs)[names(hs) == "type"] <- "class"
 names(hs)[names(hs) == "chr"] <- "seqname"
 names(hs)[names(hs) == "nreads"] <- "score"
-names(hs)[names(hs) == "totalReads"] <- "number_of_reads"
+#names(hs)[names(hs) == "totalReads"] <- "number_of_reads"
+names(hs)[names(hs) == "readsInvolved"] <- "number_of_reads"
+
+hs$coord <- NULL
+hs$totalReads <- NULL
+hs$freads <- NULL
 
 message("saving output as gff")
 writeGff(df2gff(hs,

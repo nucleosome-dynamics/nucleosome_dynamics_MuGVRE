@@ -1,5 +1,11 @@
 #!/usr/bin/Rscript
 
+# Score: Positionning score. It is calculated as the weighted sum of width and height scores.
+
+# score_width: Witdth score. It is a measure of how sharp a peak is. A value of 0 would be an extremely wide peak and a value of 1 a very sharp one.
+# score_height: Height score. Tells how large a peak of a nucleosome is. The bigger this number, the higher the peak.
+# class: Whether the nucleosome is well-positioned (W) or fuzzy (F) or undetermined. The taken value depends on score_h and score_w. Undetermined means the exact position of the nucleosome cannot be determined due to strong fuzziness.
+
 ## Imports ####################################################################
 
 library(getopt)
@@ -146,15 +152,14 @@ merged <- mergeCalls(scores,
 merged$class <- getType(merged$score_w,
                         merged$score_h,
                         params$score_w.thresh,
-                        params$score_h.thresh)
+                        params$score_h.thresh,
+                        merged$nmerge)
 
 ## Store the Result ###########################################################
 
-#Score
-#score_w
-#score_h
-#nmerge
-#class
+names(merged)[names(merged) == "score_h"] <- "score_height"
+names(merged)[names(merged) == "score_w"] <- "score_width"
+merged$nmerge <- NULL
 
 message("saving output as gff")
 writeGff(df2gff(rd2df(merged),
