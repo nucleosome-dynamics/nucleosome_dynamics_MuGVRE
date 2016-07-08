@@ -1,6 +1,5 @@
 #!/usr/bin/env Rscript
 
-
 # nucleosome_first: First nucleosome of the gene.
 # nucleosme_last: Last nucleosome of the gene.
 # score_phase: Is a measure of the phase between the first and the last nucleosome. A score of 0 means the nucleosome are completely phased and a score of 82 corresponds to totally antiphased nucleosomes.
