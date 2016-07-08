@@ -163,11 +163,19 @@ if (params$combined) {
 
 ### Store the Result ###########################################################
 
+#Score
+#coord
+#class
+#nuc
+#number_of_reads
+#readsInvolved
+#hreads
+
 hs$nuc[hs$nuc == 0] <- NA
-names(hs)[names(hs) == "type"] <- "classification"
+names(hs)[names(hs) == "type"] <- "class"
 names(hs)[names(hs) == "chr"] <- "seqname"
 names(hs)[names(hs) == "nreads"] <- "score"
-names(hs)[names(hs) == "totalReads"] <- "number of reads"
+names(hs)[names(hs) == "totalReads"] <- "number_of_reads"
 
 message("saving output as gff")
 writeGff(df2gff(hs,

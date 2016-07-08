@@ -150,6 +150,12 @@ merged$class <- getType(merged$score_w,
 
 ## Store the Result ###########################################################
 
+#Score
+#score_w
+#score_h
+#nmerge
+#class
+
 message("saving output as gff")
 writeGff(df2gff(rd2df(merged),
                 source="nucleR",

@@ -77,11 +77,18 @@ covPredAll <- getPeriodCov(genes.nucs, params$period, params$mc.cores)
 
 ## Store output ###############################################################
 
+#nucleosome_first
+#nucleosme_last
+#score_phase
+#nucleosome
+#score_autocorrelation
+
+
 names(genes.nucs)[names(genes.nucs) == "chrom"] <- "seqname"
 names(genes.nucs)[names(genes.nucs) == "dfi"] <- "score phase"
-names(genes.nucs)[names(genes.nucs) == "autocor"] <- "score autocorrelation"
-names(genes.nucs)[names(genes.nucs) == "first"] <- "nucleosome first"
-names(genes.nucs)[names(genes.nucs) == "last"] <- "nucleosome last"
+names(genes.nucs)[names(genes.nucs) == "autocor"] <- "score_autocorrelation"
+names(genes.nucs)[names(genes.nucs) == "first"] <- "nucleosome_first"
+names(genes.nucs)[names(genes.nucs) == "last"] <- "nucleosome_last"
 genes.nucs$nuc.length <- NULL
 
 message("writting GFF")

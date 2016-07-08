@@ -98,11 +98,17 @@ tx.classes <- with(params,
 
 ## Store output ###############################################################
 
-names(tx.classes)[names(tx.classes) == "m1.pos"] <- "nucleosome minus1"
-names(tx.classes)[names(tx.classes) == "p1.pos"] <- "nucleosome plus1"
+#descr
+#dist
+#gene_id
+#nucleosome_minus1
+#nucleosome_plus1
+#pos
+
+names(tx.classes)[names(tx.classes) == "m1.pos"] <- "nucleosome_minus1"
+names(tx.classes)[names(tx.classes) == "p1.pos"] <- "nucleosome_plus1"
 names(tx.classes)[names(tx.classes) == "chrom"] <- "seqname"
-names(tx.classes)[names(tx.classes) == "id"] <- "gene id"
-#tx.classes$id <- NULL
+names(tx.classes)[names(tx.classes) == "id"] <- "gene_id"
 
 message("-- saving gff output")
 gff <- df2gff(tx.classes,

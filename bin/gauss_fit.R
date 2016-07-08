@@ -81,17 +81,24 @@ gauss.df$stiffness <- sd2stiffness(gauss.df$sd, params$t)
 
 ## Save output ################################################################
 
+#score
+#nucleR_class
+#gauss_k
+#gauss_m
+#gauss_sd
+#score_stiffness
+
 gauss.df$score_w <- NULL
 gauss.df$score_h <- NULL
 gauss.df$nmerge <- NULL
 
-names(gauss.df)[names(gauss.df) == "class"] <- "nucleR.class"
-names(gauss.df)[names(gauss.df) == "stiffness"] <- "score.stiffness"
-names(gauss.df)[names(gauss.df) == "k"] <- "gauss.k"
-names(gauss.df)[names(gauss.df) == "m"] <- "gauss.m"
-names(gauss.df)[names(gauss.df) == "sd"] <- "gauss.sd"
+names(gauss.df)[names(gauss.df) == "class"] <- "nucleR_class"
+names(gauss.df)[names(gauss.df) == "stiffness"] <- "score_stiffness"
+names(gauss.df)[names(gauss.df) == "k"] <- "gauss_k"
+names(gauss.df)[names(gauss.df) == "m"] <- "gauss_m"
+names(gauss.df)[names(gauss.df) == "sd"] <- "gauss_sd"
 
-gauss.df$feature <- "stiffness estimation"
+gauss.df$feature <- "stiffness_estimation"
 
 gff <- df2gff(gauss.df)
 writeGff(gff, params[["output"]])
