@@ -113,6 +113,7 @@ names(tx.classes)[names(tx.classes) == "dist"] <- "distance"
 names(tx.classes)[names(tx.classes) == "m1.pos"] <- "nucleosome_minus1"
 names(tx.classes)[names(tx.classes) == "p1.pos"] <- "nucleosome_plus1"
 names(tx.classes)[names(tx.classes) == "chrom"] <- "seqname"
+names(tx.classes)[names(tx.classes) == "pos"] <- "TSS_position"
 #names(tx.classes)[names(tx.classes) == "id"] <- "gene_id"
 
 message("-- saving gff output")
