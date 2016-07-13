@@ -57,13 +57,13 @@ for (i in names(args)) {
 ## Subset #####################################################################
 
 sd2stiffness <- function (sd, t)
-{   # kcal/A^2
+{   # cal/bp
     j2kcal <- function (x)
         (x / 4.184) / 1000
     bp2A <- function (x)
         x * 3.4
     kB <- j2kcal(1.38064852e-23)
-    kB*t / (bp2A(sd)^2)
+    kB*t / sd^2
 }
 
 message("loading inputs")
@@ -91,7 +91,7 @@ if (!is.null(params[["chr"]])) {
 
 message("perfroming the fittings")
 gauss.df <- doGaussFit(calls, reads, .progress="text")
-gauss.df$stiffness <- sd2stiffness(gauss.df$sd, params$t)
+gauss.df$score <- sd2stiffness(gauss.df$sd, params$t)
 
 ## Save output ################################################################
 
@@ -100,7 +100,7 @@ gauss.df$score_h <- NULL
 gauss.df$nmerge <- NULL
 
 names(gauss.df)[names(gauss.df) == "class"] <- "nucleR_class"
-names(gauss.df)[names(gauss.df) == "stiffness"] <- "score_stiffness"
+#names(gauss.df)[names(gauss.df) == "stiffness"] <- "score_stiffness"
 names(gauss.df)[names(gauss.df) == "k"] <- "gauss_k"
 names(gauss.df)[names(gauss.df) == "m"] <- "gauss_m"
 names(gauss.df)[names(gauss.df) == "sd"] <- "gauss_sd"
