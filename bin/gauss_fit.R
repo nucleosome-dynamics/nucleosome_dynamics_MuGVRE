@@ -3,7 +3,7 @@
 # Score: Stiffness estimation. It's the energy required to move the nucleosome (expressed in cal/bp), it's derived from the gaussian standard deviation.
 
 # nucleR_score: the nucleR score given to that nucleosome
-# nucleR.class: the nucleR class given to that nucleosome
+# nucleR_class: the nucleR class given to that nucleosome
 # gauss_k: the height of the peak of the gaussian curve
 # gauss_m: the position of the peak of the gaussian curve
 # gauss_sd: the standard deviation of the gaussian curve
@@ -57,11 +57,13 @@ for (i in names(args)) {
 ## Subset #####################################################################
 
 sd2stiffness <- function (sd, t)
-{
-    kB <- 1.38064852e-23
-    #kB*t / sqrt(sd)
-    #1 / sqrt(sd)
-    1 / (sd^2)
+{   # kcal/A^2
+    j2kcal <- function (x)
+        (x / 4.184) / 1000
+    bp2A <- function (x)
+        x * 3.4
+    kB <- j2kcal(1.38064852e-23)
+    kB*t / (bp2A(sd)^2)
 }
 
 message("loading inputs")
@@ -82,6 +84,10 @@ if (!is.null(params[["chr"]])) {
         reads <- selectReads(reads, calls)
     }
 }
+
+#require(doMC)
+#registerDoMC(20)
+#getDoParWorkers()
 
 message("perfroming the fittings")
 gauss.df <- doGaussFit(calls, reads, .progress="text")

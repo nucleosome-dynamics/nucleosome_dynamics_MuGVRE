@@ -105,30 +105,56 @@ fitIt <- function (f, tries=10, max.value=35000, max.sd=2000)
     }
 }
 
+#gaussFitCov <- function (xs)
+#{
+#    xs <- as.vector(xs)
+#    a <- stripZeros(xs, 0)
+#    xs <- a$x
+#    shift <- a$shift
+#    xs <- stripZeros(xs, 0, tail=TRUE)$x
+#    f <- function (par) {
+#        m <- par[1]
+#        sd <- par[2]
+#        k <- par[3]
+#        rhat <- k * exp(-0.5 * ((seq_along(xs) - m)/sd)^2)
+#        sum((xs - rhat)^2)
+#    }
+#    fit.par <- fitIt(f)
+#    if (is.null(fit.par)) {
+#        return(NULL)
+#    } else {
+#        return(do.call(Gaussian,
+#                       list(m=fit.par[[1]] + shift,
+#                            sd=abs(fit.par[[2]]),
+#                            k=fit.par[[3]])))
+#    }
+#}
+
+#gaussFitCov <- function (xs)
+#{
+#    xs <- as.vector(xs)
+#    vals <- unlist(mapply(rep,
+#                          seq_along(cov),
+#                          xs,
+#                          SIMPLIFY=FALSE))
+#    Gaussian(m=mean(vals),
+#             sd=sd(vals),
+#             k=max(xs))
+#}
+
 gaussFitCov <- function (xs)
 {
-    xs <- as.vector(xs)
-    a <- stripZeros(xs, 0)
-    xs <- a$x
-    shift <- a$shift
-    xs <- stripZeros(xs, 0, tail=TRUE)$x
-    f <- function (par) {
-        m <- par[1]
-        sd <- par[2]
-        k <- par[3]
-        rhat <- k * exp(-0.5 * ((seq_along(xs) - m)/sd)^2)
-        sum((xs - rhat)^2)
-    }
-    fit.par <- fitIt(f)
-    if (is.null(fit.par)) {
-        return(NULL)
-    } else {
-        return(do.call(Gaussian,
-                       list(m=fit.par[[1]] + shift,
-                            sd=abs(fit.par[[2]]),
-                            k=fit.par[[3]])))
-    }
+    counts <- as.numeric(xs)
+    vals <- seq_along(counts)
+    total <- sum(counts)
+
+    m <- sum(counts * vals) / total
+    sd <- sqrt(sum((m - vals)^2 * counts) / total)
+    k <- max(counts)
+
+    Gaussian(m=m, sd=sd, k=k)
 }
+
 
 ###############################################################################
 
