@@ -105,7 +105,7 @@ names(gauss.df)[names(gauss.df) == "k"] <- "gauss_k"
 names(gauss.df)[names(gauss.df) == "m"] <- "gauss_m"
 names(gauss.df)[names(gauss.df) == "sd"] <- "gauss_sd"
 
-gauss.df$feature <- "stiffness_estimation"
+gauss.df$feature <- "Stiffness estimation"
 
 gff <- df2gff(gauss.df)
 writeGff(gff, params[["output"]])
