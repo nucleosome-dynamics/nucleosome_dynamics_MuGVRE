@@ -13,6 +13,7 @@
 
 library(getopt)
 library(NucDyn)
+library(plyr)
 
 where <- function () {
     spath <-parent.frame(2)$ofile
@@ -129,6 +130,8 @@ if (!is.null(params$dynRData) && file.exists(params$dynRData)) {
                        same.magnitude = params$same.magnitude,
                        threshold      = NULL,
                        mc.cores       = params$cores)
+    hs <- hs[!(hs$type == "CONTAINED AinB" | hs$type == "CONTAINED BinA"), ]
+    hs <- hs[hs$nreads > 0, ]
 
     if (!is.null(params$dynRData)) {
         save(hs, file=params$dynRData)
@@ -162,23 +165,30 @@ if (!is.null(params$rep1) && !is.null(params$rep1)) {
 
 hs <- applyThreshold(hs, thresh)
 
-if (params$combined) {
-    message("combining")
-    hs <- combiner(hs,
-                   params$nuc.width,
-                   params$same.magnitude,
-                   mc.cores=params$cores)
-}
+hs <- ddply(t.hs,
+            "chr",
+            function (x) {
+                red <- reduce(IRanges(start=x$start, end=x$end))
+                do.call(rbind,
+                        mcmapply(function (s, e) {
+                                     sel <- x[x$start >= s & x$end <= e, ]
+                                     sel[which.max(sel$hreads), ]
+                                 },
+                                 start(red),
+                                 end(red),
+                                 SIMPLIFY=FALSE,
+                                 mc.cores=params$cores))
+            })
+
+#if (params$combined) {
+#    message("combining")
+#    hs <- combiner(hs,
+#                   params$nuc.width,
+#                   params$same.magnitude,
+#                   mc.cores=params$cores)
+#}
 
 ### Store the Result ###########################################################
-
-#Score
-#coord
-#class
-#nuc
-#number_of_reads
-#readsInvolved
-#hreads
 
 hs$nuc[hs$nuc == 0] <- NA
 names(hs)[names(hs) == "type"] <- "class"
