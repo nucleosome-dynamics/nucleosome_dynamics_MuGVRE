@@ -165,7 +165,7 @@ if (!is.null(params$rep1) && !is.null(params$rep1)) {
 
 hs <- applyThreshold(hs, thresh)
 
-hs <- ddply(t.hs,
+hs <- ddply(hs,
             "chr",
             function (x) {
                 red <- reduce(IRanges(start=x$start, end=x$end))
