@@ -53,8 +53,9 @@ for (i in names(args)) {
 # conditions that a linker has to satisfy for it to be considered a NFR.
 # so far, its width has to be higher than the minimum width and lower than
 # a threshold
-conditions <- list(#compose(partial(`>`, params[["threshold"]]), width),
-                   compose(partial(`<`, params[["min.width"]]), width))
+conditions <- list( compose(partial(`>`, params[["threshold"]]), width)
+                  #, compose(partial(`<`, params[["min.width"]]), width)
+                  )
 
 getInterRans <- function(r)
 {   # Given an IRanges, return its negative ranges.
