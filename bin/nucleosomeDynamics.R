@@ -30,7 +30,7 @@ where <- function () {
 }
 
 SOURCE.DIR <- paste(where(), "../sourced", sep="/")
-sourced <- c("helperfuns", "gff_funs")
+sourced <- c("helperfuns", "gff_funs", "nd_funs")
 for (x in sourced) {
     source(paste0(SOURCE.DIR, "/", x, ".R"))
 }
@@ -130,7 +130,6 @@ if (!is.null(params$dynRData) && file.exists(params$dynRData)) {
                        same.magnitude = params$same.magnitude,
                        threshold      = NULL,
                        mc.cores       = params$cores)
-    hs <- hs[!(hs$type == "CONTAINED AinB" | hs$type == "CONTAINED BinA"), ]
     hs <- hs[hs$nreads > 0, ]
 
     if (!is.null(params$dynRData)) {
@@ -165,21 +164,6 @@ if (!is.null(params$rep1) && !is.null(params$rep1)) {
 
 hs <- applyThreshold(hs, thresh)
 
-hs <- ddply(hs,
-            "chr",
-            function (x) {
-                red <- reduce(IRanges(start=x$start, end=x$end))
-                do.call(rbind,
-                        mcmapply(function (s, e) {
-                                     sel <- x[x$start >= s & x$end <= e, ]
-                                     sel[which.max(sel$hreads), ]
-                                 },
-                                 start(red),
-                                 end(red),
-                                 SIMPLIFY=FALSE,
-                                 mc.cores=params$cores))
-            })
-
 #if (params$combined) {
 #    message("combining")
 #    hs <- combiner(hs,
@@ -187,6 +171,11 @@ hs <- ddply(hs,
 #                   params$same.magnitude,
 #                   mc.cores=params$cores)
 #}
+
+if (params$combined) {
+    message("combining")
+    hs <- newCombiner(hs, params$nuc.width, params$same.magnitude)
+}
 
 ### Store the Result ###########################################################
 
