@@ -157,12 +157,13 @@ merged$class <- getType(merged$score_w,
 
 ## Store the Result ###########################################################
 
+merged <- rd2df(merged)
 names(merged)[names(merged) == "score_h"] <- "score_height"
 names(merged)[names(merged) == "score_w"] <- "score_width"
 merged$nmerge <- NULL
 
 message("saving output as gff")
-writeGff(df2gff(rd2df(merged),
+writeGff(df2gff(merged,
                 source="nucleR",
                 feature="Nucleosome"),
          params$output)
