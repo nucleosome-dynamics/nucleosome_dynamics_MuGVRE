@@ -76,8 +76,8 @@ nucs <- with(readGff(params$calls),
                                           end   = as.numeric(end)),
                         space   = as.character(seqname),
                         score   = as.numeric(score),
-                        score_w = as.numeric(score_w),
-                        score_h = as.numeric(score_h),
+                        score_w = as.numeric(score_width),
+                        score_h = as.numeric(score_height),
                         #nmerge  = as.numeric(nmerge),
                         class   = as.character(class)))
 
