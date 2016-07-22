@@ -35,10 +35,9 @@ for (x in sourced) {
 
 ## Parameters and Arguments ###################################################
 
-#defaults <- list(period = 160)
-defaults <- list(period   = 165,
-                 mc.cores = 1,
-                 genome = "R64-1-1")
+defaults <- list(periodicity = 165,
+                 mc.cores    = 1,
+                 genome      = "R64-1-1")
 
 spec <- matrix(c("calls",       "a", 1, "character",
                  "genome",      "c", 1, "character",
@@ -75,10 +74,10 @@ message("identifying first and last nucleosomes")
 cov <- get(load(params$coverage))
 
 genes.nucs <- findGenesNucs(genes, calls.rd, params$mc.cores)
-genes.nucs$dfi <- getDfi(genes.nucs$nuc.len, params$period)
-genes.nucs$autocor <- autocorFromDf(genes.nucs, cov, params$period)
+genes.nucs$dfi <- getDfi(genes.nucs$nuc.len, params$periodicity)
+genes.nucs$autocor <- autocorFromDf(genes.nucs, cov, params$periodicity)
 
-covPredAll <- getPeriodCov(genes.nucs, params$period, params$mc.cores)
+covPredAll <- getPeriodCov(genes.nucs, params$periodicity, params$mc.cores)
 
 ## Store output ###############################################################
 
