@@ -38,7 +38,7 @@ int2base <- function(x, b=2)
     }
     N <- length(x)
     xMax <- max(x)
-    ndigits <- (floor(logb(xMax, base=2)) + 1)
+    ndigits <- floor(logb(xMax, base=2)) + 1
     Base.b <- array(NA, dim=c(N, ndigits))
     for (i in 1:ndigits) {
         Base.b[, ndigits-i+1] <- (x %% b)
@@ -63,27 +63,30 @@ processStrand <- function(strand, bam, flags)
 {
     message(sprintf("processing strand %s", strand))
 
-    is.paired <- flags[, "isPaired"] & flags[, "isProperPair"]
-    mate1 <- flags[, "isFirstMateRead"]
-    mate2 <- flags[, "isSecondMateRead"]
-    strand.check <- flags[, "isMinusStrand"]
+    #is.paired <- flags[, "isPaired"] & flags[, "isProperPair"]
+    #mate1 <- flags[, "isFirstMateRead"]
+    #mate2 <- flags[, "isSecondMateRead"]
+    #strand.check <- flags[, "isMinusStrand"]
 
-    if (strand == "+") {
-        p1mate <- mate1
-        p2mate <- mate2
-    } else if (strand == "-") {
-        p1mate <- mate2
-        p2mate <- mate1
-    }
+    #if (strand == "+") {
+    #    p1mate <- mate1
+    #    p2mate <- mate2
+    #} else if (strand == "-") {
+    #    p1mate <- mate2
+    #    p2mate <- mate1
+    #}
 
-    # Separate the paired reads
-    p1 <- vectorizedAll(is.paired, p1mate, !strand.check)
-    p2 <- vectorizedAll(is.paired, p2mate, strand.check)
-    #unsorted.reads1 <- lapply(bam, `[`, p1)
-    #unsorted.reads2 <- lapply(bam, `[`, p2)
+    ## Separate the paired reads
+    #p1 <- vectorizedAll(is.paired, p1mate, !strand.check)
+    #p2 <- vectorizedAll(is.paired, p2mate, strand.check)
+    ##unsorted.reads1 <- lapply(bam, `[`, p1)
+    ##unsorted.reads2 <- lapply(bam, `[`, p2)
 
-    unsorted.reads1 <- bam[p1, ]
-    unsorted.reads2 <- bam[p2, ]
+    p1 <- ifelse(strand == "+", 99, 163)
+    p2 <- ifelse(strand == "+", 147, 83)
+
+    unsorted.reads1 <- bam[flags == p1, ]
+    unsorted.reads2 <- bam[flags == p2, ]
 
     rownames(unsorted.reads1) <- as.vector(unsorted.reads1$qname)
     rownames(unsorted.reads2) <- as.vector(unsorted.reads2$qname)
@@ -125,17 +128,15 @@ loadPairedBam <- function(file)
               "mpos")
     bam <- as.data.frame(scanBam(file=file, param=ScanBamParam(what=what))[[1]])
 
-    # We will process the flags in R
-    # (an alternative is multiple scanBam calls...)
     message("processing flags")
-    flags <- bamFlagMatrix(bam$flag)
+    ## We will process the flags in R
+    ## (an alternative is multiple scanBam calls...)
+    #flags <- bamFlagMatrix(bam$flag)
+    flags <- bam$flag %% 256
 
     # Process both strand and return the reads in sorted order
-    sortReads(do.call(rbind,
-                      lapply(c("+", "-"),
-                             processStrand,
-                             bam,
-                             flags)))
+    sortReads(rbind(processStrand("+", bam, flags),
+                    processStrand("-", bam, flags)))
 }
 
 loadBAM <- function(f, type="single")

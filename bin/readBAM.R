@@ -31,7 +31,5 @@ args <- getopt(spec)
 message("-- loading ", args[["input"]])
 reads <- loadBAM(args[["input"]], args[["type"]])
 
-gc()
-
 message("-- saving ", args[["output"]])
 save(reads, file=args[["output"]])
