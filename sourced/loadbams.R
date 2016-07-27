@@ -7,14 +7,12 @@ library(IRanges)
 library(GenomicRanges)
 library(Rsamtools)
 
-source(paste(SOURCE.DIR,
-             "helperfuns.R",
-             sep="/"))
+source(paste(SOURCE.DIR, "helperfuns.R", sep="/"))
 
 sortBy <- function (xs, a)
     lapply(xs, `[`, sort.list(xs[[a]]))
 
-loadSingleBam <- function(exp)
+loadSingleBam <- function (exp)
 {
     what <- c("pos", "qwidth", "strand", "rname")
     bam <- scanBam(exp, param=ScanBamParam(what=what))[[1]]
@@ -30,7 +28,7 @@ loadSingleBam <- function(exp)
 }
 
 #Binary conversion
-int2base <- function(x, b=2)
+int2base <- function (x, b=2)
 {
     xi <- as.integer(x)
     if (any(is.na(xi) | ((x-xi) != 0))) {
@@ -51,7 +49,7 @@ int2base <- function(x, b=2)
     }
 }
 
-bamFlagMatrix <- function(flags)
+bamFlagMatrix <- function (flags)
 {
     bin <- int2base(flags)
     n <- ncol(bin)
@@ -59,34 +57,15 @@ bamFlagMatrix <- function(flags)
     return(bin)
 }
 
-processStrand <- function(strand, bam, flags)
+processStrand <- function (strand, bam)
 {
     message(sprintf("processing strand %s", strand))
-
-    #is.paired <- flags[, "isPaired"] & flags[, "isProperPair"]
-    #mate1 <- flags[, "isFirstMateRead"]
-    #mate2 <- flags[, "isSecondMateRead"]
-    #strand.check <- flags[, "isMinusStrand"]
-
-    #if (strand == "+") {
-    #    p1mate <- mate1
-    #    p2mate <- mate2
-    #} else if (strand == "-") {
-    #    p1mate <- mate2
-    #    p2mate <- mate1
-    #}
-
-    ## Separate the paired reads
-    #p1 <- vectorizedAll(is.paired, p1mate, !strand.check)
-    #p2 <- vectorizedAll(is.paired, p2mate, strand.check)
-    ##unsorted.reads1 <- lapply(bam, `[`, p1)
-    ##unsorted.reads2 <- lapply(bam, `[`, p2)
 
     p1 <- ifelse(strand == "+", 99, 163)
     p2 <- ifelse(strand == "+", 147, 83)
 
-    unsorted.reads1 <- bam[flags == p1, ]
-    unsorted.reads2 <- bam[flags == p2, ]
+    unsorted.reads1 <- bam[bam$flag == p1, ]
+    unsorted.reads2 <- bam[bam$flag == p2, ]
 
     rownames(unsorted.reads1) <- as.vector(unsorted.reads1$qname)
     rownames(unsorted.reads2) <- as.vector(unsorted.reads2$qname)
@@ -113,7 +92,7 @@ processStrand <- function(strand, bam, flags)
     }
 }
 
-loadPairedBam <- function(file)
+loadPairedBam <- function (file)
 {
     # Read BAM file (only one access to disk, intended for Shared Memory)
     message(sprintf("reading file %s", file))
@@ -132,14 +111,14 @@ loadPairedBam <- function(file)
     ## We will process the flags in R
     ## (an alternative is multiple scanBam calls...)
     #flags <- bamFlagMatrix(bam$flag)
-    flags <- bam$flag %% 256
+    bam$flag <- bam$flag %% 256
 
     # Process both strand and return the reads in sorted order
-    sortReads(rbind(processStrand("+", bam, flags),
-                    processStrand("-", bam, flags)))
+    sortReads(rbind(processStrand("+", bam),
+                    processStrand("-", bam)))
 }
 
-loadBAM <- function(f, type="single")
+loadBAM <- function (f, type="single")
 {
     if (type == "single") {
         loadSingleBam(f)
