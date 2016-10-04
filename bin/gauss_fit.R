@@ -56,16 +56,6 @@ for (i in names(args)) {
 
 ## Subset #####################################################################
 
-sd2stiffness <- function (sd, t)
-{   # cal/bp
-    j2kcal <- function (x)
-        (x / 4.184) / 1000
-    bp2A <- function (x)
-        x * 3.4
-    kB <- j2kcal(1.38064852e-23)
-    kB*t / sd^2
-}
-
 message("loading inputs")
 calls <- readGff(params[["calls"]])
 reads <- get(load(params[["reads"]]))
@@ -85,18 +75,14 @@ if (!is.null(params[["chr"]])) {
     }
 }
 
-#require(doMC)
-#registerDoMC(20)
-#getDoParWorkers()
-
 message("perfroming the fittings")
-gauss.df <- doGaussFit(calls, reads, .progress="text")
+gauss.df <- fitIt(calls, reads)
 gauss.df$score <- sd2stiffness(gauss.df$sd, params$t)
 
 ## Save output ################################################################
 
-gauss.df$score_w <- NULL
-gauss.df$score_h <- NULL
+gauss.df$score_width <- NULL
+gauss.df$score_height <- NULL
 gauss.df$nmerge <- NULL
 
 names(gauss.df)[names(gauss.df) == "class"] <- "nucleR_class"

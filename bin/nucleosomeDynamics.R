@@ -16,7 +16,7 @@ library(NucDyn)
 library(plyr)
 
 where <- function () {
-    spath <-parent.frame(2)$ofile
+    spath <- parent.frame(2)$ofile
 
     if (is.null(spath)) {
         args <- commandArgs()
@@ -37,12 +37,14 @@ for (x in sourced) {
 
 ### Parameters and Arguments ###################################################
 
-spec <- matrix(c("input1",         "a", 1, "character",
-                 "input2",         "b", 1, "character",
-                 "outputGff",      "c", 1, "character",
-                 "plotRData",      "d", 1, "character",
-                 "dynRData",       "e", 1, "character",
-                 "threshRData",    "f", 1, "character",
+spec <- matrix(c("input1", "a", 1, "character",
+                 "input2", "b", 1, "character",
+
+                 "outputGff",   "c", 1, "character",
+                 "plotRData",   "d", 1, "character",
+                 "dynRData",    "e", 1, "character",
+                 "threshRData", "f", 1, "character",
+
                  "cores",          "g", 1, "integer",
                  "maxLen",         "h", 1, "integer",
                  "equalSize",      "i", 1, "logical",
@@ -55,9 +57,11 @@ spec <- matrix(c("input1",         "a", 1, "character",
                  "nuc.width",      "p", 1, "integer",
                  "combined",       "q", 1, "logical",
                  "same.magnitude", "r", 1, "integer",
-                 "threshold",      "s", 1, "character",
-                 "rep1",           "t", 1, "character",
-                 "rep2",           "u", 1, "character"),
+
+                 "shift_min_nreads", "s", 1, "double",
+                 "shift_threshold",  "t", 1, "double",
+                 "indel_min_nreads", "u", 1, "double",
+                 "indel_threshold",  "v", 1, "double"),
                byrow=TRUE,
                ncol=4)
 args <- getopt(spec)
@@ -78,9 +82,11 @@ defaults <- list(cores          = 1,
                  nuc.width      = 120,
                  combined       = TRUE,
                  same.magnitude = 2,
-                 threshold      = "60%",
-                 rep1           = NULL,
-                 rep2           = NULL)
+
+                 shift_min_nreads = 3,
+                 shift_threshold  = 0.075,
+                 indel_min_nreads = 15,
+                 indel_threshold  = 0.5)
 
 params <- defaults
 for (i in names(args)) {
@@ -130,51 +136,39 @@ if (!is.null(params$dynRData) && file.exists(params$dynRData)) {
                        same.magnitude = params$same.magnitude,
                        threshold      = NULL,
                        mc.cores       = params$cores)
-    hs <- hs[hs$nreads > 0, ]
 
     if (!is.null(params$dynRData)) {
         save(hs, file=params$dynRData)
     }
 }
 
-if (!is.null(params$rep1) && !is.null(params$rep1)) {
-    if (grepl("%$", params$threshold)) {
-        params$threshold <- defaults$scale
-    }
+###############################################################################
 
-    if (!is.null(params$threshRData) && file.exists(params$threshRData)) {
-        thresh <- get(load(params$threshRData))
-    } else {
-        rep.fs <- strsplit(c(params$rep1, params$rep2), ",")
-        pairs <- do.call(mapply, c(list, rep.fs, SIMPLIFY=FALSE))
-        reps <- lapply(pairs, lapply, compose(get, load))
-        thresh <- do.call(getVariableThreshold,
-                          c(reps, mc.cores=params$cores))
+hs <- hs[hs$nreads > 0, ]
+hs <- hs[!grepl("^CONTAINED", hs$type), ]
 
-        if (!is.null(params$threshRData)) {
-            save(thresh, file=params$threshRData)
-        }
-    }
-    thresh@scale <- as.numeric(params$threshold)
-} else if (grepl("%$", params$threshold)) {
-    thresh <- params$threshold
-} else {
-    thresh <- as.numeric(params$threshold)
-}
-
-hs <- applyThreshold(hs, thresh)
-
-#if (params$combined) {
-#    message("combining")
-#    hs <- combiner(hs,
-#                   params$nuc.width,
-#                   params$same.magnitude,
-#                   mc.cores=params$cores)
-#}
+hs <- ddply(hs,
+            "type",
+            newApplyThreshold,
+            c(params$indel_min_nreads, params$indel_threshold),
+            c(params$shift_min_nreads, params$shift_threshold))
 
 if (params$combined) {
     message("combining")
-    hs <- newCombiner(hs, params$nuc.width, params$same.magnitude)
+
+    if (!is.null(params$dynRData) && file.exists(params$dynRData)) {
+        r1 <- get(load(params$input1))
+    }
+
+    calls <- nucleRCall(r1, mc.cores=params$cores)
+    hs <- assignNucs(hs, calls)
+
+    sel <- grepl("^SHIFT", hs$type) & hs$nuc != 0
+    sh.hs <- hs[sel, ]
+    non.sh.hs <- hs[!sel, ]
+
+    comb.shs <- shiftCombiner(sh.hs)
+    hs <- hsSorter(rbind(comb.shs, non.sh.hs))
 }
 
 ### Store the Result ###########################################################
@@ -182,13 +176,17 @@ if (params$combined) {
 hs$nuc[hs$nuc == 0] <- NA
 names(hs)[names(hs) == "type"] <- "class"
 names(hs)[names(hs) == "chr"] <- "seqname"
-names(hs)[names(hs) == "nreads"] <- "score"
-#names(hs)[names(hs) == "totalReads"] <- "number_of_reads"
-names(hs)[names(hs) == "readsInvolved"] <- "number_of_reads"
 
+hs$readsInvolved <- "readsInvolved" <- NULL
 hs$coord <- NULL
 hs$totalReads <- NULL
 hs$freads <- NULL
+hs$hreads <- NULL
+hs$changedArea <- NULL
+hs$involvedArea <- NULL
+hs$nuc <- NULL
+
+hs$score[hs$score > 1] <- 1
 
 message("saving output as gff")
 writeGff(df2gff(hs,
