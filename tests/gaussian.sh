@@ -3,29 +3,13 @@
 ###############################################################################
 
 script="/home/rilla/nucleServ/bin/gauss_fit.R"
-calls="/home/rilla/scratch/nucler/cell_cycle_data/calcs/g1_nr.gff"
-reads="/home/rilla/scratch/nucler/cell_cycle_data/reads/g1.RData"
-output="/home/rilla/scratch/nucler/cell_cycle_data/stiff/g1chrI.gff"
+calls="/orozco/services/Rdata/Web/USERS/ND577a8fb9e334c/run031/NR_rep1_00m_G1.gff"
+reads="/orozco/services/Rdata/Web/USERS/ND577a8fb9e334c/uploads/rep1_00m_G1.bam.RData"
+output="/home/rilla/stf.gff"
 
 Rscript $script      \
     --calls $calls   \
     --reads $reads   \
-    --output $output \
-    --chr "chrI" &
+    --output $output
 
 ###############################################################################
-
-script="/home/rilla/nucleServ/bin/gauss_fit.R"
-calls="/home/rilla/scratch/nucler/cell_cycle_data/calcs/s_nr.gff"
-reads="/home/rilla/scratch/nucler/cell_cycle_data/reads/s.RData"
-output="/home/rilla/scratch/nucler/cell_cycle_data/stiff/schrI.gff"
-
-Rscript $script      \
-    --calls $calls   \
-    --reads $reads   \
-    --output $output \
-    --chr "chrI" &
-
-###############################################################################
-
-wait

@@ -3,121 +3,14 @@
 ###############################################################################
 
 library(IRanges)
+library(nucleR)
+library(htSeqTools)
 
 source(paste(SOURCE.DIR,
              "fp.R",
              sep="/"))
 
 ###############################################################################
-
-simpleMerger <- function (x) {
-    readsInvolved <- sum(x$readsInvolved)
-    nreads <- sum(x$nreads)
-    totalReads <- x[1, "totalReads"]
-    data.frame(coord = round(mean(x$coord)),
-               start = min(x$start),
-               end   = max(x$end),
-               type = x[1, "type"],
-               nuc  = x[1, "nuc"],
-               chr  = x[1, "chr"],
-               nreads        = nreads,
-               totalReads    = totalReads,
-               readsInvolved = readsInvolved,
-               freads        = nreads / totalReads,
-               hreads        = nreads / readsInvolved)
-}
-
-mergeKind <- function (x, nuc.width) {
-    ovlp <- findOverlaps(IRanges(start=x$coord - round(nuc.width/2),
-                                 width=nuc.width))
-    i <- queryHits(ovlp)[queryHits(ovlp) != subjectHits(ovlp)]
-    if (length(i) > 1) {
-        y <- x[i, ]
-        red <- reduce(IRanges(start=y$coord - round(nuc.width/2),
-                              width=nuc.width))
-        merged <- do.call(rbind,
-                          mapply(function (s, e)
-                                     ddply(y[y$start >= s & y$end <= e, ],
-                                           "nuc",
-                                           simpleMerger),
-                                 start(red),
-                                 end(red),
-                                 SIMPLIFY=FALSE))
-        rbind(x[-i, ], merged)
-    } else {
-        x
-    }
-}
-
-comb2shifts <- function (r, l) {
-    coord <- mean(r$coord, l$coord)
-    nreads <- r$nreads + l$nreads
-    start <- min(r$start, l$start)
-    end <- max(r$end, l$end)
-
-    if (r$coord < l$coord) {
-        type <- "decrease in fuzziness"
-    } else if (r$coord > l$coord) {
-        type <- "increase in fuzziness"
-    } else {
-        type <- NA
-    }
-
-    nuc <- r$nuc
-    totalReads <- r$totalReads
-    readsInvolved <- r$readsInvolved + l$readsInvolved
-    totalReads <- r$totalReads
-    chr <- r$chr
-    freads <- nreads / totalReads
-    hreads <- nreads / readsInvolved
-
-    data.frame(coord         = coord,
-               nreads        = nreads,
-               start         = start,
-               end           = end,
-               type          = type,
-               nuc           = nuc,
-               totalReads    = totalReads,
-               freads        = freads,
-               readsInvolved = readsInvolved,
-               hreads        = hreads,
-               chr           = chr)
-}
-
-shiftCombiner <- function (i, j, rsh, lsh, same.magnitude) {
-    r <- rsh[i, ]
-    l <- lsh[j, ]
-    nrs <- c(r$nreads, l$nreads)
-    magnitude <- max(nrs) / min(nrs) <= params$same.magnitude
-    magnitude <- ifelse(is.na(magnitude), FALSE, magnitude)
-    nuc <- r$nuc == l$nuc && r$nuc != 0
-    if (magnitude && nuc) {  # we'll combine them
-        comb2shifts(r, l)
-    } else {
-        rbind(r, l)
-    }
-}
-
-shiftChrMerger <- function (df, nuc.width, same.magnitude) {
-    ii <- df$type == "SHIFT +"
-    jj <- df$type == "SHIFT -"
-
-    rsh <- df[ii, ]
-    lsh <- df[jj, ]
-
-    rran <- IRanges(start=rsh$start - round(nuc.width/2), width=nuc.width)
-    lran <- IRanges(start=lsh$start - round(nuc.width/2), width=nuc.width)
-    ovlp <- findOverlaps(rran, lran)
-
-    merged <- do.call(rbind,
-                      mapply(shiftCombiner,
-                             queryHits(ovlp),
-                             subjectHits(ovlp),
-                             MoreArgs=list(rsh, lsh, same.magnitude),
-                             SIMPLIFY=FALSE))
-
-    rbind(df[!(ii | jj), ], merged)
-}
 
 hsSorter <- function (df) {
     df <- df[order(df$coord), ]
@@ -127,21 +20,117 @@ hsSorter <- function (df) {
 
 ###############################################################################
 
-newCombiner <- function (hs, nuc.width, same.magnitude) {
-    f <- compose(hsSorter,
-                 partial(ddply,
-                         .(chr),
-                         shiftChrMerger,
-                         nuc.width,
-                         same.magnitude,
-                         .progress="text"),
-                 partial(ddply,
-                         .(type, chr),
-                         mergeKind,
-                         nuc.width,
-                         .progress="text"),
-                 function (x) x[-grep("^CONTAINED ", x$type), ])
-    f(hs)
+newApplyThreshold <- function (x, indel.threshs, shift.threshs) {
+    threshs <- switch(x[1, "type"],
+                      "INCLUSION" = indel.threshs,
+                      "EVICTION"  = indel.threshs,
+                      "SHIFT +"   = shift.threshs,
+                      "SHIFT -"   = shift.threshs)
+    x[x$nreads >= threshs[1] & x$score >= threshs[2], ]
+}
+
+###############################################################################
+
+nucleRCall <- function (reads, mc.cores=1) {
+    f.reads <- filterDuplReads(reads,
+                               fdrOverAmp=0.05,
+                               components=1,
+                               mc.cores=mc.cores)
+    prep <- processReads(f.reads,
+                         type="paired",
+                         fragmentLen=170)
+    cover <- coverage.rpm(prep)
+    fft <- filterFFT(cover, pcKeepComp=0.02, mc.cores=mc.cores)
+    peaks <- peakDetection(fft,
+                           width=125,
+                           threshold="35%",
+                           score=FALSE,
+                           mc.cores=mc.cores)
+    scores <- peakScoring(peaks,
+                          fft,
+                          threshold="35%",
+                          dyad.length=50,
+                          mc.cores=mc.cores)
+    merged <- mergeCalls(scores, min.overlap=50)
+    merged
+}
+
+chrAssignNucs <- function (df, calls, threshold=0.3) {
+    q <- IRanges(start=df$start, end=df$end)
+    ovs <- findOverlaps(query=q, subject=calls)
+    ds <- width(ranges(ovs, q, calls))
+
+    ovlps <- as.data.frame(ovs)
+    ovlps$rel.ovlp <- ds / width(q[ovlps$queryHits])
+    ovlps <- ddply(ovlps, "queryHits", function (x) x[which.max(x$rel.ovlp), ])
+    ovlps <- ovlps[ovlps$rel.ovlp > threshold, ]
+
+    missings <- which(!seq_along(q) %in% ovlps$queryHits)
+
+    nucs <- c(ovlps$subjectHits, rep(0, length(missings)))
+    ordering <- order(c(ovlps$queryHits, missings))
+
+    nucs[ordering]
+}
+
+assignNucs <- function (hs, calls, threshold=0.3) {
+    message("assigning nucleosomes")
+    chr.calls <- ranges(calls)
+    f <- function (x) {
+        chr <- x[1, "chr"]
+        calls <- chr.calls[[chr]]
+        x$nuc <- chrAssignNucs(x, calls, 0.4)
+        x
+    }
+    ddply(hs, "chr", f, .progress="text")
+}
+
+###############################################################################
+
+combineShiftTypes <- function (x, y) {
+    if (x == "SHIFT +" && y == "SHIFT +") {
+        return("SHIFT +")
+    } else if (x == "SHIFT -" && y == "SHIFT -") {
+        return("SHIFT -")
+    } else if (x == "SHIFT +" && y == "SHIFT -") {
+        return("DECREASE IN FUZZYNESS")
+    } else if (x == "SHIFT -" && y == "SHIFT +") {
+        return("INCREASE IN FUZZYNESS")
+    }
+}
+
+combineThem <- function (x) {
+    nreads <- sum(x$nreads)
+    start <- min(x$start)
+    end <- max(x$end)
+    type <- do.call(combineShiftTypes, as.list(x$type[order(x$start)]))
+    changedArea <- sum(x$changedArea)
+    involvedArea <- sum(x$involvedArea)
+    score <- changedArea / involvedArea
+
+    chr <- x[1, "chr"]
+    nuc <- x[1, "nuc"]
+
+    data.frame(nreads       = nreads,
+               start        = start,
+               end          = end,
+               type         = type,
+               changedArea  = changedArea,
+               involvedArea = involvedArea,
+               score        = score,
+               chr          = chr,
+               nuc          = nuc)
+}
+
+shiftCombiner <- function (df) {
+    f <- function (x) {
+        if (nrow(x) != 2) {
+            return(x)
+        } else {
+            combineThem(x)
+        }
+    }
+    ddply(df, "chr", ddply, "nuc", f)
 }
 
 ###############################################################################
