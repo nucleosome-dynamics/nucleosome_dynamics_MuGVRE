@@ -93,9 +93,9 @@ combineShiftTypes <- function (x, y) {
     } else if (x == "SHIFT -" && y == "SHIFT -") {
         return("SHIFT -")
     } else if (x == "SHIFT +" && y == "SHIFT -") {
-        return("DECREASED FUZZYNESS")
+        return("DECREASED FUZZINESS")
     } else if (x == "SHIFT -" && y == "SHIFT +") {
-        return("INCREASED FUZZYNESS")
+        return("INCREASED FUZZINESS")
     }
 }
 
