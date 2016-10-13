@@ -55,7 +55,8 @@ for (i in names(args)) {
 # a threshold
 conditions <- list(
     # compose(partial(`>`, params[["threshold"]]), width),
-    compose(partial(`<`, params[["min.width"]]), width)
+    # compose(partial(`<`, params[["min.width"]]), width)
+    function (x) width(x) > params[["min.width"]]
 )
 
 getInterRans <- function(r)
