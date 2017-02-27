@@ -68,22 +68,27 @@ readBigWig <- function(inf)
 
 splitAtZeros <- function (xs)
 {
-    xs <- as.vector(xs)
-    counts <- rle(xs != 0)
+    if (length(xs) == 0) {
+        return(list())
+    } else {
+        xs <- as.vector(xs)
+        counts <- rle(xs != 0)
 
-    jdxs <- cumsum(counts$length)
-    idxs <- c(1, jdxs[-length(jdxs)] + 1)
+        jdxs <- cumsum(counts$length)
+        idxs <- c(1, jdxs[-length(jdxs)] + 1)
 
-    by.kinds <- mapply(function(i, j) xs[i:j],
-                       idxs, jdxs,
-                       SIMPLIFY=FALSE)
-    names(by.kinds) <- idxs
+        by.kinds <- mapply(function(i, j) xs[i:j],
+                           idxs, jdxs,
+                           SIMPLIFY=FALSE)
+        names(by.kinds) <- idxs
 
-    return(by.kinds[counts$values])
+        return(by.kinds[counts$values])
+    }
 }
 
 writeWig <- function(x, outf)
 {
+    x <- x[sapply(x, length) != 0]
     tag.rows <- unlist(lapply(names(x),
                               function(chr)
                                   paste("fixedStep",

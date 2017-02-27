@@ -7,22 +7,6 @@ library(plyr)
 
 ###############################################################################
 
-isIn <- function (x, y)
-    # Is x in y?
-    start(x) <= end(y) & end(x) >= start(y)
-
-myFilter <- function (x, f, ...)
-    x[f(x, ...)]
-
-selectReads <- function (reads, range.df)
-    myFilter(reads,
-             isIn,
-             range(with(range.df,
-                        IRanges(start,
-                                end))))
-
-###############################################################################
-
 sd2stiffness <- function (sd, t=310.15,  rt=8.3144598*0.239005736)
    # cal/mol * bp^2
     (rt * t) / (sd**2)

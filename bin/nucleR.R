@@ -48,7 +48,10 @@ defaults <- list(mc.cores       = 1,
                  dyad.length    = NULL,
                  min.overlap    = NULL,
                  score_w.thresh = 0.6,
-                 score_h.thresh = 0.4)
+                 score_h.thresh = 0.4,
+                 start          = NULL,
+                 end            = NULL,
+                 chr            = NULL)
 
 spec <- matrix(c("input",       "a", 1, "character",
                  "output",      "b", 1, "character",
@@ -64,7 +67,10 @@ spec <- matrix(c("input",       "a", 1, "character",
                  "dyad.length", "l", 1, "integer",
                  "minoverlap",  "m", 1, "integer",
                  "wthresh",     "n", 1, "double",
-                 "hthresh",     "o", 1, "double"),
+                 "hthresh",     "o", 1, "double",
+                 "start",       "p", 1, "integer",
+                 "end",         "q", 1, "integer",
+                 "chr",         "r", 1, "character"),
                byrow=TRUE,
                ncol=4)
 args <- getopt(spec)
@@ -116,38 +122,59 @@ if (is.null(params$fragmentLen)) {
     }
 }
 
+if (!is.null(params$chr)) {
+    f.reads <- reads[space(reads) == params$chr, ]
+    if (!is.null(params$start) && !is.null(params$end)) {
+        sel <- isIn(f.reads,
+                    IRanges(start=params$start,
+                            end=params$end))
+        f.reads <- f.reads[sel, ]
+    }
+}
+
 message("processing reads")
 prep <- processReads(f.reads,
-                     type=params$type,
-                     fragmentLen=params$fragmentLen,
-                     trim=params$trim)
+                     type        = params$type,
+                     fragmentLen = params$fragmentLen,
+                     trim        = params$trim)
 
 message("calculating coverage")
 cover <- coverage.rpm(prep)
 
+emptyHandler <- function (f)
+    function (x, ...)
+        if (length(x) > 0) {
+            f(x, ...)
+        } else {
+            numeric()
+        }
+
 message("filtering with filterFFT")
-fft <- filterFFT(cover,
-                 pcKeepComp=params$pcKeepComp,
-                 mc.cores=params$mc.cores)
+fft <- mclapply(cover,
+                emptyHandler(filterFFT),
+                pcKeepComp     = params$pcKeepComp,
+                mc.preschedule = FALSE,
+                mc.cores       = params$mc.cores)
 
 message("detecting peaks")
 peaks <- peakDetection(fft,
-                       width=params$width,
-                       threshold=params$threshold,
-                       score=FALSE,
-                       mc.cores=params$mc.cores)
+                       width     = params$width,
+                       threshold = params$threshold,
+                       score     = FALSE,
+                       min.cov   = 0,
+                       mc.cores  = params$mc.cores)
 
 message("scoring peaks")
 scores <- peakScoring(peaks,
                       fft,
-                      threshold=params$threshold,
-                      dyad.length=params$dyad.length,
-                      mc.cores=params$mc.cores)
+                      threshold   = params$threshold,
+                      dyad.length = params$dyad.length,
+                      mc.cores    = params$mc.cores)
 
 message("merging peaks")
 merged <- mergeCalls(scores,
-                     min.overlap=params$min.overlap,
-                     mc.cores=params$mc.cores)
+                     min.overlap = params$min.overlap,
+                     mc.cores    = params$mc.cores)
 
 merged$class <- getType(merged$score_w,
                         merged$score_h,
@@ -164,8 +191,8 @@ merged$nmerge <- NULL
 
 message("saving output as gff")
 writeGff(df2gff(merged,
-                source="nucleR",
-                feature="Nucleosome"),
+                source  = "nucleR",
+                feature = "Nucleosome"),
          params$output)
 
 message("done")

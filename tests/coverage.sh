@@ -1,30 +1,10 @@
 #!/usr/bin/env sh
 
-################################################################################
-#
-#script="/home/rilla/nucleServ/bin/coverage.R"
-#input="/orozco/services/Rdata/tmp_wd/short_34.RData"
-#output="/orozco/services/Rdata/tmp_wd/short_34_cov.RData"
-#
-#Rscript $script    \
-#    --input $input \
-#    --output $output
-#
-################################################################################
-#
-#script="/home/rilla/nucleServ/bin/coverage.R"
-#input="/orozco/services/Rdata/tmp_wd/short_35.RData"
-#output="/orozco/services/Rdata/tmp_wd/short_35_cov.RData"
-#
-#Rscript $script    \
-#    --input $input \
-#    --output $output
-#
-################################################################################
+###############################################################################
 
 script="/home/rilla/nucleServ/bin/coverage.R"
-input="/home/rilla/scratch/nucler/cell_cycle_data/reads/g1.RData"
-output="/home/rilla/scratch/nucler/cell_cycle_data/calcs/g1_cov.RData"
+input="/home/rilla/scratch/jurgen_nucs/pooled.RData"
+output="/home/rilla/scratch/jurgen_nucs/pooled_cov.RData"
 
 Rscript $script    \
     --input $input \
@@ -32,12 +12,14 @@ Rscript $script    \
 
 ###############################################################################
 
-script="/home/rilla/nucleServ/bin/coverage.R"
-input="/home/rilla/scratch/nucler/cell_cycle_data/reads/s.RData"
-output="/home/rilla/scratch/nucler/cell_cycle_data/calcs/s_cov.RData"
+script="/home/rilla/nucleServ/bin/to_bigWig.R"
+input="/home/rilla/scratch/jurgen_nucs/pooled_cov.RData"
+output="/home/rilla/scratch/jurgen_nucs/pooled_cov.wig"
+genome="mm9"
 
-Rscript $script    \
-    --input $input \
-    --output $output
+Rscript $script      \
+    --input $input   \
+    --output $output \
+    --genome $genome
 
 ###############################################################################

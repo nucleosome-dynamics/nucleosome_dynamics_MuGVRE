@@ -29,7 +29,7 @@ where <- function () {
 }
 
 SOURCE.DIR <- paste(where(), "../sourced", sep="/")
-sourced <- c("gff_funs", "fp", "gauss_funs")
+sourced <- c("gff_funs", "fp", "gauss_funs", "helperfuns")
 for (x in paste0(SOURCE.DIR, "/", sourced, ".R")) {
      source(x)
 }

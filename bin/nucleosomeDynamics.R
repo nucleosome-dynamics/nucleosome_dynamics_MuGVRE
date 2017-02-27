@@ -5,9 +5,6 @@
 # Score: magnitude of the change
 
 # class: type of hotspot (see help for all possible types)
-# nuc: to which nucleosome the movement belongs. NA means that the hostpot couldn't be unequivocally associated to one nucleosome.
-# number_of_reads: number of reads involved in this movement
-# hreads: number of reads involved in the movement relative to the number of reads present in the area. This value ranges from 0 to 1 and the closest it is to 1, the more significant the movement.
 
 ## Imports ####################################################################
 
@@ -30,7 +27,7 @@ where <- function () {
 }
 
 SOURCE.DIR <- paste(where(), "../sourced", sep="/")
-sourced <- c("helperfuns", "gff_funs", "nd_funs")
+sourced <- c("helperfuns", "gff_funs", "nd_funs", "wig_funs")
 for (x in sourced) {
     source(paste0(SOURCE.DIR, "/", x, ".R"))
 }
@@ -39,49 +36,43 @@ for (x in sourced) {
 
 spec <- matrix(c("input1", "a", 1, "character",
                  "input2", "b", 1, "character",
+                 "genome", "c", 1, "character",
 
-                 "outputGff",   "c", 1, "character",
-                 "plotRData",   "d", 1, "character",
-                 "dynRData",    "e", 1, "character",
-                 "threshRData", "f", 1, "character",
+                 "outputGff",    "d", 1, "character",
+                 "plotRData",    "e", 1, "character",
+                 "outputBigWig", "f", 1, "character",
 
-                 "cores",          "g", 1, "integer",
-                 "maxLen",         "h", 1, "integer",
-                 "equalSize",      "i", 1, "logical",
-                 "roundPow",       "j", 1, "integer",
-                 "readSize",       "k", 1, "integer",
-                 "maxDiff",        "l", 1, "integer",
-                 "rangeStart",     "m", 1, "integer",
-                 "rangeEnd",       "n", 1, "integer",
-                 "chr",            "o", 1, "character",
-                 "nuc.width",      "p", 1, "integer",
-                 "combined",       "q", 1, "logical",
-                 "same.magnitude", "r", 1, "integer",
+                 "cores",     "g", 1, "integer",
+                 "maxLen",    "h", 1, "integer",
+                 "equalSize", "i", 1, "logical",
+                 "roundPow",  "j", 1, "integer",
+                 "readSize",  "k", 1, "integer",
+                 "maxDiff",   "l", 1, "integer",
 
-                 "shift_min_nreads", "s", 1, "double",
-                 "shift_threshold",  "t", 1, "double",
-                 "indel_min_nreads", "u", 1, "double",
-                 "indel_threshold",  "v", 1, "double"),
+                 "rangeStart", "m", 1, "integer",
+                 "rangeEnd",   "n", 1, "integer",
+                 "chr",        "o", 1, "character",
+
+                 "shift_min_nreads", "p", 1, "double",
+                 "shift_threshold",  "q", 1, "double",
+                 "indel_min_nreads", "r", 1, "double",
+                 "indel_threshold",  "s", 1, "double"),
                byrow=TRUE,
                ncol=4)
 args <- getopt(spec)
 
-defaults <- list(cores          = 1,
-                 maxLen         = 170,
-                 equalSize      = FALSE,
-                 plotRData      = NULL,
-                 dynRData       = NULL,
-                 threshRData    = NULL,
-                 roundPow       = 5,
-                 readSize       = 140,
-                 maxDiff        = NULL,
-                 rangeStart     = NULL,
-                 rangeEnd       = NULL,
-                 chr            = NULL,
-                 scale          = 2,
-                 nuc.width      = 120,
-                 combined       = TRUE,
-                 same.magnitude = 2,
+defaults <- list(cores      = 1,
+                 maxLen     = 170,
+                 equalSize  = FALSE,
+                 plotRData  = NULL,
+                 roundPow   = 5,
+                 readSize   = 140,
+                 maxDiff    = NULL,
+                 rangeStart = NULL,
+                 rangeEnd   = NULL,
+                 chr        = NULL,
+                 scale      = 2,
+                 genome     = "R64-1-1",
 
                  shift_min_nreads = 3,
                  shift_threshold  = 0.075,
@@ -105,94 +96,68 @@ if (is.null(params$maxDiff)) {
 
 ## Pipeline Itself ############################################################
 
-if (!is.null(params$dynRData) && file.exists(params$dynRData)) {
-    hs <- get(load(params$dynRData))
+r1 <- get(load(params$input1))
+r2 <- get(load(params$input2))
 
-} else {
-    r1 <- get(load(params$input1))
-    r2 <- get(load(params$input2))
+message("running NucleosomeDynamics")
+dyn <- nucleosomeDynamics(setA      = r1,
+                          setB      = r2,
+                          maxLen    = params$maxLen,
+                          equalSize = params$equalSize,
+                          readSize  = params$readSize,
+                          maxDiff   = params$maxDiff,
+                          mc.cores  = params$cores)
 
-    message("running NucleosomeDynamics")
-    dyn <- nucleosomeDynamics(setA      = r1,
-                              setB      = r2,
-                              maxLen    = params$maxLen,
-                              equalSize = params$equalSize,
-                              roundPow  = params$roundPow,
-                              readSize  = params$readSize,
-                              maxDiff   = params$maxDiff,
-                              mc.cores  = params$cores)
-
-    if (!is.null(params$plotRData)) {
-        plotable <- makePlotable(dyn)
-        save(plotable, file=params$plotRData)
-    }
-
-    message("finding hotspots")
-    hs <- findHotspots(dyn            = dyn,
-                       range          = params$range,
-                       chr            = params$chr,
-                       nuc.width      = params$nuc.width,
-                       combined       = FALSE,
-                       same.magnitude = params$same.magnitude,
-                       threshold      = NULL,
-                       mc.cores       = params$cores)
-
-    if (!is.null(params$dynRData)) {
-        save(hs, file=params$dynRData)
-    }
+if (!is.null(params$plotRData)) {
+    plotable <- makePlotable(dyn)
+    save(plotable, file=params$plotRData)
 }
+
+message("finding hotspots")
+hs <- findHotspots(dyn=dyn, mc.cores=params$cores)
+
+## Calculate vector of -log10(p-value)s  ######################################
+
+cov1 <- lapply(coverage(r1), as.vector)
+cov2 <- lapply(coverage(r2), as.vector)
+
+chrs <- intersect(names(cov1), names(cov2))
+pvals <- lapply(chrs, function (x) -log10(findPVals(cov1[[x]], cov2[[x]])))
+names(pvals) <- chrs
 
 ###############################################################################
 
-hs <- hs[hs$nreads > 0, ]
-hs <- hs[!grepl("^CONTAINED", hs$type), ]
+indel.threshold <- params$indel_threshold
+indel.min.nreads <- params$indel_min_nreads
+shift.threshold <- params$shift_threshold
+shift.min.nreads <- params$shift_min_nreads
 
-hs <- ddply(hs,
-            "type",
-            newApplyThreshold,
-            c(params$indel_min_nreads, params$indel_threshold),
-            c(params$shift_min_nreads, params$shift_threshold))
+is.indel <- hs$type == "EVICTION" | hs$type == "INCLUSION"
+is.shift <- hs$type == "SHIFT +"  | hs$type == "SHIFT -"
+indel.sel <- hs$score <= indel.threshold & hs$nreads >= indel.min.nreads
+shift.sel <- hs$score <= shift.threshold & hs$nreads >= shift.min.nreads
+i <- is.indel & indel.sel
+j <- is.shift & shift.sel
 
-if (params$combined) {
-    message("combining")
-
-    if (!is.null(params$dynRData) && file.exists(params$dynRData)) {
-        r1 <- get(load(params$input1))
-    }
-
-    calls <- nucleRCall(r1, mc.cores=params$cores)
-    hs <- assignNucs(hs, calls)
-
-    sel <- grepl("^SHIFT", hs$type) & hs$nuc != 0
-    sh.hs <- hs[sel, ]
-    non.sh.hs <- hs[!sel, ]
-
-    comb.shs <- shiftCombiner(sh.hs)
-    hs <- hsSorter(rbind(comb.shs, non.sh.hs))
-}
+hs <- hs[i | j, ]
 
 ### Store the Result ###########################################################
 
-hs$nuc[hs$nuc == 0] <- NA
 names(hs)[names(hs) == "type"] <- "class"
 names(hs)[names(hs) == "chr"] <- "seqname"
-
-hs$readsInvolved <- "readsInvolved" <- NULL
-hs$coord <- NULL
-hs$totalReads <- NULL
-hs$freads <- NULL
-hs$hreads <- NULL
-hs$changedArea <- NULL
-hs$involvedArea <- NULL
-hs$nuc <- NULL
-
-hs$score[hs$score > 1] <- 1
+hs$peak <- NULL
 
 message("saving output as gff")
 writeGff(df2gff(hs,
                 source="NucleosomeDynamics",
                 feature="Nucleosome change"),
          params$outputGff)
+
+message("saving bigWig output")
+writeBigWig(lapply(pvals, splitAtZeros),
+            params$outputBigWig,
+            params$genome)
+
 message("done")
 
 ###############################################################################

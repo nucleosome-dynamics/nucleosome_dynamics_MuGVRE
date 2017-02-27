@@ -15,13 +15,14 @@
 ###############################################################################
 
 script="/home/rilla/nucleServ/bin/nucleR.R"
-input="/orozco/scratch/xesh0/orozco/rilla/nucler/cell_cycle_data/reads/g1.RData"
-output="/orozco/scratch/xesh0/orozco/rilla/nucler/cell_cycle_data/calcs/g1_nr.gff"
+#input="/orozco/scratch/xesh0/orozco/rilla/nucler/cell_cycle_data/reads/g1.RData"
+#output="/orozco/scratch/xesh0/orozco/rilla/nucler/cell_cycle_data/calcs/g1_nr.gff"
+input="/home/rilla/scratch/jurgen_nucs/pooled.RData"
+output="/home/rilla/scratch/jurgen_nucs/pooled_calls.gff"
 
 Rscript $script    \
     --input $input \
     --output $output \
-    --threshold 1.02 \
     --cores 20
 
 ###############################################################################

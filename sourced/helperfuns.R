@@ -158,3 +158,23 @@ sortReads <- function (reads)
     }
     irLs2rd(lapply(sortChrs(ranges(reads)), sortRans))
 }
+
+###############################################################################
+
+isIn <- function (x, y)
+    # Is x in y?
+    start(x) <= end(y) & end(x) >= start(y)
+
+myFilter <- function (x, f, ...)
+    x[f(x, ...)]
+
+selectReads <- function (reads, range.df)
+    myFilter(reads,
+             isIn,
+             range(with(range.df,
+                        IRanges(start,
+                                end))))
+
+###############################################################################
+
+
