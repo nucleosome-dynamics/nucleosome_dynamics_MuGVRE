@@ -45,7 +45,6 @@ spec <- matrix(c("input1", "a", 1, "character",
                  "cores",     "g", 1, "integer",
                  "maxLen",    "h", 1, "integer",
                  "equalSize", "i", 1, "logical",
-                 "roundPow",  "j", 1, "integer",
                  "readSize",  "k", 1, "integer",
                  "maxDiff",   "l", 1, "integer",
 
@@ -65,19 +64,17 @@ defaults <- list(cores      = 1,
                  maxLen     = 170,
                  equalSize  = FALSE,
                  plotRData  = NULL,
-                 roundPow   = 5,
                  readSize   = 140,
-                 maxDiff    = NULL,
+                 maxDiff    = 74,
                  rangeStart = NULL,
                  rangeEnd   = NULL,
                  chr        = NULL,
-                 scale      = 2,
                  genome     = "R64-1-1",
 
                  shift_min_nreads = 3,
-                 shift_threshold  = 0.075,
-                 indel_min_nreads = 15,
-                 indel_threshold  = 0.5)
+                 shift_threshold  = 0.1,
+                 indel_min_nreads = 3,
+                 indel_threshold  = 0.05)
 
 params <- defaults
 for (i in names(args)) {
@@ -90,9 +87,9 @@ if (is.null(params$rangeStart) || is.null(params$rangeEnd)) {
     params$range <- c(rangeStart, rangeEnd)
 }
 
-if (is.null(params$maxDiff)) {
-    params$maxDiff <- params$readSize/2
-}
+#if (is.null(params$maxDiff)) {
+#    params$maxDiff <- params$readSize/2
+#}
 
 ## Pipeline Itself ############################################################
 
