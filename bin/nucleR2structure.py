@@ -7,7 +7,7 @@ import sys
 
 ###############################################################################
 
-def parse_range(x, pattern=r"(?P<chr>.+):(?P<start>\d+)-(?P<end>\d+)"):
+def parse_range(x, pattern=r"(?P<chr>.+):(?P<start>\d+)\.\.(?P<end>\d+)"):
     match = re.compile(pattern).match(x)
     chr = match.group("chr")
     start = int(match.group("start"))
@@ -31,6 +31,19 @@ def get_nucs(fh, chr, start, end):
         if filter_lines(parsed, chr, start, end):
             _, s, e = parsed
             yield s, e
+
+
+def read_fasta(f):
+    def iter(xs):
+        for x in xs:
+            lines = x.split()
+            chr = lines[0]
+            seq = "".join(lines[1:])
+            yield chr, seq
+    with open(f) as fh:
+        txt = fh.read()
+    res = {k: v for k, v in iter(txt.split(">")[1:])}
+    return res
 
 
 def get_seq(fh):
@@ -105,7 +118,7 @@ def get_args(margin=4):
         required=True
     )
     required_named.add_argument(
-        "--genome_dir",
+        "--genome_file",
         help="directory containing the reference genome in fasta format",
         required=True
     )
@@ -131,22 +144,23 @@ def get_args(margin=4):
         default=margin
     )
     args = parser.parse_args()
-    return args.calls, args.genome_dir, args.range, args.margin, args.nucs_output, args.seq_output
+    return args.calls, args.genome_file, args.range, args.margin, args.nucs_output, args.seq_output
 
 
 ###############################################################################
 
 
 def main():
-    calls_file, genome_dir, range_str, margin, nucs_f, seq_f = get_args()
+    calls_file, genome_file, range_str, margin, nucs_f, seq_f = get_args()
     chr, start, end = parse_range(range_str)
 
     ###########################################################################
 
     with open(calls_file) as fh:
         nucs = list(get_nucs(fh, chr, start, end))
-    with open("{0}/{1}.fa".format(genome_dir, chr)) as fh:
-        seq = get_seq(fh)
+
+    fasta = read_fasta(genome_file)
+    seq = fasta[chr]
 
     ###########################################################################
 
