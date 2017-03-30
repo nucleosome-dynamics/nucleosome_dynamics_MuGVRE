@@ -26,6 +26,8 @@ where <- function () {
     dirname(normalizePath(fname))
 }
 
+where <- function () "/home/rilla/nucleServ/bin"
+
 SOURCE.DIR <- paste(where(), "../sourced", sep="/")
 sourced <- c("helperfuns", "gff_funs", "nd_funs", "wig_funs")
 for (x in sourced) {
@@ -42,34 +44,38 @@ spec <- matrix(c("input1", "a", 1, "character",
                  "plotRData",    "e", 1, "character",
                  "outputBigWig", "f", 1, "character",
 
-                 "cores",     "g", 1, "integer",
-                 "maxLen",    "h", 1, "integer",
-                 "equalSize", "i", 1, "logical",
-                 "readSize",  "k", 1, "integer",
-                 "maxDiff",   "l", 1, "integer",
+                 "cores",      "g", 1, "integer",
+                 "maxLen",     "h", 1, "integer",
+                 "equal_size", "i", 1, "logical",
+                 "readSize",   "k", 1, "integer",
+                 "maxDiff",    "l", 1, "integer",
 
-                 "rangeStart", "m", 1, "integer",
-                 "rangeEnd",   "n", 1, "integer",
-                 "chr",        "o", 1, "character",
+                 "range", "m", 1, "character",
+
+                 #"rangeStart", "m", 1, "integer",
+                 #"rangeEnd",   "n", 1, "integer",
+                 #"chr",        "o", 1, "character",
 
                  "shift_min_nreads", "p", 1, "double",
                  "shift_threshold",  "q", 1, "double",
                  "indel_min_nreads", "r", 1, "double",
-                 "indel_threshold",  "s", 1, "double"),
+                 "indel_threshold",  "s", 1, "double",
+
+                 "roundPow", "t", 1, "logical"
+                 "same_magnitude", "u", 1, "logical"),
                byrow=TRUE,
                ncol=4)
 args <- getopt(spec)
 
 defaults <- list(cores      = 1,
                  maxLen     = 170,
-                 equalSize  = FALSE,
+                 equal_size = FALSE,
                  plotRData  = NULL,
                  readSize   = 140,
                  maxDiff    = 74,
                  rangeStart = NULL,
                  rangeEnd   = NULL,
                  chr        = NULL,
-                 genome     = "R64-1-1",
 
                  shift_min_nreads = 3,
                  shift_threshold  = 0.1,
@@ -97,10 +103,11 @@ r1 <- get(load(params$input1))
 r2 <- get(load(params$input2))
 
 message("running NucleosomeDynamics")
+
 dyn <- nucleosomeDynamics(setA      = r1,
                           setB      = r2,
                           maxLen    = params$maxLen,
-                          equalSize = params$equalSize,
+                          equalSize = params$equal_size,
                           readSize  = params$readSize,
                           maxDiff   = params$maxDiff,
                           mc.cores  = params$cores)
@@ -138,7 +145,7 @@ j <- is.shift & shift.sel
 
 hs <- hs[i | j, ]
 
-### Store the Result ###########################################################
+## Store the Result ###########################################################
 
 names(hs)[names(hs) == "type"] <- "class"
 names(hs)[names(hs) == "chr"] <- "seqname"

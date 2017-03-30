@@ -1,0 +1,1 @@
+{'nucleR:dyad__length': 50, 'nucleR:minoverlap': 80, 'nucleR:hthresh': 0.4, 'nucleR': True, 'nucleR:width': 147, 'project': 'myNuclDynProject', 'nucleR:wthresh': 0.6, 'nucleR:pcKeepComp': 0.02, 'nucleR:thresholdPercentage': 35, 'description': 'This is my first run of Nucleosome Dynamics', 'Nucleosome Dynamics': True}

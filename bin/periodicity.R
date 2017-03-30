@@ -11,6 +11,7 @@ library(IRanges)
 library(parallel)
 library(getopt)
 library(plyr)
+library(nucleR)
 
 where <- function () {
     spath <-parent.frame(2)$ofile
@@ -40,11 +41,13 @@ defaults <- list(periodicity = 165,
                  genome      = "R64-1-1")
 
 spec <- matrix(c("calls",       "a", 1, "character",
-                 "genome",      "c", 1, "character",
+                 "genes",       "c", 1, "character",
+                 "chrom_sizes", "i", 1, "character",
                  "bwOutput",    "d", 1, "character",
                  "gffOutput",   "h", 1, "character",
                  "cores",       "e", 1, "integer",
-                 "coverage",    "f", 1, "character",
+                 "reads",       "f", 1, "character",
+                 "type",        "h", 1, "character",
                  "periodicity", "g", 1, "double"),
                byrow=TRUE,
                ncol=4)
@@ -60,7 +63,7 @@ for (i in names(args)) {
 ## Some function definitions ##################################################
 
 message("loading genes")
-genes <- getGenes(params$genome)
+genes <- getGenes(params$genes)
 message("reading calls")
 calls.df <- readGff(params$calls)
 calls.rd <- with(calls.df,
@@ -69,6 +72,21 @@ calls.rd <- with(calls.df,
                                           end=end)))
 
 ## Do it ######################################################################
+
+message("calculating coverage")
+
+reads <- get(load(params$reads))
+f.reads <- filterDuplReads(reads, fdrOverAmp=0.05, components=1)
+if (params$type == "single") {
+    fragmentLen <- fragmentLenDetect(f.reads)
+} else if (params$type == "paired") {
+    framgentLen <- 170
+}
+prep <- processReads(f.reads,
+                     type=params$type,
+                     fragmentLen=fragmentLen,
+                     trim=50)
+cov <- coverage.rpm(prep)
 
 message("identifying first and last nucleosomes")
 cov <- get(load(params$coverage))
@@ -96,6 +114,6 @@ writeGff(gff, params$gffOutput)
 
 message("writting bigWig output")
 splited <- lapply(covPredAll, splitAtZeros)
-writeBigWig(splited, params$bwOutput, params$genome)
+writeBigWig(splited, params$bwOutput, params$chrom_sizes)
 
 ##############################################################################

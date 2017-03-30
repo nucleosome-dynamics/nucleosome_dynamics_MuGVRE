@@ -23,6 +23,8 @@ output="/home/rilla/scratch/jurgen_nucs/pooled_calls.gff"
 Rscript $script    \
     --input $input \
     --output $output \
+    --threshold True \
+    --thresholdPercentage 0.35 \
     --cores 20
 
 ###############################################################################
