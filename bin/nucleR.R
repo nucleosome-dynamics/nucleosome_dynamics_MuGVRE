@@ -81,8 +81,6 @@ spec <- matrix(c("input",       "a", 1, "character",
                ncol=4)
 args <- getopt(spec)
 
-print(args)
-
 names(args) <- subMany(c("cores",
                          "dyadlength",
                          "minoverlap",
@@ -108,7 +106,7 @@ if (is.null(params$min.overlap)) {
 }
 
 if (params$threshold) {
-    threshold <- paste0(params$thresholdPercentage*100, "%")
+    threshold <- paste0(params$thresholdPercentage, "%")
 } else {
     threshold <- params$thresholdValue
 }
@@ -178,7 +176,7 @@ message("scoring peaks")
 scores <- peakScoring(peaks,
                       fft,
                       threshold   = threshold,
-                      dyad_length = params$dyad_length,
+                      dyad.length = params$dyad_length,
                       mc.cores    = params$mc.cores)
 
 message("merging peaks")
