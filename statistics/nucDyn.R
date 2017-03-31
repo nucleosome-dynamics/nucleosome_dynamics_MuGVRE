@@ -31,7 +31,7 @@ for (x in sourced) {
 ## Parameters and Arguments ###################################################
 
 spec <- matrix(c("input",     "a", 1, "character",
-                 "genome",    "b", 1, "character"
+                 "genome",    "b", 1, "character",
                  "out_genes", "c", 1, "character",
                  "out_gw",    "d", 1, "character"),
                byrow=TRUE,

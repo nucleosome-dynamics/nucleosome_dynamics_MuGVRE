@@ -9,8 +9,10 @@ import subprocess
 import tarfile
 
 
-RPATH = "/opt/R-3.1.2/bin/Rscript"
-BIN_BASE = "/home/rilla/nucleServ"
+#RPATH = "/opt/R-3.1.2/bin/Rscript"
+RPATH = "/usr/bin/Rscript"
+#BIN_BASE = "/home/rilla/nucleServ"
+BIN_BASE = "/orozco/services/Rdata/Web/apps/nucleServ"
 
 
 def get_args():
@@ -96,8 +98,8 @@ def run_calc(calc, calc_type="bin", **kwargs):
     bin_path = get_bin_path(calc, calc_type=calc_type)
     arg_list = flatten([["--" + k, str(v)] for k, v in kwargs.items()])
     cmd = [RPATH, bin_path] + arg_list
-    #print(cmd)
-    #subprocess.call(cmd)
+    print("running", calc)
+    subprocess.call(cmd)
 
 
 def mkdir(dir):
