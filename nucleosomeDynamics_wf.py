@@ -98,8 +98,10 @@ def run_calc(calc, calc_type="bin", **kwargs):
     bin_path = get_bin_path(calc, calc_type=calc_type)
     arg_list = flatten([["--" + k, str(v)] for k, v in kwargs.items()])
     cmd = [RPATH, bin_path] + arg_list
+    print(cmd)
     print("running", calc)
     subprocess.call(cmd)
+    print("=================================================================")
 
 
 def mkdir(dir):
@@ -437,11 +439,13 @@ def nucDyn(f1, f2, public_dir, out_dir):
 @calculation("nucDyn", "statistics")
 def nucDyn_stats(f, public_dir, out_dir):
 
-    _, base = base_name(f["file_path"])
-    input = build_path(base, out_dir, "gff", "ND")
-    out_genes = build_path(base, out_dir, "csv", "ND", "genes_stats")
-    out_gw = build_path(base, out_dir, "png", "ND", "stats")
-    assembly = f["meta_data"]["assembly"]
+    splt = (base_name(f["file_path"]) for f in (f1, f2))
+    (in_dir1, base1), (in_dir2, base2) = splt
+    nd_base = "{0}_{1}".format(base1, base2)
+    input = build_path(nd_base, out_dir, "gff", "ND")
+    out_genes = build_path(nd_base, out_dir, "csv", "ND", "genes_stats")
+    out_gw = build_path(nd_base, out_dir, "png", "ND", "stats")
+    assembly = f1["meta_data"]["assembly"]
     genome = get_genes_f(assembly, public_dir)
 
     args = {"input":     input,
