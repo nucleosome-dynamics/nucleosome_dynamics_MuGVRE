@@ -56,9 +56,13 @@ genes_gr <- GRanges(genes$chrom,
 message("-- computing statistics per gene")
 nd <- readGff(params$input)
 
-nd_gr <- GRanges(nd$seqname,
-                 IRanges(start=nd$start, end=nd$end),
-                 class=nd$class)
+if (nrow(nd) > 0) {
+    nd_gr <- GRanges(nd$seqname,
+                     IRanges(start=nd$start, end=nd$end),
+                     class=nd$class)
+} else {
+    nd_gr <- GRanges()
+}
 
 incl = nd_gr[nd_gr$class == "INCLUSION"]
 evic = nd_gr[nd_gr$class == "EVICTION"]
@@ -106,26 +110,34 @@ message("-- computing statistics genome-wide")
 
 nd_tab = table(nd$class)/sum(table(nd$class))
 
-i <- c("INCLUSION",
-       "EVICTION",
-       "SHIFT +",
-       "SHIFT -",
-       "INCREASED FUZZYNESS",
-       "DECREASED FUZZYNESS")
-nd_tab = nd_tab[i]
-names(nd_tab) = c("Inclusion",
-                  "Eviction",
-                  "Shift +",
-                  "Shift -",
-                  "Increased Fuzziness",
-                  "Decreased Fuzziness")
+if (length(nd_tab) > 0) {
+    i <- c("INCLUSION",
+           "EVICTION",
+           "SHIFT +",
+           "SHIFT -",
+           "INCREASED FUZZYNESS",
+           "DECREASED FUZZYNESS")
+    nd_tab = nd_tab[i]
+    names(nd_tab) = c("Inclusion",
+                      "Eviction",
+                      "Shift +",
+                      "Shift -",
+                      "Increased Fuzziness",
+                      "Decreased Fuzziness")
 
-png(params$out_gw)
-par(mar=c(6,4,2,2) + 0.1)
-bp = barplot(nd_tab,
-             col=c("#04B431","#FF0000","#8000FF","#0040FF","#424242","#BDBDBD"),
-             xlab="",
-             ylab="Proportion",
-             xaxt="n")
-text(x=bp, y=-0.05, names(nd_tab), xpd=TRUE, srt=45)
-dev.off()
+    png(params$out_gw)
+    par(mar=c(6,4,2,2) + 0.1)
+    bp = barplot(nd_tab,
+                 col=c("#04B431","#FF0000","#8000FF","#0040FF","#424242","#BDBDBD"),
+                 xlab="",
+                 ylab="Proportion",
+                 xaxt="n")
+    text(x=bp, y=-0.05, names(nd_tab), xpd=TRUE, srt=45)
+    dev.off()
+
+} else {
+    png(params$out_gw)
+    par(mar=c(6,4,2,2) + 0.1)
+    bp = barplot(0)
+    dev.off()
+}
