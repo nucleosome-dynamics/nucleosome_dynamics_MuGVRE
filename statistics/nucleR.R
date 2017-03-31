@@ -78,7 +78,7 @@ cols <- c("Name",
           "Total Nucleosomes",
           "Total Well-Positioned",
           "Total Fuzzy",
-          "Total Uncertain"),
+          "Total Uncertain")
 genes_out = rbind(cols, genes_out)
 
 write.table(genes_out,
