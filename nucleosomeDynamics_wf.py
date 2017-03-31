@@ -1,4 +1,4 @@
-#!/usr/bin/python2.7
+#!/usr/bin/python3
 
 import os
 import sys
@@ -6,10 +6,11 @@ import argparse
 import json
 import re
 import subprocess
+import tarfile
 
 
 RPATH = "/opt/R-3.1.2/bin/Rscript"
-BIN_BASE = "/home/rilla/nucleServ/bin/{0}.R"
+BIN_BASE = "/home/rilla/nucleServ"
 
 
 def get_args():
@@ -38,6 +39,10 @@ def get_args():
                         help="JSON file containing results metadata")
 
     return parser.parse_args()
+
+
+def get_bin_path(calc_name, calc_type="bin"):
+    return "{0}/{1}/{2}.R".format(BIN_BASE, calc_type, calc_name)
 
 
 def subset_args(x, args):
@@ -87,8 +92,8 @@ def get_genes_f(assembly, public_dir):
     return os.path.join(genome_path, "genes.gff")
 
 
-def run_calc(calc, **kwargs):
-    bin_path = BIN_BASE.format(calc)
+def run_calc(calc, calc_type="bin", **kwargs):
+    bin_path = get_bin_path(calc, calc_type=calc_type)
     arg_list = flatten([["--" + k, str(v)] for k, v in kwargs.items()])
     cmd = [RPATH, bin_path] + arg_list
     #print(cmd)
@@ -102,16 +107,19 @@ def mkdir(dir):
         pass
 
 
-def calculation(exec_name):
+def calculation(exec_name, calc_type="bin"):
     def decorator(fun):
         def g(*xs, args, public_dir, out_dir):
-            calc_args = subset_args(exec_name, args)
             new_args, out_meta = fun(*xs,
                                      public_dir=public_dir,
                                      out_dir=out_dir)
-            calc_args.update(new_args)
+            if calc_type == "bin":
+                calc_args = subset_args(exec_name, args)
+                calc_args.update(new_args)
+            elif calc_type == "statistics":
+                calc_args = new_args
             mkdir(out_dir)
-            run_calc(exec_name, **calc_args)
+            run_calc(exec_name, calc_type=calc_type, **calc_args)
             return out_meta
         return g
     return decorator
@@ -156,9 +164,13 @@ def base_name(x):
     return dir, base
 
 
-def build_path(base, root, extension, prefix=None):
-    if prefix:
+def build_path(base, root, extension, prefix=None, postfix=None):
+    if prefix and postfix:
+        return "{0}/{1}_{2}_{3}.{4}".format(root, prefix, base, postfix, extension)
+    elif prefix:
         return "{0}/{1}_{2}.{3}".format(root, prefix, base, extension)
+    elif postfix:
+        return "{0}/{1}_{2}.{3}".format(root, base, postfix, extension)
     else:
         return "{0}/{1}.{2}".format(root, base, extension)
 
@@ -202,8 +214,28 @@ def nucleR(f, public_dir, out_dir):
 
 
 @iter_on_infs("MNaseSeq")
+@calculation("nucleR", "statistics")
+def nucleR_stats(f, public_dir, out_dir):
+
+    _, base = base_name(f["file_path"])
+    input = build_path(base, out_dir, "gff", "NR")
+    out_genes = build_path(base, out_dir, "csv", "NR", "genes_stats")
+    out_gw = build_path(base, out_dir, "csv", "NR", "stats")
+    assembly = f["meta_data"]["assembly"]
+    genome = get_genes_f(assembly, public_dir)
+
+    args = {"input":     input,
+            "out_genes": out_genes,
+            "out_gw":    out_gw,
+            "genome":    genome}
+    meta = [out_genes, out_gw]
+
+    return args, meta
+
+
+@iter_on_infs("MNaseSeq")
 @calculation("NFR")
-def nfr(f, _, out_dir):
+def nfr(f, public_dir, out_dir):
 
     _, base = base_name(f["file_path"])
     input  = build_path(base, out_dir, "gff", "NR")
@@ -213,6 +245,24 @@ def nfr(f, _, out_dir):
     meta = [{"name": "NFR_gff",
              "file_path": output,
              "source_id": [f["_id"]]}]
+
+    return args, meta
+
+
+@iter_on_infs("MNaseSeq")
+@calculation("NFR", "statistics")
+def nfr_stats(f, public_dir, out_dir):
+
+    _, base = base_name(f["file_path"])
+    input = build_path(base, out_dir, "gff", "NFR")
+    out_gw = build_path(base, out_dir, "csv", "NFR", "stats")
+    assembly = f["meta_data"]["assembly"]
+    genome = get_genes_f(assembly, public_dir)
+
+    args = {"input":     input,
+            "out_gw":    out_gw,
+            "genome":    genome}
+    meta = [out_gw]
 
     return args, meta
 
@@ -233,6 +283,28 @@ def tss(f, public_dir, out_dir):
     meta = [{"name":     "TSS_gff",
              "file_path": output,
              "source_id": [f["_id"]]}]
+
+    return args, meta
+
+
+@iter_on_infs("MNaseSeq")
+@calculation("txstart", "statistics")
+def tss_stats(f, public_dir, out_dir):
+
+    _, base = base_name(f["file_path"])
+    input = build_path(base, out_dir, "gff", "TSS")
+    out_genes = build_path(base, out_dir, "csv", "TSS", "genes_stats")
+    out_gw = build_path(base, out_dir, "png", "TSS", "stats1")
+    out_gw2 = build_path(base, out_dir, "png", "TSS", "stats2")
+    assembly = f["meta_data"]["assembly"]
+    genome = get_genes_f(assembly, public_dir)
+
+    args = {"input":     input,
+            "genome":    genome,
+            "out_genes": out_genes,
+            "out_gw":    out_gw,
+            "out_gw2":   out_gw2}
+    meta = [out_genes, out_gw, out_gw2]
 
     return args, meta
 
@@ -269,6 +341,26 @@ def periodicity(f, public_dir, out_dir):
 
 
 @iter_on_infs("MNaseSeq")
+@calculation("periodicity", "statistics")
+def periodicity_stats(f, public_dir, out_dir):
+
+    _, base = base_name(f["file_path"])
+    input = build_path(base, out_dir, "gff", "P")
+    out_genes = build_path(base, out_dir, "csv", "P", "genes_stats")
+    out_gw = build_path(base, out_dir, "csv", "P", "stats")
+    assembly = f["meta_data"]["assembly"]
+    genome = get_genes_f(assembly, public_dir)
+
+    args = {"input":     input,
+            "genome":    genome,
+            "out_genes": out_genes,
+            "out_gw":    out_gw}
+    meta = [out_genes, out_gw]
+
+    return args, meta
+
+
+@iter_on_infs("MNaseSeq")
 @calculation("gausfitting")
 def gauss_fit(f, _, out_dir):
 
@@ -285,9 +377,31 @@ def gauss_fit(f, _, out_dir):
     return args, meta
 
 
+@iter_on_infs("MNaseSeq")
+@calculation("gausfitting", "statistics")
+def gauss_fit_stats(f, public_dir, out_dir):
+
+    _, base = base_name(f["file_path"])
+    input = build_path(base, out_dir, "gff", "STF")
+    out_genes = build_path(base, out_dir, "csv", "STF", "genes_stats")
+    out_gw = build_path(base, out_dir, "csv", "STF", "stats1")
+    out_gw1 = build_path(base, out_dir, "png", "STF", "stats2")
+    assembly = f["meta_data"]["assembly"]
+    genome = get_genes_f(assembly, public_dir)
+
+    args = {"input":     input,
+            "genome":    genome,
+            "out_genes": out_genes,
+            "out_gw":    out_gw,
+            "out_gw2":   out_gw2}
+    meta = [out_genes, out_gw, out_gw2]
+
+    return args, meta
+
+
 @select_two("condition1", "condition2")
 @calculation("nucDyn")
-def nucleosomeDynamics(f1, f2, public_dir, out_dir):
+def nucDyn(f1, f2, public_dir, out_dir):
 
     splt = (base_name(f["file_path"]) for f in (f1, f2))
     (in_dir1, base1), (in_dir2, base2) = splt
@@ -317,13 +431,33 @@ def nucleosomeDynamics(f1, f2, public_dir, out_dir):
     return args, meta
 
 
+@iter_on_infs("MNaseSeq")
+@calculation("nucDyn", "statistics")
+def nucDyn_stats(f, public_dir, out_dir):
+
+    _, base = base_name(f["file_path"])
+    input = build_path(base, out_dir, "gff", "ND")
+    out_genes = build_path(base, out_dir, "csv", "ND", "genes_stats")
+    out_gw = build_path(base, out_dir, "png", "ND", "stats")
+    assembly = f["meta_data"]["assembly"]
+    genome = get_genes_f(assembly, public_dir)
+
+    args = {"input":     input,
+            "genome":    genome,
+            "out_genes": out_genes,
+            "out_gw":    out_gw}
+    meta = [out_genes, out_gw]
+
+    return args, meta
+
+
 CALCS_ORDER = ["nucleR", "NFR", "txstart", "periodicity", "gausfitting", "nucDyn"]
-CALCS = {"nucleR":      nucleR,
-         "NFR":         nfr,
-         "txstart":     tss,
-         "periodicity": periodicity,
-         "gausfitting": gauss_fit,
-         "nucDyn":      nucleosomeDynamics}
+CALCS = {"nucleR":      {"bin": nucleR,      "statistics": nucleR_stats},
+         "NFR":         {"bin": nfr,         "statistics": nfr_stats},
+         "txstart":     {"bin": tss,         "statistics": tss_stats},
+         "periodicity": {"bin": periodicity, "statistics": periodicity_stats},
+         "gausfitting": {"bin": gauss_fit,   "statistics": gauss_fit_stats},
+         "nucDyn":      {"bin": nucDyn,      "statistics": nucDyn_stats}}
 
 
 def find_calcs_todo(args):
@@ -345,6 +479,38 @@ def add_root(meta, root_dir):
         except KeyError:
             pass
     return d
+
+
+def make_stats(todo_calcs, in_files, metadata, arguments, public_dir, out_dir):
+
+    calc_args = (in_files, metadata, arguments, public_dir, out_dir)
+    stat_ls = (CALCS[i]["statistics"](*calc_args) for i in todo_calcs)
+    stat_files = flatten(stat_ls)
+    output = os.path.join(out_dir, "statistics.tar")
+
+    if stat_files:
+        with tarfile.open(output, 'w') as fh:
+            for f in stat_files:
+                try:
+                    fh.add(f)
+                    os.remove(f)
+                except FileNotFoundError:
+                    pass
+
+        return [{"name": "statistics", "file_path": output}]
+    else:
+        return []
+
+
+def cleanup(in_files, metadata):
+    for x in in_files:
+        bam_file = metadata[x["value"]]["file_path"]
+        base, _ = os.path.splitext(bam_file)
+        rdata_file = "{0}.{1}".format(base, "RData")
+        try:
+            os.remove(rdata_file)
+        except FileNotFoundError:
+            pass
 
 
 def main():
@@ -370,26 +536,16 @@ def main():
     # load bam files
     read_bam(in_files, metadata, arguments, public_dir, out_dir)
 
-    # run calculations
     todo_calcs = find_calcs_todo(arguments)
-    out_meta = flatten(CALCS[i](in_files,
-                                metadata,
-                                arguments,
-                                public_dir,
-                                out_dir)
-                       for i in todo_calcs)
+    calc_args = (in_files, metadata, arguments, public_dir, out_dir)
 
-    # cleanup
-    for x in in_files:
-        bam_file = metadata[x["value"]]["file_path"]
-        base, _ = os.path.splitext(bam_file)
-        rdata_file = "{0}.{1}".format(base, "RData")
-        try:
-            os.remove(rdata_file)
-        except FileNotFoundError:
-            pass
+    # run calculations
+    calcs_meta = flatten(CALCS[i]["bin"](*calc_args) for i in todo_calcs)
+    stats_meta = make_stats(todo_calcs, *calc_args)
+    cleanup(in_files, metadata)
 
     # store output
+    out_meta = calcs_meta + stats_meta
     json_out = json.dumps(out_meta, indent=4, separators=(',', ': '))
     with open(out_metadata, 'w') as fh:
         fh.write(json_out)

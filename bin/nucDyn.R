@@ -26,8 +26,6 @@ where <- function () {
     dirname(normalizePath(fname))
 }
 
-where <- function () "/home/rilla/nucleServ/bin"
-
 SOURCE.DIR <- paste(where(), "../sourced", sep="/")
 sourced <- c("helperfuns", "gff_funs", "nd_funs", "wig_funs")
 for (x in sourced) {
@@ -61,7 +59,7 @@ spec <- matrix(c("input1", "a", 1, "character",
                  "indel_min_nreads", "r", 1, "double",
                  "indel_threshold",  "s", 1, "double",
 
-                 "roundPow", "t", 1, "logical"
+                 "roundPow", "t", 1, "logical",
                  "same_magnitude", "u", 1, "logical"),
                byrow=TRUE,
                ncol=4)
