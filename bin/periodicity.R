@@ -81,8 +81,9 @@ f.reads <- filterDuplReads(reads, fdrOverAmp=0.05, components=1)
 if (params$type == "single") {
     fragmentLen <- fragmentLenDetect(f.reads)
 } else if (params$type == "paired") {
-    framgentLen <- 170
+    fragmentLen <- 170
 }
+
 prep <- processReads(f.reads,
                      type=params$type,
                      fragmentLen=fragmentLen,
