@@ -9,8 +9,8 @@ import subprocess
 import tarfile
 
 
-#RPATH = "/opt/R-3.1.2/bin/Rscript"
-RPATH = "/usr/bin/Rscript"
+RPATH = "/opt/R-3.1.2/bin/Rscript"
+#RPATH = "/usr/bin/Rscript"
 #BIN_BASE = "/home/rilla/nucleServ"
 BIN_BASE = "/orozco/services/Rdata/Web/apps/nucleServ"
 
@@ -366,7 +366,7 @@ def periodicity_stats(f, public_dir, out_dir):
 
 @iter_on_infs("MNaseSeq")
 @calculation("gausfitting")
-def gauss_fit(f, _, out_dir):
+def gauss_fit(f, public_dir, out_dir):
 
     in_dir, base = base_name(f["file_path"])
     reads = build_path(base, in_dir, "RData")
@@ -548,7 +548,7 @@ def main():
     # run calculations
     calcs_meta = flatten(CALCS[i]["bin"](*calc_args) for i in todo_calcs)
     stats_meta = make_stats(todo_calcs, *calc_args)
-    cleanup(in_files, metadata)
+    #cleanup(in_files, metadata)
 
     # store output
     out_meta = calcs_meta + stats_meta
