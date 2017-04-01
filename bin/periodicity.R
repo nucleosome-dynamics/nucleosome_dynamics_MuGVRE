@@ -12,6 +12,7 @@ library(parallel)
 library(getopt)
 library(plyr)
 library(nucleR)
+library(htSeqTools)
 
 where <- function () {
     spath <-parent.frame(2)$ofile
