@@ -91,8 +91,6 @@ prep <- processReads(f.reads,
 cov <- coverage.rpm(prep)
 
 message("identifying first and last nucleosomes")
-cov <- get(load(params$coverage))
-
 genes.nucs <- findGenesNucs(genes, calls.rd, params$mc.cores)
 genes.nucs$dfi <- getDfi(genes.nucs$nuc.len, params$periodicity)
 genes.nucs$autocor <- autocorFromDf(genes.nucs, cov, params$periodicity)
