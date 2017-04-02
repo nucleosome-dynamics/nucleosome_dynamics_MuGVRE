@@ -389,7 +389,7 @@ def gauss_fit_stats(f, public_dir, out_dir):
     input = build_path(base, out_dir, "gff", "STF")
     out_genes = build_path(base, out_dir, "csv", "STF", "genes_stats")
     out_gw = build_path(base, out_dir, "csv", "STF", "stats1")
-    out_gw1 = build_path(base, out_dir, "png", "STF", "stats2")
+    out_gw2 = build_path(base, out_dir, "png", "STF", "stats2")
     assembly = f["meta_data"]["assembly"]
     genome = get_genes_f(assembly, public_dir)
 
@@ -435,9 +435,9 @@ def nucDyn(f1, f2, public_dir, out_dir):
     return args, meta
 
 
-@iter_on_infs("MNaseSeq")
+@select_two("condition1", "condition2")
 @calculation("nucDyn", "statistics")
-def nucDyn_stats(f, public_dir, out_dir):
+def nucDyn_stats(f1, f2, public_dir, out_dir):
 
     splt = (base_name(f["file_path"]) for f in (f1, f2))
     (in_dir1, base1), (in_dir2, base2) = splt
