@@ -80,7 +80,6 @@ colnames(stat_stf)[colnames(stat_stf)=="name"] = "Name"
 
 write.table(stat_stf[, c("Name","Mean_STF","StdDev_STF")],
             params$out_genes,
-            OUT_GENES,
             row.names=FALSE,
             quote=FALSE,
             sep=",")
