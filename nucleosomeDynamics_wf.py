@@ -12,7 +12,7 @@ import tarfile
 RPATH = "/opt/R-3.1.2/bin/Rscript"
 #RPATH = "/usr/bin/Rscript"
 #BIN_BASE = "/home/rilla/nucleServ"
-BIN_BASE = "/orozco/services/Rdata/Web/apps/nucleServ"
+BIN_BASE = "/orozco/services/Rdata/Web/apps/nucleServ_MuG/nucleServ"
 
 
 def get_args():
@@ -492,10 +492,10 @@ def make_stats(todo_calcs, in_files, metadata, arguments, public_dir, out_dir):
     calc_args = (in_files, metadata, arguments, public_dir, out_dir)
     stat_ls = (CALCS[i]["statistics"](*calc_args) for i in todo_calcs)
     stat_files = flatten(stat_ls)
-    output = os.path.join(out_dir, "statistics.tar")
+    output = os.path.join(out_dir, "statistics.tgz")
 
     if stat_files:
-        with tarfile.open(output, 'w') as fh:
+        with tarfile.open(output, 'w:gz') as fh:
             for f in stat_files:
                 try:
                     fh.add(f)
