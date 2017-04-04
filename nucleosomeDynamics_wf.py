@@ -1,11 +1,12 @@
 #!/usr/bin/python3
 
-import os
-import sys
 import argparse
+import copy
 import json
+import os
 import re
 import subprocess
+import sys
 import tarfile
 
 
@@ -112,19 +113,37 @@ def mkdir(dir):
         pass
 
 
+def add_bin_meta(meta, *xs):
+    x, *_ = xs
+    assembly = x["meta_data"]["assembly"]
+    taxon_id = x["taxon_id"]
+    source_id = [x["_id"] for x in xs]
+    new_meta = copy.deepcopy(meta)
+    for m in new_meta:
+        m["taxon_id"] = taxon_id
+        m["source_id"] = source_id
+        try:
+            m["meta_data"]["assembly"] = assembly
+        except:
+            m["meta_data"] = {"assembly": assembly}
+    return new_meta
+
+
 def calculation(exec_name, calc_type="bin"):
     def decorator(fun):
         def g(*xs, args, public_dir, out_dir):
-            new_args, out_meta = fun(*xs,
-                                     public_dir=public_dir,
-                                     out_dir=out_dir)
+            calc_args, out_meta = fun(*xs,
+                                      public_dir=public_dir,
+                                      out_dir=out_dir)
+
             if calc_type == "bin":
-                calc_args = subset_args(exec_name, args)
-                calc_args.update(new_args)
-            elif calc_type == "statistics":
-                calc_args = new_args
+                out_meta = add_bin_meta(out_meta, *xs)
+                given_args = subset_args(exec_name, args)
+                calc_args.update(given_args)
+
             mkdir(out_dir)
             run_calc(exec_name, calc_type=calc_type, **calc_args)
+
             return out_meta
         return g
     return decorator
@@ -207,13 +226,9 @@ def nucleR(f, public_dir, out_dir):
     input  = build_path(base, in_dir,  "RData")
     output = build_path(base, out_dir, "gff", "NR")
     type = f["meta_data"]["paired"]
-    assembly = f["meta_data"]["assembly"]
 
     args = {"input": input, "output": output, "type": type}
-    meta = [{"name":      "NR_gff",
-             "file_path": output,
-             "source_id": [f["_id"]],
-             "meta_data": {"assembly": assembly}}]
+    meta = [{"name": "NR_gff", "file_path": output}]
 
     return args, meta
 
@@ -248,8 +263,7 @@ def nfr(f, public_dir, out_dir):
 
     args = {"input": input, "output": output}
     meta = [{"name": "NFR_gff",
-             "file_path": output,
-             "source_id": [f["_id"]]}]
+             "file_path": output}]
 
     return args, meta
 
@@ -264,9 +278,7 @@ def nfr_stats(f, public_dir, out_dir):
     assembly = f["meta_data"]["assembly"]
     genome = get_genes_f(assembly, public_dir)
 
-    args = {"input":  input,
-            "out_gw": out_gw,
-            "genome": genome}
+    args = {"input": input, "out_gw": out_gw, "genome": genome}
     meta = [out_gw]
 
     return args, meta
@@ -282,12 +294,8 @@ def tss(f, public_dir, out_dir):
     assembly = f["meta_data"]["assembly"]
     genome = get_genes_f(assembly, public_dir)
 
-    args = {"calls":  calls,
-            "genome": genome,
-            "output": output}
-    meta = [{"name":  "TSS_gff",
-             "file_path": output,
-             "source_id": [f["_id"]]}]
+    args = {"calls": calls, "genome": genome, "output": output}
+    meta = [{"name": "TSS_gff", "file_path": output}]
 
     return args, meta
 
@@ -336,11 +344,9 @@ def periodicity(f, public_dir, out_dir):
             "chrom_sizes": chrom_sizes}
 
     meta = [{"name":      "P_gff",
-             "file_path": gffOutput,
-             "source_id": [f["_id"]]},
+             "file_path": gffOutput},
             {"name":      "P_bw",
-             "file_path": bwOutput,
-             "source_id": [f["_id"]]}]
+             "file_path": bwOutput}]
 
     return args, meta
 
@@ -375,9 +381,7 @@ def gauss_fit(f, public_dir, out_dir):
     output = build_path(base, out_dir, "gff", "STF")
 
     args = {"calls": calls, "reads": reads, "output": output}
-    meta = [{"name":     "STF_gff",
-             "file_path": output,
-             "source_id": [f["_id"]]}]
+    meta = [{"name": "STF_gff", "file_path": output}]
 
     return args, meta
 
@@ -427,11 +431,9 @@ def nucDyn(f1, f2, public_dir, out_dir):
             "plotRData":    plotRData,
             "genome":       genome}
     meta = [{"name":      "ND_gff",
-             "file_path": outputGff,
-             "source_id": [f1["_id"], f2["_id"]]},
+             "file_path": outputGff},
             {"name":      "ND_bw",
-             "file_path": outputBigWig,
-             "source_id": [f1["_id"], f2["_id"]]}]
+             "file_path": outputBigWig}]
 
     return args, meta
 
