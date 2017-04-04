@@ -503,7 +503,7 @@ def make_stats(todo_calcs, in_files, metadata, arguments, public_dir, out_dir):
         with tarfile.open(output, 'w:gz') as fh:
             for f in stat_files:
                 try:
-                    fh.add(f)
+                    fh.add(f, arcname=os.path.basename(f))
                     os.remove(f)
                 except FileNotFoundError:
                     pass
