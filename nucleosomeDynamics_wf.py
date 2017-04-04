@@ -98,10 +98,11 @@ def run_calc(calc, calc_type="bin", **kwargs):
     bin_path = get_bin_path(calc, calc_type=calc_type)
     arg_list = flatten([["--" + k, str(v)] for k, v in kwargs.items()])
     cmd = [RPATH, bin_path] + arg_list
-    print(cmd)
-    print("running", calc)
-    subprocess.call(cmd)
-    print("=================================================================")
+    print_str = "running {0} ({1})".format(calc, calc_type)
+    print(print_str)
+    #print(cmd)
+    #subprocess.call(cmd)
+    #print("=================================================================")
 
 
 def mkdir(dir):
@@ -263,9 +264,9 @@ def nfr_stats(f, public_dir, out_dir):
     assembly = f["meta_data"]["assembly"]
     genome = get_genes_f(assembly, public_dir)
 
-    args = {"input":     input,
-            "out_gw":    out_gw,
-            "genome":    genome}
+    args = {"input":  input,
+            "out_gw": out_gw,
+            "genome": genome}
     meta = [out_gw]
 
     return args, meta
@@ -281,10 +282,10 @@ def tss(f, public_dir, out_dir):
     assembly = f["meta_data"]["assembly"]
     genome = get_genes_f(assembly, public_dir)
 
-    args = {"calls":    calls,
-            "genome":   genome,
-            "output":   output}
-    meta = [{"name":     "TSS_gff",
+    args = {"calls":  calls,
+            "genome": genome,
+            "output": output}
+    meta = [{"name":  "TSS_gff",
              "file_path": output,
              "source_id": [f["_id"]]}]
 
@@ -503,7 +504,10 @@ def make_stats(todo_calcs, in_files, metadata, arguments, public_dir, out_dir):
                 except FileNotFoundError:
                     pass
 
-        return [{"name": "statistics", "file_path": output}]
+        source_id = list(set(x["value"] for x in in_files))
+        return [{"name":      "statistics",
+                 "file_path": output,
+                 "source_id": source_id}]
     else:
         return []
 
@@ -548,10 +552,10 @@ def main():
     # run calculations
     calcs_meta = flatten(CALCS[i]["bin"](*calc_args) for i in todo_calcs)
     stats_meta = make_stats(todo_calcs, *calc_args)
-    #cleanup(in_files, metadata)
+    cleanup(in_files, metadata)
 
     # store output
-    out_meta = calcs_meta + stats_meta
+    out_meta = {"output_files": calcs_meta + stats_meta}
     json_out = json.dumps(out_meta, indent=4, separators=(',', ': '))
     with open(out_metadata, 'w') as fh:
         fh.write(json_out)
