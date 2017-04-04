@@ -9,8 +9,8 @@ import subprocess
 import tarfile
 
 
-RPATH = "/opt/R-3.1.2/bin/Rscript"
-#RPATH = "/usr/bin/Rscript"
+#RPATH = "/opt/R-3.1.2/bin/Rscript"
+RPATH = "/usr/bin/Rscript"
 #BIN_BASE = "/home/rilla/nucleServ"
 BIN_BASE = "/orozco/services/Rdata/Web/apps/nucleServ_MuG/nucleServ"
 
