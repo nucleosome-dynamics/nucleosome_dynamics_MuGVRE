@@ -12,7 +12,7 @@ import tarfile
 #RPATH = "/opt/R-3.1.2/bin/Rscript"
 RPATH = "/usr/bin/Rscript"
 #BIN_BASE = "/home/rilla/nucleServ"
-BIN_BASE = "/orozco/services/Rdata/Web/apps/nucleServ_MuG/nucleServ"
+BIN_BASE = "/orozco/services/Rdata/Web/apps/nucleServ_MuG"
 
 
 def get_args():
