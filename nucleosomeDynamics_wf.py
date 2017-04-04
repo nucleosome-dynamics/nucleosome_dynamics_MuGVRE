@@ -152,12 +152,14 @@ def calculation(exec_name, calc_type="bin"):
 def iter_on_infs(*names):
     def decorator(fun):
         def g(in_files, metadata, args, public_dir, out_dir):
-            res = [fun(metadata[x["value"]],
+            ids = list(set([x["value"]
+                           for x in in_files
+                           if [x["name"] in names]]))
+            res = [fun(metadata[id],
                        args=args,
                        public_dir=public_dir,
                        out_dir=out_dir)
-                   for x in in_files
-                   if x["name"] in names]
+                   for id in ids]
             return flatten(res)
         return g
     return decorator
