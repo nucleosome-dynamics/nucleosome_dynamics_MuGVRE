@@ -100,9 +100,9 @@ def run_calc(calc, calc_type="bin", **kwargs):
     cmd = [RPATH, bin_path] + arg_list
     print_str = "running {0} ({1})".format(calc, calc_type)
     print(print_str)
-    #print(cmd)
-    #subprocess.call(cmd)
-    #print("=================================================================")
+    print(cmd)
+    subprocess.call(cmd)
+    print("=================================================================")
 
 
 def mkdir(dir):
