@@ -105,6 +105,8 @@ tx.classes <- with(params,
                                    max.uncovered     = max.uncovered,
                                    mc.cores          = mc.cores))
 
+tx.classes <- tx.classes[!tx.classes$descr == "NA", ]
+
 ## Store output ###############################################################
 
 names(tx.classes)[names(tx.classes) == "descr"] <- "classification"
