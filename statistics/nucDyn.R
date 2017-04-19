@@ -7,6 +7,7 @@ library(htSeqTools)
 library(nucleR)
 library(IRanges)
 library(GenomicRanges)
+library(ggplot2)
 
 where <- function () {
     spath <-parent.frame(2)$ofile
@@ -68,32 +69,24 @@ incl = nd_gr[nd_gr$class == "INCLUSION"]
 evic = nd_gr[nd_gr$class == "EVICTION"]
 shift_p = nd_gr[nd_gr$class == "SHIFT +"]
 shift_m = nd_gr[nd_gr$class == "SHIFT -"]
-incr_fuzzy = nd_gr[nd_gr$class == "INCREASED FUZZYNESS"]
-decr_fuzzy = nd_gr[nd_gr$class == "DECREASED FUZZYNESS"]
 
 genes$nIncl = countOverlaps(genes_gr, incl)
 genes$nEvic = countOverlaps(genes_gr, evic)
 genes$nShift_p = countOverlaps(genes_gr, shift_p)
 genes$nShift_m = countOverlaps(genes_gr, shift_m)
-genes$nIncr_fuzzy = countOverlaps(genes_gr, incr_fuzzy)
-genes$nDecr_fuzzy = countOverlaps(genes_gr, decr_fuzzy)
 
 i <- c("name",
        "nIncl",
        "nEvic",
        "nShift_p",
-       "nShift_m",
-       "nIncr_fuzzy",
-       "nDecr_fuzzy")
+       "nShift_m")
 stat_nd <- genes[, i]
 
 stat_nd <- rbind(c("Name",
                    "Inclusions",
                    "Evictions",
                    "Shifts+",
-                   "Shifts-",
-                   "Increased Fuzziness",
-                   "Decreased Fuzziness"),
+                   "Shifts-"),
                  stat_nd)
 
 write.table(stat_nd,
@@ -108,36 +101,24 @@ write.table(stat_nd,
 #--- Mean and std.dev ---
 message("-- computing statistics genome-wide")
 
-nd_tab = table(nd$class)/sum(table(nd$class))
+nd_tab <- table(nd$class) / sum(table(nd$class))
 
-if (length(nd_tab) > 0) {
-    i <- c("INCLUSION",
-           "EVICTION",
-           "SHIFT +",
-           "SHIFT -",
-           "INCREASED FUZZYNESS",
-           "DECREASED FUZZYNESS")
-    nd_tab = nd_tab[i]
-    names(nd_tab) = c("Inclusion",
-                      "Eviction",
-                      "Shift +",
-                      "Shift -",
-                      "Increased Fuzziness",
-                      "Decreased Fuzziness")
+df <- as.data.frame(nd_tab)
+names(df)[names(df) == "Freq"] <- "Proportion"
 
-    png(params$out_gw)
-    par(mar=c(6,4,2,2) + 0.1)
-    bp = barplot(nd_tab,
-                 col=c("#04B431","#FF0000","#8000FF","#0040FF","#424242","#BDBDBD"),
-                 xlab="",
-                 ylab="Proportion",
-                 xaxt="n")
-    text(x=bp, y=-0.05, names(nd_tab), xpd=TRUE, srt=45)
-    dev.off()
+levels(df$Var1)[match("EVICTION", levels(df$Var1))] <- "Eviction"
+levels(df$Var1)[match("INCLUSION", levels(df$Var1))] <- "Inclusion"
+levels(df$Var1)[match("SHIFT -", levels(df$Var1))] <- "Shift -"
+levels(df$Var1)[match("SHIFT +", levels(df$Var1))] <- "Shift +"
 
-} else {
-    png(params$out_gw)
-    par(mar=c(6,4,2,2) + 0.1)
-    bp = barplot(0)
-    dev.off()
-}
+p <- ggplot(df, aes(Var1, Proportion)) +
+    geom_bar(stat="identity", aes(fill=Var1)) +
+    scale_fill_manual(values=c("Eviction"  = "#04B431",
+                               "Inclusion" = "#FF0000",
+                               "Shift -"   = "#8000FF",
+                               "Shift +"   = "#0040FF")) +
+    theme_bw() +
+    theme(legend.position="none",
+          axis.title.x=element_blank())
+
+ggsave(filename=params$out_gw, plot=p)

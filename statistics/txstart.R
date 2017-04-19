@@ -6,6 +6,7 @@
 library(getopt)
 library(IRanges)
 library(GenomicRanges)
+library(ggplot2)
 
 where <- function () {
     spath <-parent.frame(2)$ofile
@@ -37,7 +38,6 @@ spec <- matrix(c("input",     "a", 1, "character",
                  "out_gw2",   "e", 1, "character"),
                byrow=TRUE,
                ncol=4)
-
 params <- getopt(spec)
 
 ## Read genes #################################################################
@@ -53,15 +53,14 @@ genes$tts <- as.numeric(genes$tts)
 message("-- computing statistics per gene")
 tss <- readGff(params$input)
 
-genes_out = tss[, c("id", "classification", "distance")]
-genes_out = merge(genes[, c("name", "tss")],
-                  genes_out,
-                  by.x="name",
-                  by.y="id",
-                  all.x=TRUE)
-genes_out = genes_out[, c(1, 3, 4)]
-genes_out = rbind(c("Name", "TSS class", "Distance from -1 to +1"),
-                  genes_out)
+genes_out <- tss[, c("id", "classification", "distance")]
+genes_out <- merge(genes[, c("name", "tss")],
+                   genes_out,
+                   by.x="name",
+                   by.y="id",
+                   all.x=TRUE)
+genes_out <- genes_out[, c(1, 3, 4)]
+genes_out <- rbind(c("Name", "TSS class", "Distance from -1 to +1"), genes_out)
 
 write.table(genes_out,
             params$out_genes,
@@ -76,20 +75,33 @@ message("-- computing statistics genome-wide")
 
 #--- Plot 1 ---
 
-png(params$out_gw)
-par(mar=c(c(5, 10, 4, 4) + 0.1))
-tab_tss = table(tss$classification)
-bpres = barplot(tab_tss, horiz=T,las=2, col="#66A61E")
-text(x= tab_tss+80, y= bpres, labels=as.character(tab_tss), xpd=TRUE)
-dev.off()
+df1 <- as.data.frame(tab_tss)
 
+x <- max(df1$Freq)
+lim <- x + (0.05*x)
+p1 <- ggplot(df1, aes(x=Var1, y=Freq)) +
+    geom_bar(stat="identity", fill="#66A61E") +
+    geom_text(aes(label=Freq), hjust=-1) +
+    coord_flip() +
+    ylim(0, lim) +
+    theme_bw() +
+    theme(axis.title.x=element_blank(),
+          axis.title.y=element_blank())
+
+ggsave(filename=params$out_gw, plot=p1)
 
 #--- Plot 2 ---
 
-png(params$out_gw2)
-plot(density(as.numeric(tss$distance), na.rm=T), 
-     main="Distribution of NFR width around TSS", 
-     xlab="Width",
-     col="#1B9E77", lwd=2, ylim=c(0,0.01)
-)
-dev.off()
+x <- as.numeric(tss$distance)
+x <- x[!is.na(x)]
+df2 <- data.frame(x=x)
+
+p2 <- ggplot(df2, aes(x=x)) +
+    geom_line(stat="density", color="#1B9E77", lwd=1) +
+    ylim(0, 0.01) +
+    xlim(0, 450) +
+    labs(x="Width", y="Density") +
+    ggtitle("Distribution of NFR width around TSS") +
+    theme_bw()
+
+ggsave(filename=params$out_gw2, plot=p2)

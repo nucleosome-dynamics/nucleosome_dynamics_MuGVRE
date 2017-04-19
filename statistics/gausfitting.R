@@ -5,6 +5,7 @@
 library(getopt)
 library(IRanges)
 library(GenomicRanges)
+library(ggplot2)
 
 where <- function () {
     spath <-parent.frame(2)$ofile
@@ -65,7 +66,7 @@ split_ovlps <- split(subjectHits(ovlps), queryHits(ovlps))
 res <- lapply(
     names(split_ovlps),
     function(i) {
-        tmp = stf_gr[split_ovlps[[i]]]
+        tmp <- stf_gr[split_ovlps[[i]]]
         return(c(genes_gr$name[as.numeric(i)],
                  mean(tmp$score, na.rm=TRUE),
                  sd(tmp$score, na.rm=TRUE)))
@@ -73,12 +74,13 @@ res <- lapply(
 )
 
 res <- do.call(rbind, res)
-colnames(res) = c("name", "Mean_STF", "StdDev_STF")
+colnames(res) <- c("name", "Mean_STF", "StdDev_STF")
 
 stat_stf <- merge(genes, res, by="name", all.x=T)
-colnames(stat_stf)[colnames(stat_stf)=="name"] = "Name"
+colnames(stat_stf)[colnames(stat_stf)=="name"] <- "Name"
 
-write.table(stat_stf[, c("Name","Mean_STF","StdDev_STF")],
+i <- c("Name","Mean_STF","StdDev_STF")
+write.table(stat_stf[, i],
             params$out_genes,
             row.names=FALSE,
             quote=FALSE,
@@ -89,10 +91,10 @@ write.table(stat_stf[, c("Name","Mean_STF","StdDev_STF")],
 #--- Mean and std.dev ---
 message("-- computing statistics genome-wide")
 
-gw_stat = cbind(c("Mean stiffness", "Std. Dev. stiffness"),
-                round(c(mean(stf_gr$score, na.rm=T),
-                        sd(stf_gr$score, na.rm=T)),
-                      4))
+gw_stat <- cbind(c("Mean stiffness", "Std. Dev. stiffness"),
+                 round(c(mean(stf_gr$score, na.rm=T),
+                         sd(stf_gr$score, na.rm=T)),
+                       4))
 
 write.table(gw_stat,
             params$out_gw,
@@ -103,15 +105,23 @@ write.table(gw_stat,
 
 #--- Plot distribution ---
 
-stf$class=NA
-stf$class[stf$score<0.1] = "0 - 0.1"
-stf$class[stf$score>=0.1 & stf$score<0.2] = "0.1 - 0.2"
-stf$class[stf$score>=0.2 & stf$score<0.3] = "0.2 - 0.3"
-stf$class[stf$score>=0.3 & stf$score<0.4] = "0.3 - 0.4"
-stf$class[stf$score>=0.4] = "0.4 - 1"
+stf$class <- NA
+stf$class[stf$score <  0.1] <- "0 - 0.1"
+stf$class[stf$score >= 0.1 & stf$score < 0.2] <- "0.1 - 0.2"
+stf$class[stf$score >= 0.2 & stf$score < 0.3] <- "0.2 - 0.3"
+stf$class[stf$score >= 0.3 & stf$score < 0.4] <- "0.3 - 0.4"
+stf$class[stf$score >= 0.4] <- "0.4 - 1"
 
-png(params$out_gw2)
-barplot(table(stf$class)/sum(table(stf$class)),
-        col=c("#98F5FF", "#71DAE2", "#4CC0C4", "#26A5A8", "#008B8B"),
-        xlab="Stiffness", ylab="Proportion of genes")
-dev.off()
+df <- as.data.frame(table(stf$class)/sum(table(stf$class)))
+
+p <- ggplot(df, aes(Var1, Freq)) +
+    geom_bar(stat="identity", aes(fill=Var1)) +
+    scale_fill_manual(values=c("0 - 0.1"   = "#98F5FF",
+                               "0.1 - 0.2" = "#71DAE2",
+                               "0.2 - 0.3" = "#4CC0C4",
+                               "0.3 - 0.4" = "#26A5A8",
+                               "0.4 - 1"   = "#008B8B")) +
+    labs(x="Stiffness", y="Proportion of genes") +
+    theme_bw() +
+    theme(legend.position="none")
+ggsave(filename=params$out_gw2, plot=p)
