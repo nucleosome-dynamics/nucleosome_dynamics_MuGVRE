@@ -40,9 +40,8 @@ cleanExons <- function (df)
 
 getGenes <- function (genome)
 {
-    #f <- genomeFile(genome)
-    #gff <- readGff(f)
-    gff <- readGff(genome)
+    f <- genomeFile(genome)
+    gff <- readGff(f)
     names(gff)[names(gff) == "seqname"] <- "chrom"
     gff
 }

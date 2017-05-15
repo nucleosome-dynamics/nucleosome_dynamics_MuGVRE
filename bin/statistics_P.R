@@ -4,6 +4,8 @@
 ## Imports ####################################################################
 
 library(getopt)
+library(htSeqTools)
+library(nucleR)
 library(IRanges)
 library(GenomicRanges)
 
@@ -30,14 +32,21 @@ for (x in sourced) {
 
 ## Parameters and Arguments ###################################################
 
-spec <- matrix(c("input",     "a", 1, "character",
-                 "genome",    "b", 1, "character",
-                 "out_genes", "c", 1, "character",
-                 "out_gw",    "d", 1, "character"),
+defaults <- list()
+
+spec <- matrix(c("input", "a", 1, "character",
+                 "genome", "b", 1, "character"
+                ),
                byrow=TRUE,
                ncol=4)
 
-params <- getopt(spec)
+args <- getopt(spec)
+
+params <- defaults
+for (i in names(args)) {
+    params[[i]] <- args[[i]]
+}
+
 
 ## Read genes #################################################################
 
@@ -47,40 +56,42 @@ genes <- getGenes(params$genome)
 genes$tss <- as.numeric(genes$tss)
 genes$tts <- as.numeric(genes$tts)
 
+
 ## Statistics per gene ########################################################
 
 message("-- computing statistics per gene")
 phase <- readGff(params$input)
 
-genes_out = phase[, c("id", "score_phase", "score_autocorrelation")]
-genes_out = merge(genes[, c("name", "tss")],
-                  genes_out,
-                  by.x="name",
-                  by.y="id",
-                  all.x=TRUE)
-genes_out = genes_out[, c(1,3,4)]
+genes_out = phase[,c("id", "score_phase", "score_autocorrelation")]
+genes_out = merge(genes[, c("name", "tss")], genes_out, by.x="name", by.y="id", all.x=T)
+genes_out = genes_out[,c(1,3,4)]
 genes_out = rbind(c("Name", "Score phase", "Score autocorrelation"), 
                   genes_out)
 
-write.table(genes_out,
-            params$out_genes,
-            row.names=FALSE,
-            col.names=FALSE,
-            quote=FALSE,
-            sep=",")
+
+OUT_GENES =  gsub(".gff", "_genes_stats.csv", params$input)
+tmp = strsplit(OUT_GENES, "/")[[1]][length(strsplit(OUT_GENES, "/")[[1]])]
+
+OUT_GENES = gsub(tmp, paste(".", tmp, sep=""), OUT_GENES, fixed=T)
+
+write.table(genes_out, OUT_GENES, row.names=FALSE, col.names=FALSE, quote=FALSE, sep=",")
+
 
 ## Statistics genome-wide  ####################################################
 
 message("-- computing statistics genome-wide")
 
-gw_out = data.frame(c("Phased genes", "Not-phased genes", "Other genes"),
-                    c(sum(phase$score_phase <= 25),
-                      sum(phase$score_phase >= 56),
-                      sum(phase$score_phase > 25 & phase$score_phase <= 55)))
+gw_out = data.frame(c("Phased genes", "Not-phased genes", "Other genes"), 
+                    c(sum(phase$score_phase<=25), 
+                      sum(phase$score_phase>=56),
+                      sum(phase$score_phase>25 & phase$score_phase<=55)
+                   ))
 
-write.table(gw_out,
-            params$out_gw,
-            row.names=FALSE,
-            col.names=FALSE,
-            quote=FALSE,
-            sep=",")
+OUT_GW <- gsub(".gff", "_stats.csv", params$input)
+tmp = strsplit(OUT_GW, "/")[[1]][length(strsplit(OUT_GW, "/")[[1]])]
+
+OUT_GW = gsub(tmp, paste(".", tmp, sep=""), OUT_GW, fixed=T)
+
+
+write.table(gw_out, OUT_GW, row.names=FALSE, col.names=FALSE, quote=FALSE, sep=",")
+

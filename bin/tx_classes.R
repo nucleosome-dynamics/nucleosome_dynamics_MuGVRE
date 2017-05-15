@@ -44,17 +44,18 @@ defaults <- list(mc.cores          = 1,
                  window            = 300,
                  p1.max.merge      = 3,
                  p1.max.downstream = 20,
-                 open_thresh       = 215,
+                 open.thresh       = 215,
                  max.uncovered     = 150)
 
 spec <- matrix(c("calls",             "a", 1, "character",
+                 "coverage",          "b", 1, "character",
                  "genome",            "c", 1, "character",
                  "output",            "d", 1, "character",
                  "cores",             "e", 1, "integer",
                  "window",            "f", 1, "integer",
                  "p1.max.merge",      "g", 1, "integer",
                  "p1.max.downstream", "h", 1, "integer",
-                 "open_thresh",       "i", 1, "integer",
+                 "open.thresh",       "i", 1, "integer",
                  "max.uncovered",     "j", 1, "integer"),
                byrow=TRUE,
                ncol=4)
@@ -101,11 +102,9 @@ tx.classes <- with(params,
                                    window            = window,
                                    p1.max.merge      = p1.max.merge,
                                    p1.max.downstream = p1.max.downstream,
-                                   open.thresh       = open_thresh,
+                                   open.thresh       = open.thresh,
                                    max.uncovered     = max.uncovered,
                                    mc.cores          = mc.cores))
-
-tx.classes <- tx.classes[!tx.classes$descr == "NA", ]
 
 ## Store output ###############################################################
 

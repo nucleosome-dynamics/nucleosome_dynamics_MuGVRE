@@ -41,7 +41,6 @@ defaults <- list(t = 310.15)
 spec <- matrix(c("calls",  "a", 1, "character",
                  "reads",  "b", 1, "character",
                  "output", "c", 1, "character",
-                 "range",  "g", 1, "character",
                  "start",  "d", 1, "integer",
                  "end",    "e", 1, "integer",
                  "chr",    "f", 1, "character",

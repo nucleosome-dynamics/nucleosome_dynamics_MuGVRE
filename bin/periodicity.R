@@ -11,8 +11,6 @@ library(IRanges)
 library(parallel)
 library(getopt)
 library(plyr)
-library(nucleR)
-library(htSeqTools)
 
 where <- function () {
     spath <-parent.frame(2)$ofile
@@ -42,14 +40,12 @@ defaults <- list(periodicity = 165,
                  genome      = "R64-1-1")
 
 spec <- matrix(c("calls",       "a", 1, "character",
-                 "genes",       "b", 1, "character",
-                 "chrom_sizes", "c", 1, "character",
+                 "genome",      "c", 1, "character",
                  "bwOutput",    "d", 1, "character",
-                 "gffOutput",   "e", 1, "character",
-                 "cores",       "f", 1, "integer",
-                 "reads",       "g", 1, "character",
-                 "type",        "h", 1, "character",
-                 "periodicity", "i", 1, "double"),
+                 "gffOutput",   "h", 1, "character",
+                 "cores",       "e", 1, "integer",
+                 "coverage",    "f", 1, "character",
+                 "periodicity", "g", 1, "double"),
                byrow=TRUE,
                ncol=4)
 args <- getopt(spec)
@@ -64,7 +60,7 @@ for (i in names(args)) {
 ## Some function definitions ##################################################
 
 message("loading genes")
-genes <- getGenes(params$genes)
+genes <- getGenes(params$genome)
 message("reading calls")
 calls.df <- readGff(params$calls)
 calls.rd <- with(calls.df,
@@ -74,23 +70,9 @@ calls.rd <- with(calls.df,
 
 ## Do it ######################################################################
 
-message("calculating coverage")
-
-reads <- get(load(params$reads))
-f.reads <- filterDuplReads(reads, fdrOverAmp=0.05, components=1)
-if (params$type == "single") {
-    fragmentLen <- fragmentLenDetect(f.reads)
-} else if (params$type == "paired") {
-    fragmentLen <- 170
-}
-
-prep <- processReads(f.reads,
-                     type=params$type,
-                     fragmentLen=fragmentLen,
-                     trim=50)
-cov <- coverage.rpm(prep)
-
 message("identifying first and last nucleosomes")
+cov <- get(load(params$coverage))
+
 genes.nucs <- findGenesNucs(genes, calls.rd, params$mc.cores)
 genes.nucs$dfi <- getDfi(genes.nucs$nuc.len, params$periodicity)
 genes.nucs$autocor <- autocorFromDf(genes.nucs, cov, params$periodicity)
@@ -114,6 +96,6 @@ writeGff(gff, params$gffOutput)
 
 message("writting bigWig output")
 splited <- lapply(covPredAll, splitAtZeros)
-writeBigWig(splited, params$bwOutput, params$chrom_sizes)
+writeBigWig(splited, params$bwOutput, params$genome)
 
 ##############################################################################

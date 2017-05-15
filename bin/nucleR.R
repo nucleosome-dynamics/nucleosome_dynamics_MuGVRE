@@ -36,24 +36,22 @@ for (x in sourced) {
 
 ## Parameters and Arguments ###################################################
 
-defaults <- list(mc.cores            = 1,
-                 type                = "paired",
-                 fdrOverAmp          = 0.05,
-                 components          = 1,
-                 fragmentLen         = NULL,
-                 trim                = 50,
-                 pcKeepComp          = 0.02,
-                 width               = 125,
-                 threshold           = TRUE,
-                 thresholdPercentage = 0.35,
-                 thresholdValue      = 10,
-                 dyad_length         = NULL,
-                 min.overlap         = NULL,
-                 score_w.thresh      = 0.6,
-                 score_h.thresh      = 0.4,
-                 start               = NULL,
-                 end                 = NULL,
-                 chr                 = NULL)
+defaults <- list(mc.cores       = 1,
+                 type           = "paired",
+                 fdrOverAmp     = 0.05,
+                 components     = 1,
+                 fragmentLen    = NULL,
+                 trim           = 50,
+                 pcKeepComp     = 0.02,
+                 width          = 125,
+                 threshold      = "35%",
+                 dyad.length    = NULL,
+                 min.overlap    = NULL,
+                 score_w.thresh = 0.6,
+                 score_h.thresh = 0.4,
+                 start          = NULL,
+                 end            = NULL,
+                 chr            = NULL)
 
 spec <- matrix(c("input",       "a", 1, "character",
                  "output",      "b", 1, "character",
@@ -65,12 +63,8 @@ spec <- matrix(c("input",       "a", 1, "character",
                  "trim",        "h", 1, "integer",
                  "pcKeepComp",  "i", 1, "double",
                  "width",       "j", 1, "integer",
-
-                 "threshold",           "k", 1, "logical",
-                 "thresholdPercentage", "s", 1, "double",
-                 "thresholdValue",      "t", 1, "integer",
-
-                 "dyad_length", "l", 1, "integer",
+                 "threshold",   "k", 1, "character",
+                 "dyad.length", "l", 1, "integer",
                  "minoverlap",  "m", 1, "integer",
                  "wthresh",     "n", 1, "double",
                  "hthresh",     "o", 1, "double",
@@ -87,7 +81,7 @@ names(args) <- subMany(c("cores",
                          "wthresh",
                          "hthresh"),
                        c("mc.cores",
-                         "dyad_length",
+                         "dyad.length",
                          "min.overlap",
                          "score_w.thresh",
                          "score_h.thresh"),
@@ -98,17 +92,15 @@ for (i in names(args)) {
     params[[i]] <- args[[i]]
 }
 
-if (is.null(params$dyad_length)) {
-    params$dyad_length <- params$trim
+if (is.null(params$dyad.length)) {
+    params$dyad.length <- params$trim
 }
 if (is.null(params$min.overlap)) {
     params$min.overlap <- params$trim
 }
 
-if (params$threshold) {
-    threshold <- paste0(params$thresholdPercentage, "%")
-} else {
-    threshold <- params$thresholdValue
+if (!grepl("%$", params$threshold)) {
+    params$threshold <- as.numeric(params$threshold)
 }
 
 ## Pipeline Itself ############################################################
@@ -167,7 +159,7 @@ fft <- mclapply(cover,
 message("detecting peaks")
 peaks <- peakDetection(fft,
                        width     = params$width,
-                       threshold = threshold,
+                       threshold = params$threshold,
                        score     = FALSE,
                        min.cov   = 0,
                        mc.cores  = params$mc.cores)
@@ -175,8 +167,8 @@ peaks <- peakDetection(fft,
 message("scoring peaks")
 scores <- peakScoring(peaks,
                       fft,
-                      threshold   = threshold,
-                      dyad.length = params$dyad_length,
+                      threshold   = params$threshold,
+                      dyad.length = params$dyad.length,
                       mc.cores    = params$mc.cores)
 
 message("merging peaks")
