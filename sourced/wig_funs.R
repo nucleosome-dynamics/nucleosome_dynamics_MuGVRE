@@ -115,7 +115,7 @@ writeBigWig <- function (x, outf, genome)
     chrom.sizes.f <- chromSizesFile(genome)
     wigf <- sub(".bw$", ".wig", outf)
     writeWig(x, wigf)
-    system(paste(tobig.bin, wigf, chrom.sizes.f, outf))
+    system2(tobig.bin, shQuote(c(wigf, chrom.sizes.f, outf)))
     file.remove(wigf)
     invisible()
 }
