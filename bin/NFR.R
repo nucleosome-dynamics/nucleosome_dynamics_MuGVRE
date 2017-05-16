@@ -91,33 +91,6 @@ nfr <- rd2df(irLs2rd(lapply(
     }
 )))
 
-#rmUnderCovered <- function (df, reads, thresh) {
-
-#    getCovSum <- function (from, to, cov) {
-#        sub.cov <- cov[from:to]
-#        sum(sub.cov == 0) / length(sub.cov)
-#    }
-
-#    doByChr <- function (df, covs, thresh) {
-#        chr <- as.vector(df[1, "seqname"])
-#        chr.cov <- covs[[chr]]
-#        covs.ratio <- mapply(getCovSum,
-#                             df$start,
-#                             df$end,
-#                             MoreArgs=list(chr.cov))
-#        df[covs.ratio < thresh, ]
-#    }
-
-#    covs <- lapply(coverage(reads), as.vector)
-#    ddply(df, "seqname", doByChr, covs, thresh)
-#}
-
-#if (!is.null(params$readsInput)) {
-#    # discard undercovered NFRs
-#    reads <- get(load(params$reads))
-#    nfr <- rmUnderCovered(nfr, reads, 0.75)
-#}
-
 ## Store output ###############################################################
 
 message("-- saving gff output")

@@ -50,10 +50,6 @@ spec <- matrix(c("input1", "a", 1, "character",
 
                  "range", "m", 1, "character",
 
-                 #"rangeStart", "m", 1, "integer",
-                 #"rangeEnd",   "n", 1, "integer",
-                 #"chr",        "o", 1, "character",
-
                  "shift_min_nreads", "p", 1, "double",
                  "shift_threshold",  "q", 1, "double",
                  "indel_min_nreads", "r", 1, "double",
@@ -90,10 +86,6 @@ if (is.null(params$rangeStart) || is.null(params$rangeEnd)) {
 } else {
     params$range <- c(rangeStart, rangeEnd)
 }
-
-#if (is.null(params$maxDiff)) {
-#    params$maxDiff <- params$readSize/2
-#}
 
 ## Pipeline Itself ############################################################
 

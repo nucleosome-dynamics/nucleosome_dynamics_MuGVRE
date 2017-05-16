@@ -114,43 +114,6 @@ buildGgplot <- function (mdf, shdf, plot.start, plot.end) {
         theme_bw()
 }
 
-#buildGgplot <- function (mdf, shdf, plot.start, plot.end) {
-#    ggplot(mdf, aes(x=x, y=value)) +
-#        xlim(plot.start, plot.end) +
-#        xlab("") +
-#        ylab("") +
-#        geom_area(aes(fill=variable,
-#                      color=variable,
-#                      linetype=variable,
-#                      alpha=variable),
-#                  position="identity") +
-#        geom_segment(data=shdf,
-#                     mapping=aes(x=x0, y=y0, xend=x1, yend=y1,
-#                                 color=variable)) +
-#        scale_color_manual(name="",
-#                           values=c("setA"="gray",
-#                                    "setB"="black",
-#                                    "ins"="#00FF0090",
-#                                    "dels"="#FF000090",
-#                                    "left"="darkred",
-#                                    "right"="darkblue")) +
-#        scale_fill_manual(name="",
-#                          values=c("setA"="#909090",
-#                                   "setB"="#E0E0E000",
-#                                   "ins"="#00FF0090",
-#                                   "dels"="#FF000095",
-#                                   "left"="darkred",
-#                                   "right"="darkblue")) +
-#        scale_linetype_manual(name="",
-#                              values=c("setA"="solid",
-#                                       "setB"="dashed",
-#                                       "ins"="solid",
-#                                       "dels"="solid",
-#                                       "left"="solid",
-#                                       "right"="solid")) +
-#        theme_bw()
-#}
-
 fixShifts <- function (xs, name) {
     parseShiftTxt <- function (txt)
         lapply(strsplit(txt, split="<br>"),
