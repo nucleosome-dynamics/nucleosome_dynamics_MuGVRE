@@ -12,10 +12,10 @@ import tarfile
 
 ###############################################################################
 
-RPATH = "/opt/R-3.1.2/bin/Rscript"
-BIN_BASE = "/home/rilla/nucleServ"
-#RPATH = "/usr/bin/Rscript"
-#BIN_BASE = "/orozco/services/Rdata/Web/apps/nucleServ_MuG"
+#RPATH = "/opt/R-3.1.2/bin/Rscript"
+#BIN_BASE = "/home/rilla/nucleServ"
+RPATH = "/usr/bin/Rscript"
+BIN_BASE = "/orozco/services/Rdata/Web/apps/nucleServ_MuG"
 
 ###############################################################################
 
