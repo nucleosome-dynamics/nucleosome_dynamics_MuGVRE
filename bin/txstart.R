@@ -9,8 +9,10 @@
 # nucleosome plus1: Position of the nucleosome +1
 # TTS_position: Position of the Transcription Start Site.
 
-
 ## Imports ####################################################################
+
+lib.path <- "/orozco/services/Rdata/Web/apps/libs"
+.libPath(lib.path)
 
 library(getopt)
 library(IRanges)
