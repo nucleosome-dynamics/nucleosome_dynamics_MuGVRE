@@ -75,6 +75,7 @@ message("-- computing statistics genome-wide")
 
 #--- Plot 1 ---
 
+tab_tss <- table(tss$classification)
 df1 <- as.data.frame(tab_tss)
 
 x <- max(df1$Freq)
@@ -88,7 +89,12 @@ p1 <- ggplot(df1, aes(x=Var1, y=Freq)) +
     theme(axis.title.x=element_blank(),
           axis.title.y=element_blank())
 
-ggsave(filename=params$out_gw, plot=p1, width=480, height=480, units="px")
+ggsave(filename=params$out_gw,
+       plot=p1,
+       width=41,
+       height=41,
+       units="mm",
+       dpi=300)
 
 #--- Plot 2 ---
 
@@ -104,4 +110,9 @@ p2 <- ggplot(df2, aes(x=x)) +
     ggtitle("Distribution of NFR width around TSS") +
     theme_bw()
 
-ggsave(filename=params$out_gw2, plot=p2, width=480, height=480, units="px")
+ggsave(filename=params$out_gw2,
+       plot=p2,
+       width=41,
+       height=41,
+       units="mm"
+       dpi=300)
