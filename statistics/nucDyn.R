@@ -120,7 +120,7 @@ p <- ggplot(df, aes(Var1, Proportion)) +
     theme_bw() +
     theme(legend.position="none",
           axis.title.x=element_blank(),
-          text=element_text(size=5))
+          text=element_text(size=3))
 
 ggsave(filename=params$out_gw,
        plot=p,

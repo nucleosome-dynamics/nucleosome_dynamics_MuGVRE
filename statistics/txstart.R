@@ -82,13 +82,13 @@ x <- max(df1$Freq)
 lim <- x + (0.05*x)
 p1 <- ggplot(df1, aes(x=Var1, y=Freq)) +
     geom_bar(stat="identity", fill="#66A61E") +
-    geom_text(aes(label=Freq), hjust=-1) +
+    geom_text(aes(label=Freq), hjust=-1, size=3) +
     coord_flip() +
     ylim(0, lim) +
     theme_bw() +
     theme(axis.title.x=element_blank(),
           axis.title.y=element_blank(),
-          text=element_text(size=5))
+          text=element_text(size=3))
 
 ggsave(filename=params$out_gw,
        plot=p1,
@@ -110,7 +110,7 @@ p2 <- ggplot(df2, aes(x=x)) +
     labs(x="Width", y="Density") +
     ggtitle("Distribution of NFR width around TSS") +
     theme_bw() +
-    theme(text=element_text(size=5))
+    theme(text=element_text(size=3))
 
 ggsave(filename=params$out_gw2,
        plot=p2,
