@@ -123,7 +123,8 @@ p <- ggplot(df, aes(Var1, Freq)) +
                                "0.4 - 1"   = "#008B8B")) +
     labs(x="Stiffness", y="Proportion of genes") +
     theme_bw() +
-    theme(legend.position="none")
+    theme(legend.position="none",
+          text=element_text(size=5))
 ggsave(filename=params$out_gw2,
        plot=p,
        width=41,

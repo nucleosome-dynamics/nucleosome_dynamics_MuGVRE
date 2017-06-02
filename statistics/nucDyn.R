@@ -119,7 +119,8 @@ p <- ggplot(df, aes(Var1, Proportion)) +
                                "Shift +"   = "#0040FF")) +
     theme_bw() +
     theme(legend.position="none",
-          axis.title.x=element_blank())
+          axis.title.x=element_blank(),
+          text=element_text(size=5))
 
 ggsave(filename=params$out_gw,
        plot=p,
