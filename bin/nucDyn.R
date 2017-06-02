@@ -9,7 +9,7 @@
 ## Imports ####################################################################
 
 lib.path <- "/orozco/services/Rdata/Web/apps/libs"
-.libPath(lib.path)
+.libPaths(lib.path)
 
 library(getopt)
 library(NucDyn)
