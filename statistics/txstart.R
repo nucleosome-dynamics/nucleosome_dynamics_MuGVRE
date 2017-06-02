@@ -88,7 +88,7 @@ p1 <- ggplot(df1, aes(x=Var1, y=Freq)) +
     theme(axis.title.x=element_blank(),
           axis.title.y=element_blank())
 
-ggsave(filename=params$out_gw, plot=p1)
+ggsave(filename=params$out_gw, plot=p1, width=480, height=480, units="px")
 
 #--- Plot 2 ---
 
@@ -104,4 +104,4 @@ p2 <- ggplot(df2, aes(x=x)) +
     ggtitle("Distribution of NFR width around TSS") +
     theme_bw()
 
-ggsave(filename=params$out_gw2, plot=p2)
+ggsave(filename=params$out_gw2, plot=p2, width=480, height=480, units="px")

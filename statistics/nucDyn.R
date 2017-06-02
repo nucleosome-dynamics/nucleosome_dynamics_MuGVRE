@@ -121,4 +121,4 @@ p <- ggplot(df, aes(Var1, Proportion)) +
     theme(legend.position="none",
           axis.title.x=element_blank())
 
-ggsave(filename=params$out_gw, plot=p)
+ggsave(filename=params$out_gw, plot=p, width=480, height=480, units="px")

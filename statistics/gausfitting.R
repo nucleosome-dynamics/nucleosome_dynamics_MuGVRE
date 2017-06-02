@@ -124,4 +124,4 @@ p <- ggplot(df, aes(Var1, Freq)) +
     labs(x="Stiffness", y="Proportion of genes") +
     theme_bw() +
     theme(legend.position="none")
-ggsave(filename=params$out_gw2, plot=p)
+ggsave(filename=params$out_gw2, plot=p, width=480, height=480, units="px")
