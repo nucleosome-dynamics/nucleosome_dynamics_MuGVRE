@@ -114,5 +114,5 @@ ggsave(filename=params$out_gw2,
        plot=p2,
        width=41,
        height=41,
-       units="mm"
+       units="mm",
        dpi=300)
