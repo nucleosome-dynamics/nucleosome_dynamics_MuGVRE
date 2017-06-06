@@ -33,10 +33,11 @@ df2gff <- function (df, ...)
     kwargs <- list(...)
     fields <- c("seqname", "source", "feature", "start", "end", "score",
                 "strand", "frame")
-    out.df <- data.frame(matrix(nrow=nrow(df),
+    out.df <- data.frame(matrix(nrow=ifelse(nrow(df) > 0, nrow(df), 1),
                                 ncol=length(fields) + 1,
                                 dimnames=list(c(),
                                               c(fields, "attribute"))))
+
     for (f in fields) {
         if (f %in% colnames(df)) {
             out.df[[f]] <- as.vector(df[[f]])
