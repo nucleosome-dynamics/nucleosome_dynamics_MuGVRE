@@ -102,9 +102,9 @@ write.table(stat_nd,
 message("-- computing statistics genome-wide")
 
 nd_tab <- table(nd$class) / sum(table(nd$class))
+df <- as.data.frame(nd_tab)
 
 if (nrow(df) > 0) {
-    df <- as.data.frame(nd_tab)
     names(df)[names(df) == "Freq"] <- "Proportion"
 
     levels(df$Var1)[match("EVICTION", levels(df$Var1))] <- "Eviction"
