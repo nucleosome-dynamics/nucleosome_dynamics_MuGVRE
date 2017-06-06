@@ -58,7 +58,7 @@ spec <- matrix(c("input1", "a", 1, "character",
                  "indel_min_nreads", "r", 1, "double",
                  "indel_threshold",  "s", 1, "double",
 
-                 "roundPow", "t", 1, "logical",
+                 "roundPow",       "t", 1, "logical",
                  "same_magnitude", "u", 1, "logical"),
                byrow=TRUE,
                ncol=4)
@@ -70,35 +70,43 @@ defaults <- list(cores      = 1,
                  plotRData  = NULL,
                  readSize   = 140,
                  maxDiff    = 74,
-                 rangeStart = NULL,
-                 rangeEnd   = NULL,
-                 chr        = NULL,
+
+                 range      = "All",
 
                  shift_min_nreads = 3,
                  shift_threshold  = 0.1,
                  indel_min_nreads = 3,
                  indel_threshold  = 0.05)
 
+
 params <- defaults
 for (i in names(args)) {
     params[[i]] <- args[[i]]
 }
 
-if (is.null(params$rangeStart) || is.null(params$rangeEnd)) {
-    params$range <- c()
-} else {
-    params$range <- c(rangeStart, rangeEnd)
+subsetReads <- function (rs, chr=NULL, start=NULL, end=NULL) {
+    if (!is.null(range$chr)) {
+        rs <- rs[space(rs) == range$chr, ]
+        if (!is.null(range$start) && !is.null(range$end)) {
+            rs <- rs[start(rs) >= range$start & end(rs) <= range$end, ]
+        }
+    }
+    rs
 }
 
 ## Pipeline Itself ############################################################
 
-r1 <- get(load(params$input1))
-r2 <- get(load(params$input2))
+range <- parseRange(params$range)
+
+range <- list(chr="chrI", start=100, end=900)
+
+message("loading and subsetting reads")
+rs <- lapply(params[c("input1", "input2")], function(x) get(load(x)))
+rs <- lapply(rs, subsetReads, range$chr, range$start, range$end)
 
 message("running NucleosomeDynamics")
-
-dyn <- nucleosomeDynamics(setA      = r1,
-                          setB      = r2,
+dyn <- nucleosomeDynamics(setA      = rs[[1]],
+                          setB      = rs[[2]],
                           maxLen    = params$maxLen,
                           equalSize = params$equal_size,
                           readSize  = params$readSize,

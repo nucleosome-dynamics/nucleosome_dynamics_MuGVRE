@@ -147,8 +147,7 @@ irLs2rd <- function(x)
                          sapply(x, length)))
 
 sortReads <- function (reads)
-{
-    # Sort reads RangedData format. Sort them first by chromosome, then by
+{   # Sort reads RangedData format. Sort them first by chromosome, then by
     # start and then by end
     sortChrs <- function (rans)
         rans[order(names(rans))]
@@ -177,4 +176,20 @@ selectReads <- function (reads, range.df)
 
 ###############################################################################
 
+parseRange <- function (x)
+{   # Parse the range string into a list containing the chromosome, start and
+    # end. NULL means everything is to be selected.
+    re <- "([[:alnum:]]+):([[:digit:]]+)-([[:digit:]]+)"
+    if (x == "All") {
+        list(chr=NULL, start=NULL, end=NULL)
+    } else if (!grepl(re, x)) {
+        list(chr=x, start=NULL, end=NULL)
+    } else {
+        chr <- gsub(re, '\\1', x)
+        start <- as.integer(gsub(re, '\\2', x))
+        end   <- as.integer(gsub(re, '\\3', x))
+        list(chr=chr, start=start, end=end)
+    }
+}
 
+###############################################################################
