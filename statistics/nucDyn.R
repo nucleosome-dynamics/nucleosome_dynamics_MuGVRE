@@ -103,7 +103,7 @@ message("-- computing statistics genome-wide")
 
 nd_tab <- table(nd$class) / sum(table(nd$class))
 
-if (nrow(df)) {
+if (nrow(df) > 0) {
     df <- as.data.frame(nd_tab)
     names(df)[names(df) == "Freq"] <- "Proportion"
 
