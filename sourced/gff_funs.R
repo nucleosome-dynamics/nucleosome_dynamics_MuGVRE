@@ -78,7 +78,7 @@ writeGff <- function (df, outpath)
     write.table(df,
                 file      = outpath,
                 quote     = FALSE,
-                sep       = "t",
+                sep       = "\t",
                 row.names = FALSE,
                 col.names = FALSE)
 }
