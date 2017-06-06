@@ -33,7 +33,7 @@ df2gff <- function (df, ...)
     kwargs <- list(...)
     fields <- c("seqname", "source", "feature", "start", "end", "score",
                 "strand", "frame")
-    out.df <- data.frame(matrix(nrow=ifelse(nrow(df) > 0, nrow(df), 1),
+    out.df <- data.frame(matrix(nrow=nrow(df),
                                 ncol=length(fields) + 1,
                                 dimnames=list(c(),
                                               c(fields, "attribute"))))
@@ -63,18 +63,24 @@ df2gff <- function (df, ...)
     } else {
         out.df[["attribute"]] <- rep(".", nrow(out.df))
     }
-    out.df
+    if (nrow(out.df) > 0) {
+        out.df
+    } else {
+        tmp <- rep(".", length(out.df))
+        names(tmp) <- names(out.df)
+        as.data.frame(as.list(tmp))
+    }
 }
 
 writeGff <- function (df, outpath)
 {
     # Use this to write the output of df2gff to disk.
     write.table(df,
-                file=outpath,
-                quote=FALSE,
-                sep="\t",
-                row.names=FALSE,
-                col.names=FALSE)
+                file      = outpath,
+                quote     = FALSE,
+                sep       = "t",
+                row.names = FALSE,
+                col.names = FALSE)
 }
 
 readGff <- function (fname, load.attributes=TRUE)
@@ -90,10 +96,10 @@ readGff <- function (fname, load.attributes=TRUE)
               "attribute")
 
     df <- read.csv(fname,
-                   header=FALSE,
-                   col.names=cols,
-                   stringsAsFactors=FALSE,
-                   sep="\t")
+                   header           = FALSE,
+                   col.names        = cols,
+                   stringsAsFactors = FALSE,
+                   sep              = "\t")
 
     for (i in colnames(df)) {
         if (all(df[[i]] == ".")) {
@@ -133,5 +139,10 @@ readGff <- function (fname, load.attributes=TRUE)
     }
 
     df$attribute <- NULL
-    df
+
+    if (ncol(df) > 0) {
+        df
+    } else {
+        data.frame()
+    }
 }
