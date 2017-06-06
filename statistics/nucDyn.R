@@ -65,15 +65,15 @@ if (nrow(nd) > 0) {
     nd_gr <- GRanges()
 }
 
-incl = nd_gr[nd_gr$class == "INCLUSION"]
-evic = nd_gr[nd_gr$class == "EVICTION"]
-shift_p = nd_gr[nd_gr$class == "SHIFT +"]
-shift_m = nd_gr[nd_gr$class == "SHIFT -"]
+incl    <- nd_gr[nd_gr$class == "INCLUSION"]
+evic    <- nd_gr[nd_gr$class == "EVICTION"]
+shift_p <- nd_gr[nd_gr$class == "SHIFT +"]
+shift_m <- nd_gr[nd_gr$class == "SHIFT -"]
 
-genes$nIncl = countOverlaps(genes_gr, incl)
-genes$nEvic = countOverlaps(genes_gr, evic)
-genes$nShift_p = countOverlaps(genes_gr, shift_p)
-genes$nShift_m = countOverlaps(genes_gr, shift_m)
+genes$nIncl    <- countOverlaps(genes_gr, incl)
+genes$nEvic    <- countOverlaps(genes_gr, evic)
+genes$nShift_p <- countOverlaps(genes_gr, shift_p)
+genes$nShift_m <- countOverlaps(genes_gr, shift_m)
 
 i <- c("name",
        "nIncl",
@@ -103,13 +103,17 @@ message("-- computing statistics genome-wide")
 
 nd_tab <- table(nd$class) / sum(table(nd$class))
 
-df <- as.data.frame(nd_tab)
-names(df)[names(df) == "Freq"] <- "Proportion"
+if (nrow(df)) {
+    df <- as.data.frame(nd_tab)
+    names(df)[names(df) == "Freq"] <- "Proportion"
 
-levels(df$Var1)[match("EVICTION", levels(df$Var1))] <- "Eviction"
-levels(df$Var1)[match("INCLUSION", levels(df$Var1))] <- "Inclusion"
-levels(df$Var1)[match("SHIFT -", levels(df$Var1))] <- "Shift -"
-levels(df$Var1)[match("SHIFT +", levels(df$Var1))] <- "Shift +"
+    levels(df$Var1)[match("EVICTION", levels(df$Var1))] <- "Eviction"
+    levels(df$Var1)[match("INCLUSION", levels(df$Var1))] <- "Inclusion"
+    levels(df$Var1)[match("SHIFT -", levels(df$Var1))] <- "Shift -"
+    levels(df$Var1)[match("SHIFT +", levels(df$Var1))] <- "Shift +"
+} else {
+    df <- data.frame(Var1=character(), Proportion=numeric())
+}
 
 p <- ggplot(df, aes(Var1, Proportion)) +
     geom_bar(stat="identity", aes(fill=Var1)) +
