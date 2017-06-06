@@ -82,20 +82,20 @@ x <- max(df1$Freq)
 lim <- x + (0.05*x)
 p1 <- ggplot(df1, aes(x=Var1, y=Freq)) +
     geom_bar(stat="identity", fill="#66A61E") +
-    geom_text(aes(label=Freq), hjust=-1, size=3) +
+    geom_text(aes(label=Freq), hjust=0, size=1) +
     coord_flip() +
     ylim(0, lim) +
     theme_bw() +
     theme(axis.title.x=element_blank(),
           axis.title.y=element_blank(),
-          text=element_text(size=3))
+          text=element_text(size=4))
 
-ggsave(filename=params$out_gw,
-       plot=p1,
-       width=41,
-       height=41,
-       units="mm",
-       dpi=300)
+ggsave(filename = params$out_gw,
+       plot     = p1,
+       width    = 41,
+       height   = 41,
+       units    = "mm",
+       dpi      = 300)
 
 #--- Plot 2 ---
 
@@ -104,17 +104,17 @@ x <- x[!is.na(x)]
 df2 <- data.frame(x=x)
 
 p2 <- ggplot(df2, aes(x=x)) +
-    geom_line(stat="density", color="#1B9E77", lwd=1) +
+    geom_line(stat="density", color="#1B9E77", lwd=0.5) +
     ylim(0, 0.01) +
     xlim(0, 450) +
     labs(x="Width", y="Density") +
     ggtitle("Distribution of NFR width around TSS") +
     theme_bw() +
-    theme(text=element_text(size=3))
+    theme(text=element_text(size=4))
 
-ggsave(filename=params$out_gw2,
-       plot=p2,
-       width=41,
-       height=41,
-       units="mm",
-       dpi=300)
+ggsave(filename = params$out_gw2,
+       plot     = p2,
+       width    = 41,
+       height   = 41,
+       units    = "mm",
+       dpi      = 300)
