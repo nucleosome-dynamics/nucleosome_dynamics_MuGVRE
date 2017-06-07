@@ -53,9 +53,6 @@ for (i in names(args)) {
     params[[i]] <- args[[i]]
 }
 
-params$reads <- "/orozco/services/Rdata/Web/USERS/ND577a8fb9e334c/uploads/rep1_00m_G1.bam.RData"
-params$calls <- "/orozco/services/Rdata/Web/USERS/ND577a8fb9e334c/run007/NR_rep2_00m_G1.gff"
-
 ## Subset #####################################################################
 
 range <- parseRange(params$range)
