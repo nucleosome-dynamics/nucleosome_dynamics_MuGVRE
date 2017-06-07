@@ -78,11 +78,13 @@ defaults <- list(cores      = 1,
                  indel_min_nreads = 3,
                  indel_threshold  = 0.05)
 
-
 params <- defaults
 for (i in names(args)) {
     params[[i]] <- args[[i]]
 }
+
+#params$input1 <- "/orozco/services/Rdata/Web/USERS/ND577a8fb9e334c/uploads/rep2_00m_G1.bam.RData"
+#params$input2 <- "/orozco/services/Rdata/Web/USERS/ND577a8fb9e334c/uploads/rep2_30m_S.bam.RData"
 
 subsetReads <- function (rs, chr=NULL, start=NULL, end=NULL) {
     if (!is.null(range$chr)) {
@@ -98,7 +100,7 @@ subsetReads <- function (rs, chr=NULL, start=NULL, end=NULL) {
 
 range <- parseRange(params$range)
 
-range <- list(chr="chrI", start=100, end=900)
+#range <- list(chr="chrI", start=100, end=900)
 
 message("loading and subsetting reads")
 rs <- lapply(params[c("input1", "input2")], function(x) get(load(x)))
@@ -123,8 +125,8 @@ hs <- findHotspots(dyn=dyn, mc.cores=params$cores)
 
 ## Calculate vector of -log10(p-value)s  ######################################
 
-cov1 <- lapply(coverage(r1), as.vector)
-cov2 <- lapply(coverage(r2), as.vector)
+cov1 <- lapply(coverage(rs[[1]]), as.vector)
+cov2 <- lapply(coverage(rs[[2]]), as.vector)
 
 chrs <- intersect(names(cov1), names(cov2))
 pvals <- lapply(chrs, function (x) -log10(findPVals(cov1[[x]], cov2[[x]])))
