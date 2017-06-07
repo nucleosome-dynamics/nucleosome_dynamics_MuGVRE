@@ -83,24 +83,9 @@ for (i in names(args)) {
     params[[i]] <- args[[i]]
 }
 
-#params$input1 <- "/orozco/services/Rdata/Web/USERS/ND577a8fb9e334c/uploads/rep2_00m_G1.bam.RData"
-#params$input2 <- "/orozco/services/Rdata/Web/USERS/ND577a8fb9e334c/uploads/rep2_30m_S.bam.RData"
-
-subsetReads <- function (rs, chr=NULL, start=NULL, end=NULL) {
-    if (!is.null(range$chr)) {
-        rs <- rs[space(rs) == range$chr, ]
-        if (!is.null(range$start) && !is.null(range$end)) {
-            rs <- rs[start(rs) >= range$start & end(rs) <= range$end, ]
-        }
-    }
-    rs
-}
-
 ## Pipeline Itself ############################################################
 
 range <- parseRange(params$range)
-
-#range <- list(chr="chrI", start=100, end=900)
 
 message("loading and subsetting reads")
 rs <- lapply(params[c("input1", "input2")], function(x) get(load(x)))

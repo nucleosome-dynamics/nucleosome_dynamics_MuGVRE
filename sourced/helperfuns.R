@@ -174,6 +174,22 @@ selectReads <- function (reads, range.df)
                         IRanges(start,
                                 end))))
 
+makeSubsetter <- function (getChr, getStart, getEnd)
+    function (x, chr=NULL, start=NULL, end=NULL) {
+        if (!is.null(chr)) {
+            x <- x[getChr(x) == chr, ]
+            if (!is.null(start) && !is.null(end)) {
+                x <- x[getStart(x) >= start & getEnd(x) <= end, ]
+            }
+        }
+        x
+    }
+
+subsetCalls <- makeSubsetter(function (x) x$seqname,
+                             function (x) x$start,
+                             function (x) x$end)
+subsetReads <- makeSubsetter(space, start, end)
+
 ###############################################################################
 
 parseRange <- function (x)

@@ -36,15 +36,13 @@ for (x in paste0(SOURCE.DIR, "/", sourced, ".R")) {
 
 ## Command line arguments #####################################################
 
-defaults <- list(t = 310.15)
+defaults <- list(t     = 310.15,
+                 range = "All")
 
 spec <- matrix(c("calls",  "a", 1, "character",
                  "reads",  "b", 1, "character",
                  "output", "c", 1, "character",
                  "range",  "g", 1, "character",
-                 "start",  "d", 1, "integer",
-                 "end",    "e", 1, "integer",
-                 "chr",    "f", 1, "character",
                  "t",      "t", 1, "double"),
                byrow=TRUE,
                ncol=4)
@@ -55,26 +53,19 @@ for (i in names(args)) {
     params[[i]] <- args[[i]]
 }
 
+params$reads <- "/orozco/services/Rdata/Web/USERS/ND577a8fb9e334c/uploads/rep1_00m_G1.bam.RData"
+params$calls <- "/orozco/services/Rdata/Web/USERS/ND577a8fb9e334c/run007/NR_rep2_00m_G1.gff"
+
 ## Subset #####################################################################
+
+range <- parseRange(params$range)
 
 message("loading inputs")
 calls <- readGff(params[["calls"]])
 reads <- get(load(params[["reads"]]))
 
-if (!is.null(params[["chr"]])) {
-    message("subsetting data")
-
-    calls <- subset(calls, seqname == params[["chr"]])
-    reads <- ranges(reads)[[params[["chr"]]]]
-
-    if (!is.null(params$start) && !is.null(params$end)) {
-        calls <- subset(calls,
-                        isIn(IRanges(start, end),
-                             IRanges(params[["start"]],
-                                     params[["end"]])))
-        reads <- selectReads(reads, calls)
-    }
-}
+reads <- subsetReads(reads, range$chr, range$start, range$end)
+calls <- subsetCalls(calls, range$chr, range$start, range$end)
 
 message("perfroming the fittings")
 gauss.df <- fitIt(calls, reads)
@@ -87,7 +78,6 @@ gauss.df$score_height <- NULL
 gauss.df$nmerge <- NULL
 
 names(gauss.df)[names(gauss.df) == "class"] <- "nucleR_class"
-#names(gauss.df)[names(gauss.df) == "stiffness"] <- "score_stiffness"
 names(gauss.df)[names(gauss.df) == "k"] <- "gauss_k"
 names(gauss.df)[names(gauss.df) == "m"] <- "gauss_m"
 names(gauss.df)[names(gauss.df) == "sd"] <- "gauss_sd"
