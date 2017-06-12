@@ -34,16 +34,26 @@ class StatsProc:
         ids = [x[0] for x in splitted[0]]
         content = [[x[1: ] for x in xs] for xs in splitted]
         def f(id, *xs):
-            content_vals = list(chain.from_iterable(xs))
-            if (all([x in ('0', 'NA') for x in content_vals])):
-                return None
-            else:
-                return ','.join(chain([id], content_vals))
-        res = map(f, ids, *content)
-        fres = (x for x in res if x is not None)
-        return '\n'.join(fres)
+            return ','.join(chain([id], chain.from_iterable(xs)))
+        return '\n'.join(map(f, ids, *content))
 
+    @staticmethod
+    def gw_cleaner(fname):
+        tmp_file = fname + "_tmp"
+        with open(fname) as in_fh, open(tmp_file, 'w') as out_fh:
+            for line in in_fh:
+                _, *xs = line.strip().split(',')
+                if not all(x in ('0', 'NA') for x in xs):
+                    out_fh.write(line)
+        os.rename(tmp_file, fname)
+        return fname
 
+    @staticmethod
+    def clean_genome_wide(fs):
+        for f in fs:
+            if f.endswith("_genes_stats.csv"):
+                gw_cleaner(f)
+        return fs
 
     @staticmethod
     def merge_tabs(x, gene_stats, col_order, w_dir):
@@ -104,6 +114,7 @@ class StatsProc:
     @staticmethod
     def proc(stat_files, in_files, out_dir, col_order):
         merged_stats = StatsProc.merge_stats(stat_files, col_order)
+        clean_genome_wide(merged_stats)
         stats_meta = StatsProc.compress_stats(merged_stats, in_files, out_dir)
         return stats_meta
 
