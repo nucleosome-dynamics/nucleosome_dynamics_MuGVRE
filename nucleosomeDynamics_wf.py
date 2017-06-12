@@ -29,11 +29,13 @@ def dummy(*_):
 
 class StatsProc:
     @staticmethod
-    def merger(*xs):
-        splitted = [x.split(",") for x in xs]
-        id = splitted[0][0]
-        content = [",".join(x[1:]).strip() for x in splitted]
-        return "\n".join([id] + content)
+    def merger(*fhs):
+        splitted = [[x.strip().split(',') for x in xs] for xs in fhs]
+        ids = [x[0] for x in splitted[0]]
+        content = [[x[1: ] for x in xs] for xs in splitted]
+        def f(id, *xs):
+            return ','.join(chain([id], chain.from_iterable(xs)))
+        return '\n'.join(map(f, ids, *content))
 
     @staticmethod
     def merge_tabs(x, gene_stats, col_order, w_dir):
@@ -45,7 +47,7 @@ class StatsProc:
         if files_to_merge:
             in_fhs = map(open, files_to_merge)
             with open(out_f, 'w') as fh:
-                fh.writelines(map(StatsProc.merger, *in_fhs))
+                fh.writelines(merger(*in_fhs))
             for fh in in_fhs:
                 fh.close()
             return out_f, files_to_merge
@@ -838,3 +840,5 @@ def main():
 
 if __name__ == '__main__':
     sys.exit(main())
+
+###############################################################################
