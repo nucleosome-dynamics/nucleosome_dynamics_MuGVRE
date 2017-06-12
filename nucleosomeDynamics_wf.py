@@ -52,7 +52,7 @@ class StatsProc:
     def clean_genome_wide(fs):
         for f in fs:
             if f.endswith("_genes_stats.csv"):
-                gw_cleaner(f)
+                StatsProc.gw_cleaner(f)
         return fs
 
     @staticmethod
@@ -114,7 +114,7 @@ class StatsProc:
     @staticmethod
     def proc(stat_files, in_files, out_dir, col_order):
         merged_stats = StatsProc.merge_stats(stat_files, col_order)
-        clean_genome_wide(merged_stats)
+        StatsProc.clean_genome_wide(merged_stats)
         stats_meta = StatsProc.compress_stats(merged_stats, in_files, out_dir)
         return stats_meta
 
