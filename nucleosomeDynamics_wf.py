@@ -38,12 +38,12 @@ class StatsProc:
         return '\n'.join(map(f, ids, *content))
 
     @staticmethod
-    def gw_cleaner(fname):
+    def gw_cleaner(fname, discard=('0', 'NA')):
         tmp_file = fname + "_tmp"
         with open(fname) as in_fh, open(tmp_file, 'w') as out_fh:
             for line in in_fh:
                 _, *xs = line.strip().split(',')
-                if not all(x in ('0', 'NA') for x in xs):
+                if not all(x in discard for x in xs):
                     out_fh.write(line)
         os.rename(tmp_file, fname)
         return fname
@@ -201,7 +201,7 @@ class Bin:
             m["source_id"] = source_id
             try:
                 m["meta_data"]["assembly"] = assembly
-            except:
+            except KeyError:
                 m["meta_data"] = {"assembly": assembly}
         return new_meta
 
