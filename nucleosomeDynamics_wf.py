@@ -47,7 +47,7 @@ class StatsProc:
         if files_to_merge:
             in_fhs = map(open, files_to_merge)
             with open(out_f, 'w') as fh:
-                fh.writelines(merger(*in_fhs))
+                fh.writelines(StatsProc.merger(*in_fhs))
             for fh in in_fhs:
                 fh.close()
             return out_f, files_to_merge
