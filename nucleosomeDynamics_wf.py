@@ -34,8 +34,16 @@ class StatsProc:
         ids = [x[0] for x in splitted[0]]
         content = [[x[1: ] for x in xs] for xs in splitted]
         def f(id, *xs):
-            return ','.join(chain([id], chain.from_iterable(xs)))
-        return '\n'.join(map(f, ids, *content))
+            content_vals = list(chain.from_iterable(xs))
+            if (all([x in ('0', 'NA') for x in content_vals])):
+                return None
+            else:
+                return ','.join(chain([id], content_vals))
+        res = map(f, ids, *content)
+        fres = (x for x in res if x is not None)
+        return '\n'.join(fres)
+
+
 
     @staticmethod
     def merge_tabs(x, gene_stats, col_order, w_dir):
