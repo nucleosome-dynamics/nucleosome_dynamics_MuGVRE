@@ -181,7 +181,11 @@ makeShifts <- function (dyn, middle, par.ypc) {
 
 simplifier <- function (df, i=2)
     # remove some points from the plot for efficiency
-    df[1:nrow(df) %% i == 1, ]
+    if (nrow(df)) {
+        df[1:nrow(df) %% i == 1, ]
+    } else {
+        df
+    }
 
 makeCovs <- function (dyn) {
     cols <- list(setA=dyn[[1]]$originals,
@@ -190,10 +194,12 @@ makeCovs <- function (dyn) {
                  ins=dyn[[2]]$indels)
     covs <- lapply(cols, function(x) as.vector(coverage(x)))
     valsdf <- as.data.frame(makeEqual(covs))
-    valsdf$x <- 1:nrow(valsdf)
-    covs <- lapply(cols, function(x) as.vector(coverage(x)))
-    valsdf <- as.data.frame(makeEqual(covs))
-    valsdf$x <- 1:nrow(valsdf)
+    n <- nrow(valsdf)
+    if (n) {
+        valdf$x <- 1:n
+    } else {
+        valsdf$x <- integer()
+    }
     melt(simplifier(valsdf), id.vars="x")
 }
 
