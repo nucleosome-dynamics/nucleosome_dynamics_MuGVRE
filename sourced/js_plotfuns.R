@@ -115,7 +115,7 @@ buildGgplot <- function (mdf, shdf, plot.start, plot.end) {
 }
 
 fixShifts <- function (xs, name) {
-    parseShifttxt <- function (txt)
+    parseShiftTxt <- function (txt)
         lapply(strsplit(txt, split="<br>"),
                function (x) {
                    pairs <- strsplit(x, split=": ")
@@ -125,7 +125,7 @@ fixShifts <- function (xs, name) {
                    vals
                })
 
-    txt.ls <- parseshiftTxt(xs[["text"]])
+    txt.ls <- parseShiftTxt(xs[["text"]])
     n <- length(xs[["text"]])
     for (i in seq(from=1, to=n, by=9)) {
         x0 <- txt.ls[[i]]["x0"]
@@ -164,17 +164,17 @@ ggplot2widget <- function (p) {
 }
 
 makeShifts <- function (dyn, middle, par.ypc) {
-    lsdf <- buildarrowdf(dyn[[1]]$left.shifts,
+    lsdf <- buildArrowDf(dyn[[1]]$left.shifts,
                          dyn[[2]]$left.shifts,
                          middle,
                          par.ypc,
                          "left")
-    rsdf <- buildarrowdf(dyn[[1]]$right.shifts,
+    rsdf <- buildArrowDf(dyn[[1]]$right.shifts,
                          dyn[[2]]$right.shifts,
                          middle,
                          par.ypc,
                          "right")
-    lsdf <- addarrows(lsdf, par.ypc, forward=FALSE)
+    lsdf <- addArrows(lsdf, par.ypc, forward=FALSE)
     rsdf <- addArrows(rsdf, par.ypc, forward=TRUE)
     rbind(lsdf, rsdf)
 }
@@ -196,7 +196,7 @@ makeCovs <- function (dyn) {
     valsdf <- as.data.frame(makeEqual(covs))
     n <- nrow(valsdf)
     if (n) {
-        valdf$x <- 1:n
+        valsdf$x <- 1:n
     } else {
         valsdf$x <- integer()
     }
