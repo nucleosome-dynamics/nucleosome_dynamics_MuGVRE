@@ -47,3 +47,10 @@ pw <- buildPlot(subdyn, args$start, args$end)
 saveWidget(pw, file=args$output)
 
 ###############################################################################
+
+SOURCE.DIR <- "/home/rilla/nucleServ/sourced"
+
+args$input <- "/orozco/services/Rdata/MuG/MuG_userdata//MuGUSER58e77fd7394c5/plotlytest/ND_G2_chrII_M_chrII.RData"
+args$start <- 3000
+args$end <- 5000
+args$chr <- "chrII"
