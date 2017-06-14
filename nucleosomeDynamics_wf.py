@@ -1,19 +1,18 @@
 #!/usr/bin/python3
 
-from argparse import ArgumentParser
-from copy import deepcopy
-from functools import partial
-from itertools import chain
 import json
 import os
-from subprocess import call
 import sys
 import tarfile
 
+from argparse   import ArgumentParser
+from copy       import deepcopy
+from functools  import partial
+from itertools  import chain
+from subprocess import call
+
 ###############################################################################
 
-#RPATH = "/opt/R-3.1.2/bin/Rscript"
-#BIN_BASE = "/home/rilla/nucleServ"
 RPATH = "/usr/bin/Rscript"
 BIN_BASE = "/orozco/services/Rdata/Web/apps/nucleServ_MuG"
 
