@@ -75,16 +75,16 @@ addArrows <- function (sdf, par.ypc, forward=TRUE) {
             }
         )
     } else {
-        data.frame(x0=0,
-                   y0=0,
-                   x1=0,
-                   y1=0,
-                   variable=factor(levels(sdf$variable)))
+        data.frame(x0=integer(),
+                   y0=integer(),
+                   x1=integer(),
+                   y1=integer(),
+                   variable=factor(levels=levels(sdf$variable)))
     }
 }
 
-colors <- c("setA"  = "dimgray",
-            "setB"  = "gray",
+colors <- c("seta"  = "dimgray",
+            "setb"  = "gray",
             "ins"   = "green",
             "dels"  = "red",
             "left"  = "darkred",
@@ -115,7 +115,7 @@ buildGgplot <- function (mdf, shdf, plot.start, plot.end) {
 }
 
 fixShifts <- function (xs, name) {
-    parseShiftTxt <- function (txt)
+    parseShifttxt <- function (txt)
         lapply(strsplit(txt, split="<br>"),
                function (x) {
                    pairs <- strsplit(x, split=": ")
@@ -125,7 +125,7 @@ fixShifts <- function (xs, name) {
                    vals
                })
 
-    txt.ls <- parseShiftTxt(xs[["text"]])
+    txt.ls <- parseshiftTxt(xs[["text"]])
     n <- length(xs[["text"]])
     for (i in seq(from=1, to=n, by=9)) {
         x0 <- txt.ls[[i]]["x0"]
@@ -152,7 +152,7 @@ ggplot2widget <- function (p) {
     pdf(NULL)
     pl <- plotly_build(p)
 
-    names <- c("Coverage 1", "Coverage 2", "Deletions", "Insertions")
+    names <- c("coverage 1", "Coverage 2", "Deletions", "Insertions")
     for (i in seq_along(names)) {
         pl[["data"]][[i]] <- fixNonShifts(pl[["data"]][[i]], names[i])
     }
@@ -164,17 +164,17 @@ ggplot2widget <- function (p) {
 }
 
 makeShifts <- function (dyn, middle, par.ypc) {
-    lsdf <- buildArrowDf(dyn[[1]]$left.shifts,
+    lsdf <- buildarrowdf(dyn[[1]]$left.shifts,
                          dyn[[2]]$left.shifts,
                          middle,
                          par.ypc,
                          "left")
-    rsdf <- buildArrowDf(dyn[[1]]$right.shifts,
+    rsdf <- buildarrowdf(dyn[[1]]$right.shifts,
                          dyn[[2]]$right.shifts,
                          middle,
                          par.ypc,
                          "right")
-    lsdf <- addArrows(lsdf, par.ypc, forward=FALSE)
+    lsdf <- addarrows(lsdf, par.ypc, forward=FALSE)
     rsdf <- addArrows(rsdf, par.ypc, forward=TRUE)
     rbind(lsdf, rsdf)
 }
@@ -205,7 +205,11 @@ makeCovs <- function (dyn) {
 
 buildPlot <- function (dyn, start, end) {
     mdf <- makeCovs(dyn)
-    maxy <- max(mdf$value)
+    if (nrow(mdf)) {
+        maxy <- max(mdf$value)
+    } else {
+        maxy <- 0
+    }
     middle <- maxy / 2
     par.ypc <- maxy / 100
     shdf <- makeShifts(subdyn, middle, par.ypc)
