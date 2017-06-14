@@ -498,7 +498,7 @@ class nuc_dyn(SelectTwo, Bin):
                              [in_dir1, in_dir2],
                              ["RData", "RData"])
         outputGff = PathHelpers.build_path(nd_base, out_dir, "gff", "ND")
-        plotRData = PathHelpers.build_path(nd_base, out_dir, "RData", "ND")
+        plotRData = PathHelpers.build_path(nd_base, out_dir, "RData", "ND", "plot")
         outputBigWig = PathHelpers.build_path(nd_base, out_dir, "bw", "ND")
 
         assembly = f1["meta_data"]["assembly"]
