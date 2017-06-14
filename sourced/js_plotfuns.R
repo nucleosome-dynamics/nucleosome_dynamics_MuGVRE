@@ -75,16 +75,16 @@ addArrows <- function (sdf, par.ypc, forward=TRUE) {
             }
         )
     } else {
-        data.frame(x0=0,
-                   y0=0,
-                   x1=0,
-                   y1=0,
-                   variable=factor(levels(sdf$variable)))
+        data.frame(x0=integer(),
+                   y0=integer(),
+                   x1=integer(),
+                   y1=integer(),
+                   variable=factor(levels=levels(sdf$variable)))
     }
 }
 
-colors <- c("setA"  = "dimgray",
-            "setB"  = "gray",
+colors <- c("seta"  = "dimgray",
+            "setb"  = "gray",
             "ins"   = "green",
             "dels"  = "red",
             "left"  = "darkred",
@@ -113,43 +113,6 @@ buildGgplot <- function (mdf, shdf, plot.start, plot.end) {
                                     "right"=1)) +
         theme_bw()
 }
-
-#buildGgplot <- function (mdf, shdf, plot.start, plot.end) {
-#    ggplot(mdf, aes(x=x, y=value)) +
-#        xlim(plot.start, plot.end) +
-#        xlab("") +
-#        ylab("") +
-#        geom_area(aes(fill=variable,
-#                      color=variable,
-#                      linetype=variable,
-#                      alpha=variable),
-#                  position="identity") +
-#        geom_segment(data=shdf,
-#                     mapping=aes(x=x0, y=y0, xend=x1, yend=y1,
-#                                 color=variable)) +
-#        scale_color_manual(name="",
-#                           values=c("setA"="gray",
-#                                    "setB"="black",
-#                                    "ins"="#00FF0090",
-#                                    "dels"="#FF000090",
-#                                    "left"="darkred",
-#                                    "right"="darkblue")) +
-#        scale_fill_manual(name="",
-#                          values=c("setA"="#909090",
-#                                   "setB"="#E0E0E000",
-#                                   "ins"="#00FF0090",
-#                                   "dels"="#FF000095",
-#                                   "left"="darkred",
-#                                   "right"="darkblue")) +
-#        scale_linetype_manual(name="",
-#                              values=c("setA"="solid",
-#                                       "setB"="dashed",
-#                                       "ins"="solid",
-#                                       "dels"="solid",
-#                                       "left"="solid",
-#                                       "right"="solid")) +
-#        theme_bw()
-#}
 
 fixShifts <- function (xs, name) {
     parseShiftTxt <- function (txt)
@@ -189,7 +152,7 @@ ggplot2widget <- function (p) {
     pdf(NULL)
     pl <- plotly_build(p)
 
-    names <- c("Coverage 1", "Coverage 2", "Deletions", "Insertions")
+    names <- c("coverage 1", "Coverage 2", "Deletions", "Insertions")
     for (i in seq_along(names)) {
         pl[["data"]][[i]] <- fixNonShifts(pl[["data"]][[i]], names[i])
     }
@@ -218,7 +181,11 @@ makeShifts <- function (dyn, middle, par.ypc) {
 
 simplifier <- function (df, i=2)
     # remove some points from the plot for efficiency
-    df[1:nrow(df) %% i == 1, ]
+    if (nrow(df)) {
+        df[1:nrow(df) %% i == 1, ]
+    } else {
+        df
+    }
 
 makeCovs <- function (dyn) {
     cols <- list(setA=dyn[[1]]$originals,
@@ -227,16 +194,22 @@ makeCovs <- function (dyn) {
                  ins=dyn[[2]]$indels)
     covs <- lapply(cols, function(x) as.vector(coverage(x)))
     valsdf <- as.data.frame(makeEqual(covs))
-    valsdf$x <- 1:nrow(valsdf)
-    covs <- lapply(cols, function(x) as.vector(coverage(x)))
-    valsdf <- as.data.frame(makeEqual(covs))
-    valsdf$x <- 1:nrow(valsdf)
+    n <- nrow(valsdf)
+    if (n) {
+        valsdf$x <- 1:n
+    } else {
+        valsdf$x <- integer()
+    }
     melt(simplifier(valsdf), id.vars="x")
 }
 
 buildPlot <- function (dyn, start, end) {
     mdf <- makeCovs(dyn)
-    maxy <- max(mdf$value)
+    if (nrow(mdf)) {
+        maxy <- max(mdf$value)
+    } else {
+        maxy <- 0
+    }
     middle <- maxy / 2
     par.ypc <- maxy / 100
     shdf <- makeShifts(subdyn, middle, par.ypc)
