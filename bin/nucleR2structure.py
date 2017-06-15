@@ -197,12 +197,12 @@ def unoverlapper(nucs):
     nucleosomes with no overlaps. Discard overlapping nucleosomes with lowest
     scores
     """
-    def do(x):
+    def go(x):
         if len(x) == 1:
             return x
         else:
-            return mapcat(do, nuc_grouper(rm_least(x)))
-    return mapcat(do, nuc_grouper(nucs))
+            return mapcat(go, nuc_grouper(rm_least(x)))
+    return mapcat(go, nuc_grouper(nucs))
 
 
 # other helper functions ######################################################
