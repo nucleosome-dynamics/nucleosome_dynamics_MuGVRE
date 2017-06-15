@@ -195,12 +195,18 @@ def unoverlapper(nucs):
     """
     Given a list of potentially overlapped nucleosomes, return a new list of
     nucleosomes with no overlaps. Discard overlapping nucleosomes with lowest
-    scores
+    scores.
+    Group the list of nucleosomes into sublists of overlapping nucleosomes
+    (a list with only one nucleosome, means it's not overlapped). For each
+    subgroup, check if there's an overlap (more than one nucleosome in that
+    sublist). If there's an overlap, remove the nucleosome with the lowest
+    score, and recursively try again until no overlaps are found. In the end,
+    concantenate all the non-overlapped nucleosomes into one single list.
     """
     def go(x):
-        if len(x) == 1:
+        if len(x) == 1:  # no overlaps
             return x
-        else:
+        else:  # some overlaps; remove one, group the results and try again
             return mapcat(go, nuc_grouper(rm_least(x)))
     return mapcat(go, nuc_grouper(nucs))
 
