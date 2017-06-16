@@ -83,8 +83,8 @@ addArrows <- function (sdf, par.ypc, forward=TRUE) {
     }
 }
 
-colors <- c("seta"  = "dimgray",
-            "setb"  = "gray",
+colors <- c("setA"  = "dimgray",
+            "setB"  = "gray",
             "ins"   = "green",
             "dels"  = "red",
             "left"  = "darkred",
