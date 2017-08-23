@@ -116,13 +116,17 @@ if (params$threshold) {
 
 ## Pipeline Itself ############################################################
 
+message("loading data")
 reads <- get(load(params$input))
+reads <- RangedData(reads$ranges,
+                    space  = droplevels(reads$space),
+                    strand = reads$strand)
 
 message("filtering duplicated reads")
 f.reads <- filterDuplReads(reads,
-                           fdrOverAmp=params$fdrOverAmp,
-                           components=params$components,
-                           mc.cores=params$mc.cores)
+                           fdrOverAmp = params$fdrOverAmp,
+                           components = params$components,
+                           mc.cores   = params$mc.cores)
 
 if (is.null(params$fragmentLen)) {
     if (params$type == "single") {
@@ -134,7 +138,7 @@ if (is.null(params$fragmentLen)) {
 }
 
 if (!is.null(params$chr)) {
-    f.reads <- reads[space(reads) == params$chr, ]
+    f.reads <- f.reads[space(f.reads) == params$chr, ]
     if (!is.null(params$start) && !is.null(params$end)) {
         sel <- isIn(f.reads,
                     IRanges(start=params$start,
