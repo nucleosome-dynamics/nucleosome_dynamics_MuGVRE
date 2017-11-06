@@ -15,6 +15,7 @@ from subprocess import call
 
 RPATH = "/usr/bin/Rscript"
 BIN_BASE = "/orozco/services/Rdata/Web/apps/nucleServ_MuG"
+PUBLIC_DIR = "/orozco/services/MuG/MuG_public/"
 
 ###############################################################################
 
@@ -105,10 +106,10 @@ class StatsProc:
                 except FileNotFoundError:
                     pass
 
-        source_id = list(set(x["value"] for x in in_files))
+        sourced = list(set(x["value"] for x in in_files))
         return [{"name":      "statistics",
                  "file_path": output,
-                 "source_id": source_id}]
+                 "sources":   sources}]
 
     @staticmethod
     def proc(stat_files, in_files, out_dir, col_order):
@@ -193,11 +194,11 @@ class Bin:
         x, *_ = xs
         assembly = x["meta_data"]["assembly"]
         taxon_id = x["taxon_id"]
-        source_id = [x["_id"] for x in xs]
+        sources = [x["_id"] for x in xs]
         new_meta = deepcopy(meta)
         for m in new_meta:
             m["taxon_id"] = taxon_id
-            m["source_id"] = source_id
+            m["sources"] = sources
             try:
                 m["meta_data"]["assembly"] = assembly
             except KeyError:
@@ -687,15 +688,7 @@ def get_args():
                         required=True,
                         metavar="CONFIG_JSON",
                         help="JSON file containing workflow parameters")
-    parser.add_argument("--root_dir",
-                        required=True,
-                        metavar="ABS_PATH",
-                        help="Absolute path of the user data directory.")
-    parser.add_argument("--public_dir",
-                        required=False,
-                        metavar="PUBLIC_PATH",
-                        help="Absolute path of the MuG public directory (with reference genome data, etc).")
-    parser.add_argument("--metadata",
+    parser.add_argument("--in_metadata",
                         required=True,
                         metavar="METADATA_JSON",
                         help="JSON file containing MuG metadata files")
@@ -733,17 +726,17 @@ def get_args_dict(xs):
     return {x["name"]: x["value"] for x in xs}
 
 
-def add_root(meta, root_dir):
-    """
-    Add the root directory to the path of each input file
-    """
-    d = dict(meta)
-    for v in d.values():
-        try:
-            v["file_path"] = os.path.join(root_dir, v["file_path"])
-        except KeyError:
-            pass
-    return d
+# def add_root(meta, root_dir):
+    # """
+    # Add the root directory to the path of each input file
+    # """
+    # d = dict(meta)
+    # for v in d.values():
+        # try:
+            # v["file_path"] = os.path.join(root_dir, v["file_path"])
+        # except KeyError:
+            # pass
+    # return d
 
 ###############################################################################
 
@@ -833,20 +826,21 @@ def main():
     # load and parse inputs
     with open(args.config) as fh:
         config = json.load(fh)
-    with open(args.metadata) as fh:
-        meta = json.load(fh)
+    with open(args.in_metadata) as fh:
+        in_meta = json.load(fh)
 
-    root_dir = args.root_dir
-    public_dir = args.public_dir
     out_metadata = args.out_metadata
 
     in_files = config["input_files"]
     arguments = get_args_dict(config["arguments"])
-    metadata = add_root(preproc_meta(meta), root_dir)
-    out_dir = os.path.join(root_dir, arguments["project"])
 
-    out_meta = my_run.run(in_files, metadata, arguments, public_dir, out_dir)
-    cleanup(in_files, metadata)
+    metadata = preproc_meta(in_meta)
+    out_dir = arguments["project"]
+
+    out_meta = my_run.run(in_files, metadata, arguments, PUBLIC_DIR, out_dir)
+    #cleanup(in_files, metadata)
+
+    exit()
 
     json_out = json.dumps(out_meta, indent=4, separators=(',', ': '))
     with open(out_metadata, 'w') as fh:
