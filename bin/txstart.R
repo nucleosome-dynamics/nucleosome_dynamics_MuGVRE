@@ -11,9 +11,6 @@
 
 ## Imports ####################################################################
 
-lib.path <- "/orozco/services/Rdata/Web/apps/libs"
-.libPaths(lib.path)
-
 library(getopt)
 library(IRanges)
 library(GenomicRanges)

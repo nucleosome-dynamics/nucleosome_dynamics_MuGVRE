@@ -7,9 +7,6 @@
 
 ## Imports ####################################################################
 
-lib.path <- "/orozco/services/Rdata/Web/apps/libs"
-.libPaths(lib.path)
-
 library(IRanges)
 library(parallel)
 library(getopt)
