@@ -1,0 +1,140 @@
+[
+    {
+        "_id": "MuGUSER59f30c53b3cf6_5a002e5e1e9611.01493352",
+        "file_path": "/orozco/services/MuG/MuG_userdata/MuGUSER59f30c53b3cf6/uploads/met_rep1.bam",
+        "file_type": "BAM",
+        "data_type": "data_mnase_seq",
+        "compressed": 0,
+        "user_id": "MuGUSER59f30c53b3cf6",
+        "creation_time": {
+            "sec": 1509961309,
+            "usec": 0
+        },
+        "taxon_id": "",
+        "meta_data": {
+            "size": 1843396175,
+            "parentDir": "/orozco/services/MuG/MuG_userdata/MuGUSER59f30c53b3cf6/MuGUSER59f30c53b3cf6/uploads",
+            "expiration": {
+                "sec": 1513417309,
+                "usec": 0
+            },
+            "validated": true,
+            "associated_files": [
+                "MuGUSER59f30c53b3cf6_59f8b714a3d707.10876876"
+            ],
+            "compressed": "null",
+            "taxon_id": "",
+            "description": "",
+            "tool": "BAMval",
+            "visible": true,
+            "paired": "paired",
+            "sorted": "unsorted",
+            "assembly": "R64-1-1"
+        },
+        "sources": [
+            "/orozco/services/MuG/MuG_userdata/MuGUSER59f30c53b3cf6/MuGUSER59f30c53b3cf6/uploads/met_rep1.bam"
+        ]
+    },
+    {
+        "_id": "MuGUSER59f30c53b3cf6_59f8b714a3d707.10876876",
+        "file_path": "/orozco/services/MuG/MuG_userdata/MuGUSER59f30c53b3cf6/uploads/met_rep1.bam.bai",
+        "file_type": "BAI",
+        "data_type": "data_mnase_seq",
+        "compressed": 0,
+        "user_id": "MuGUSER59f30c53b3cf6",
+        "creation_time": {
+            "sec": 1509471904,
+            "usec": 0
+        },
+        "taxon_id": "",
+        "meta_data": {
+            "size": 36872,
+            "parentDir": "/orozco/services/MuG/MuG_userdata/MuGUSER59f30c53b3cf6/MuGUSER59f30c53b3cf6/uploads",
+            "expiration": {
+                "sec": 1512927904,
+                "usec": 0
+            },
+            "compressed": "null",
+            "taxon_id": "",
+            "description": "",
+            "tool": "BAMval",
+            "visible": false,
+            "name": "bam_index",
+            "associated_id": "MuGUSER59f30c53b3cf6_5a002e5e1e9611.01493352",
+            "validated": true,
+            "assembly": "R64-1-1"
+        },
+        "sources": [
+            "/orozco/services/MuG/MuG_userdata/MuGUSER59f30c53b3cf6/MuGUSER59f30c53b3cf6/uploads/met_rep1.bam"
+        ]
+    },
+    {
+        "_id": "MuGUSER59f30c53b3cf6_5a002e3c010ed4.83727950",
+        "file_path": "/orozco/services/MuG/MuG_userdata/MuGUSER59f30c53b3cf6/uploads/met_rep2.bam",
+        "file_type": "BAM",
+        "data_type": "data_mnase_seq",
+        "compressed": 0,
+        "user_id": "MuGUSER59f30c53b3cf6",
+        "creation_time": {
+            "sec": 1509961275,
+            "usec": 0
+        },
+        "taxon_id": "4932",
+        "meta_data": {
+            "size": 1458298927,
+            "parentDir": "/orozco/services/MuG/MuG_userdata/MuGUSER59f30c53b3cf6/MuGUSER59f30c53b3cf6/uploads",
+            "expiration": {
+                "sec": 1513417275,
+                "usec": 0
+            },
+            "validated": true,
+            "associated_files": [
+                "MuGUSER59f30c53b3cf6_59f8b2807c9699.79591367"
+            ],
+            "compressed": "null",
+            "taxon_id": "4932",
+            "description": "",
+            "tool": "BAMval",
+            "visible": true,
+            "paired": "single",
+            "sorted": "unsorted",
+            "assembly": "R64-1-1"
+        },
+        "sources": [
+            "/orozco/services/MuG/MuG_userdata/MuGUSER59f30c53b3cf6/MuGUSER59f30c53b3cf6/uploads/met_rep2.bam"
+        ]
+    },
+    {
+        "_id": "MuGUSER59f30c53b3cf6_59f8b2807c9699.79591367",
+        "file_path": "/orozco/services/MuG/MuG_userdata/MuGUSER59f30c53b3cf6/uploads/met_rep2.bam.bai",
+        "file_type": "BAI",
+        "data_type": "data_mnase_seq",
+        "compressed": 0,
+        "user_id": "MuGUSER59f30c53b3cf6",
+        "creation_time": {
+            "sec": 1509470103,
+            "usec": 0
+        },
+        "taxon_id": "4932",
+        "meta_data": {
+            "size": 36848,
+            "parentDir": "/orozco/services/MuG/MuG_userdata/MuGUSER59f30c53b3cf6/MuGUSER59f30c53b3cf6/uploads",
+            "expiration": {
+                "sec": 1512926103,
+                "usec": 0
+            },
+            "compressed": "null",
+            "taxon_id": "4932",
+            "description": "",
+            "tool": "BAMval",
+            "visible": false,
+            "name": "bam_index",
+            "associated_id": "MuGUSER59f30c53b3cf6_5a002e3c010ed4.83727950",
+            "validated": true,
+            "assembly": "R64-1-1"
+        },
+        "sources": [
+            "/orozco/services/MuG/MuG_userdata/MuGUSER59f30c53b3cf6/MuGUSER59f30c53b3cf6/uploads/met_rep2.bam"
+        ]
+    }
+]
