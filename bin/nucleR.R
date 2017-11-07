@@ -115,9 +115,7 @@ if (params$threshold) {
 
 message("loading data")
 reads <- get(load(params$input))
-reads <- RangedData(reads$ranges,
-                    space  = droplevels(reads$space),
-                    strand = reads$strand)
+reads <- RangedData(reads$ranges, space  = droplevels(reads$space))
 
 message("filtering duplicated reads")
 f.reads <- filterDuplReads(reads,
