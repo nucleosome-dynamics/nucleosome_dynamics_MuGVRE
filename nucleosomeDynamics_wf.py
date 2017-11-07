@@ -693,9 +693,14 @@ def get_args():
                         metavar="METADATA_JSON",
                         help="JSON file containing MuG metadata files")
     parser.add_argument("--out_metadata",
-                        required=False,
+                        required=True,
                         metavar="RESULTS_JSON",
                         help="JSON file containing results metadata")
+    parser.add_argument("--log_file",
+                        required=False,
+                        metavar="LOG_FILE",
+                        help="Log file")
+
 
     return parser.parse_args()
 
