@@ -843,9 +843,7 @@ def main():
     out_dir = arguments["project"]
 
     out_meta = my_run.run(in_files, metadata, arguments, PUBLIC_DIR, out_dir)
-    #cleanup(in_files, metadata)
-
-    exit()
+    cleanup(in_files, metadata)
 
     json_out = json.dumps(out_meta, indent=4, separators=(',', ': '))
     with open(out_metadata, 'w') as fh:
