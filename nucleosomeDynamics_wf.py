@@ -106,7 +106,7 @@ class StatsProc:
                 except FileNotFoundError:
                     pass
 
-        sourced = list(set(x["value"] for x in in_files))
+        sources = list(set(x["value"] for x in in_files))
         return [{"name":      "statistics",
                  "file_path": output,
                  "sources":   sources}]
