@@ -14,7 +14,7 @@ from subprocess import call
 ###############################################################################
 
 RPATH = "/usr/bin/Rscript"
-BIN_BASE = "/orozco/services/Rdata/Web/apps/nucleServ_MuG"
+BIN_BASE = "/home/NucleosomeDynamics"
 PUBLIC_DIR = "/orozco/services/MuG/MuG_public/"
 
 ###############################################################################
