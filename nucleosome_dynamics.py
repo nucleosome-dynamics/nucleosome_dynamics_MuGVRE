@@ -15,7 +15,7 @@ from subprocess import call
 
 RPATH = "/usr/bin/Rscript"
 BIN_BASE = "/home/NucleosomeDynamics"
-PUBLIC_DIR = "/orozco/services/MuG/MuG_public/"
+GENOME_PATH_NAME = "refGenome_chromSizes"
 
 ###############################################################################
 
@@ -127,18 +127,18 @@ class PathHelpers:
     """
 
     @staticmethod
-    def get_chrom_sizes_f(assembly, public_dir):
+    def get_chrom_sizes_f(assembly, genome_dir):
         """
         Return the path of the chromosome sizes directory
         """
-        return "{0}/refGenomes/{1}/{1}.fa.chrom.sizes".format(public_dir, assembly)
+        return "{0}/{1}/{1}.fa.chrom.sizes".format(genome_dir, assembly)
 
     @staticmethod
-    def get_genes_f(assembly, public_dir):
+    def get_genes_f(assembly, genome_dir):
         """
         Return the path of the gff containing the genes
         """
-        return "{0}/refGenomes/{1}/genes.gff".format(public_dir, assembly)
+        return "{0}/{1}/genes.gff".format(genome_dir, assembly)
 
     @staticmethod
     def base_name(x):
@@ -268,7 +268,7 @@ class Calculation():
         print_str = "running {0} ({1})".format(self.exec_name, calc_type)
         print(print_str)
         print(cmd)
-        call(cmd)
+        #call(cmd)
         print("==============================================================")
 
     def get_bin_path(self, calc_type="bin"):
@@ -277,12 +277,12 @@ class Calculation():
         """
         return "{0}/{1}/{2}.R".format(BIN_BASE, calc_type, self.exec_name)
 
-    def run_calc(self, *xs, args, public_dir, out_dir):
+    def run_calc(self, *xs, args, genome_dir, out_dir):
         """
         Run a calculation and return its output metadata
         """
         calc_args, out_meta = self.fun(*xs,
-                                       public_dir=public_dir,
+                                       genome_dir=genome_dir,
                                        out_dir=out_dir)
         out_meta = self.add_meta(out_meta, *xs)
         calc_args = self.update_args(calc_args, args)
@@ -299,13 +299,13 @@ class IterOnInfs(Calculation):
     self.names). Used for calculations that have only one input.
     """
 
-    def run(self, in_files, metadata, args, public_dir, out_dir):
+    def run(self, in_files, metadata, args, genome_dir, out_dir):
         ids = set([x["value"]
                   for x in in_files
-                  if [x["name"] in self.names]])
+                  if x["name"] in self.names])
         res = (self.run_calc(metadata[id],
                              args=args,
-                             public_dir=public_dir,
+                             genome_dir=genome_dir,
                              out_dir=out_dir)
                for id in ids)
         return list(chain.from_iterable(res))
@@ -325,13 +325,13 @@ class SelectTwo(Calculation):
                  if i["name"] == name)
         return a
 
-    def run(self, in_files, metadata, args, public_dir, out_dir):
+    def run(self, in_files, metadata, args, genome_dir, out_dir):
         f1, f2 = (self.get_file(n, metadata, in_files)
                   for n in (self.name1, self.name2))
         res = self.run_calc(f1,
                             f2,
                             args=args,
-                            public_dir=public_dir,
+                            genome_dir=genome_dir,
                             out_dir=out_dir)
         return res
 
@@ -355,7 +355,7 @@ class read_bam(IterOnInfs, PreProc):
     exec_name = "readBAM"
     names = "MNaseSeq", "condition1", "condition2"
 
-    def fun(self, f, public_dir, out_dir):
+    def fun(self, f, genome_dir, out_dir):
         input = f["file_path"]
         type = f["meta_data"]["paired"]
 
@@ -375,7 +375,7 @@ class nucleR(IterOnInfs, Bin):
     exec_name = "nucleR"
     names = "MNaseSeq",
 
-    def fun(self, f, public_dir, out_dir):
+    def fun(self, f, genome_dir, out_dir):
         in_dir, base = PathHelpers.base_name(f["file_path"])
         input = PathHelpers.build_path(base, in_dir,  "RData")
         output = PathHelpers.build_path(base, out_dir, "gff", "NR")
@@ -394,7 +394,7 @@ class nfr(IterOnInfs, Bin):
     exec_name = "NFR"
     names = "MNaseSeq",
 
-    def fun(self, f, public_dir, out_dir):
+    def fun(self, f, genome_dir, out_dir):
         _, base = PathHelpers.base_name(f["file_path"])
         input = PathHelpers.build_path(base, out_dir, "gff", "NR")
         output = PathHelpers.build_path(base, out_dir, "gff", "NFR")
@@ -413,14 +413,14 @@ class tss(IterOnInfs, Bin):
     exec_name = "txstart"
     names = "MNaseSeq",
 
-    def fun(self, f, public_dir, out_dir):
+    def fun(self, f, genome_dir, out_dir):
         in_dir, base = PathHelpers.base_name(f["file_path"])
 
         calls = PathHelpers.build_path(base, out_dir, "gff", "NR")
         output = PathHelpers.build_path(base, out_dir, "gff", "TSS")
 
         assembly = f["meta_data"]["assembly"]
-        genome = PathHelpers.get_genes_f(assembly, public_dir)
+        genome = PathHelpers.get_genes_f(assembly, genome_dir)
 
         args = {"calls": calls, "genome": genome, "output": output}
         meta = [{"name": "TSS_gff", "file_path": output}]
@@ -435,7 +435,7 @@ class period(IterOnInfs, Bin):
     exec_name = "periodicity"
     names = "MNaseSeq",
 
-    def fun(self, f, public_dir, out_dir):
+    def fun(self, f, genome_dir, out_dir):
         in_dir, base = PathHelpers.base_name(f["file_path"])
 
         calls = PathHelpers.build_path(base, out_dir, "gff", "NR")
@@ -445,8 +445,8 @@ class period(IterOnInfs, Bin):
 
         assembly = f["meta_data"]["assembly"]
         type = f["meta_data"]["paired"]
-        genes = PathHelpers.get_genes_f(assembly, public_dir)
-        chrom_sizes = PathHelpers.get_chrom_sizes_f(assembly, public_dir)
+        genes = PathHelpers.get_genes_f(assembly, genome_dir)
+        chrom_sizes = PathHelpers.get_chrom_sizes_f(assembly, genome_dir)
 
         args = {"calls":       calls,
                 "reads":       reads,
@@ -468,7 +468,7 @@ class gauss(IterOnInfs, Bin):
     exec_name = "gausfitting"
     names = "MNaseSeq",
 
-    def fun(self, f, public_dir, out_dir):
+    def fun(self, f, genome_dir, out_dir):
         in_dir, base = PathHelpers.base_name(f["file_path"])
 
         reads = PathHelpers.build_path(base, in_dir, "RData")
@@ -489,7 +489,7 @@ class nuc_dyn(SelectTwo, Bin):
     name1 = "condition1"
     name2 = "condition2"
 
-    def fun(self, f1, f2, public_dir, out_dir):
+    def fun(self, f1, f2, genome_dir, out_dir):
         splt = (PathHelpers.base_name(f["file_path"]) for f in (f1, f2))
         (in_dir1, base1), (in_dir2, base2) = splt
         nd_base = "{0}_{1}".format(base1, base2)
@@ -503,7 +503,7 @@ class nuc_dyn(SelectTwo, Bin):
         outputBigWig = PathHelpers.build_path(nd_base, out_dir, "bw", "ND")
 
         assembly = f1["meta_data"]["assembly"]
-        genome = PathHelpers.get_chrom_sizes_f(assembly, public_dir)
+        genome = PathHelpers.get_chrom_sizes_f(assembly, genome_dir)
 
         args = {"input1":       input1,
                 "input2":       input2,
@@ -525,7 +525,7 @@ class nucleR_stats(IterOnInfs, Stats):
     exec_name = "nucleR"
     names = "MNaseSeq",
 
-    def fun(self, f, public_dir, out_dir):
+    def fun(self, f, genome_dir, out_dir):
         _, base = PathHelpers.base_name(f["file_path"])
 
         input = PathHelpers.build_path(base, out_dir, "gff", "NR")
@@ -533,7 +533,7 @@ class nucleR_stats(IterOnInfs, Stats):
         out_gw = PathHelpers.build_path(base, out_dir, "csv", "NR", "stats")
 
         assembly = f["meta_data"]["assembly"]
-        genome = PathHelpers.get_genes_f(assembly, public_dir)
+        genome = PathHelpers.get_genes_f(assembly, genome_dir)
 
         args = {"input":     input,
                 "out_genes": out_genes,
@@ -551,14 +551,14 @@ class nfr_stats(IterOnInfs, Stats):
     exec_name = "NFR"
     names = "MNaseSeq",
 
-    def fun(self, f, public_dir, out_dir):
+    def fun(self, f, genome_dir, out_dir):
         _, base = PathHelpers.base_name(f["file_path"])
 
         input = PathHelpers.build_path(base, out_dir, "gff", "NFR")
         out_gw = PathHelpers.build_path(base, out_dir, "csv", "NFR", "stats")
 
         assembly = f["meta_data"]["assembly"]
-        genome = PathHelpers.get_genes_f(assembly, public_dir)
+        genome = PathHelpers.get_genes_f(assembly, genome_dir)
 
         args = {"input": input, "out_gw": out_gw, "genome": genome}
         meta = [out_gw]
@@ -573,7 +573,7 @@ class tss_stats(IterOnInfs, Stats):
     exec_name = "txstart"
     names = "MNaseSeq",
 
-    def fun(self, f, public_dir, out_dir):
+    def fun(self, f, genome_dir, out_dir):
         _, base = PathHelpers.base_name(f["file_path"])
 
         input = PathHelpers.build_path(base, out_dir, "gff", "TSS")
@@ -582,7 +582,7 @@ class tss_stats(IterOnInfs, Stats):
         out_gw2 = PathHelpers.build_path(base, out_dir, "png", "TSS", "stats2")
 
         assembly = f["meta_data"]["assembly"]
-        genome = PathHelpers.get_genes_f(assembly, public_dir)
+        genome = PathHelpers.get_genes_f(assembly, genome_dir)
 
         args = {"input":     input,
                 "genome":    genome,
@@ -601,7 +601,7 @@ class period_stats(IterOnInfs, Stats):
     exec_name = "periodicity"
     names = "MNaseSeq",
 
-    def fun(self, f, public_dir, out_dir):
+    def fun(self, f, genome_dir, out_dir):
         _, base = PathHelpers.base_name(f["file_path"])
 
         input = PathHelpers.build_path(base, out_dir, "gff", "P")
@@ -609,7 +609,7 @@ class period_stats(IterOnInfs, Stats):
         out_gw = PathHelpers.build_path(base, out_dir, "csv", "P", "stats")
 
         assembly = f["meta_data"]["assembly"]
-        genome = PathHelpers.get_genes_f(assembly, public_dir)
+        genome = PathHelpers.get_genes_f(assembly, genome_dir)
 
         args = {"input":     input,
                 "genome":    genome,
@@ -627,7 +627,7 @@ class gauss_stats(IterOnInfs, Stats):
     exec_name = "gausfitting"
     names = "MNaseSeq",
 
-    def fun(self, f, public_dir, out_dir):
+    def fun(self, f, genome_dir, out_dir):
         _, base = PathHelpers.base_name(f["file_path"])
 
         input = PathHelpers.build_path(base, out_dir, "gff", "STF")
@@ -636,7 +636,7 @@ class gauss_stats(IterOnInfs, Stats):
         out_gw2 = PathHelpers.build_path(base, out_dir, "png", "STF", "stats2")
 
         assembly = f["meta_data"]["assembly"]
-        genome = PathHelpers.get_genes_f(assembly, public_dir)
+        genome = PathHelpers.get_genes_f(assembly, genome_dir)
 
         args = {"input":     input,
                 "genome":    genome,
@@ -656,7 +656,7 @@ class nuc_dyn_stats(SelectTwo, Stats):
     name1 = "condition1"
     name2 = "condition2"
 
-    def fun(self, f1, f2, public_dir, out_dir):
+    def fun(self, f1, f2, genome_dir, out_dir):
         splt = (PathHelpers.base_name(f["file_path"]) for f in (f1, f2))
         (in_dir1, base1), (in_dir2, base2) = splt
         nd_base = "{0}_{1}".format(base1, base2)
@@ -666,7 +666,7 @@ class nuc_dyn_stats(SelectTwo, Stats):
         out_gw = PathHelpers.build_path(nd_base, out_dir, "png", "ND", "stats")
 
         assembly = f1["meta_data"]["assembly"]
-        genome = PathHelpers.get_genes_f(assembly, public_dir)
+        genome = PathHelpers.get_genes_f(assembly, genome_dir)
 
         args = {"input":     input,
                 "genome":    genome,
@@ -731,17 +731,22 @@ def get_args_dict(xs):
     return {x["name"]: x["value"] for x in xs}
 
 
-# def add_root(meta, root_dir):
-    # """
-    # Add the root directory to the path of each input file
-    # """
-    # d = dict(meta)
-    # for v in d.values():
-        # try:
-            # v["file_path"] = os.path.join(root_dir, v["file_path"])
-        # except KeyError:
-            # pass
-    # return d
+def get_file_paths(names, in_files, metadata):
+    """
+    Given a specific name, a list of input files an a metadata dictionary,
+    return the file paths of the input files with that name
+    """
+    return [metadata[x['value']]['file_path']
+            for x in in_files
+            if x['name'] in names]
+
+
+def get_genome_path(in_files, metadata, name="refGenome_chromSizes"):
+    """
+    Get the path where the genomes are stored
+    """
+    f, *_ = get_file_paths([name], in_files, metadata)
+    return f
 
 ###############################################################################
 
@@ -777,8 +782,8 @@ class Calc:
         if self.name in xs:
             self.mark_as_todo()
 
-    def run(self, in_files, metadata, arguments, public_dir, out_dir):
-        calc_args = in_files, metadata, arguments, public_dir, out_dir
+    def run(self, in_files, metadata, arguments, genome_dir, out_dir):
+        calc_args = in_files, metadata, arguments, genome_dir, out_dir
         if self.todo:
             return self.bin(*calc_args), self.stats(*calc_args)
         else:
@@ -790,9 +795,9 @@ class Run:
         self.calcs = calcs
         self.col_order = col_order
 
-    def run(self, in_files, metadata, arguments, public_dir, out_dir):
+    def run(self, in_files, metadata, arguments, genome_dir, out_dir):
         asked = set(k for k, v in arguments.items() if v)
-        calc_args = in_files, metadata, arguments, public_dir, out_dir
+        calc_args = in_files, metadata, arguments, genome_dir, out_dir
         for x in self.calcs:
             x.check_todo(asked)
         res = [x.run(*calc_args) for x in self.calcs]
@@ -840,9 +845,10 @@ def main():
     arguments = get_args_dict(config["arguments"])
 
     metadata = preproc_meta(in_meta)
+    genome_path = get_genome_path(in_files, metadata, GENOME_PATH_NAME)
     out_dir = arguments["project"]
 
-    out_meta = my_run.run(in_files, metadata, arguments, PUBLIC_DIR, out_dir)
+    out_meta = my_run.run(in_files, metadata, arguments, genome_path, out_dir)
     cleanup(in_files, metadata)
 
     json_out = json.dumps(out_meta, indent=4, separators=(',', ': '))
