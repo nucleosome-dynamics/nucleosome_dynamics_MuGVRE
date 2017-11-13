@@ -36,7 +36,6 @@ spec <- matrix(c("input",     "a", 1, "character",
                  "out_gw2",   "e", 1, "character"),
                byrow=TRUE,
                ncol=4)
-
 params <- getopt(spec)
 
 ## Read genes #################################################################
@@ -82,26 +81,27 @@ colnames(stat_stf)[colnames(stat_stf)=="name"] <- "Name"
 i <- c("Name","Mean_STF","StdDev_STF")
 write.table(stat_stf[, i],
             params$out_genes,
-            row.names=FALSE,
-            quote=FALSE,
-            sep=",")
+            row.names = FALSE,
+            quote     = FALSE,
+            sep       = ",")
 
 ## Statistics genome-wide  ####################################################
 
 #--- Mean and std.dev ---
 message("-- computing statistics genome-wide")
 
-gw_stat <- cbind(c("Mean stiffness", "Std. Dev. stiffness"),
-                 round(c(mean(stf_gr$score, na.rm=T),
-                         sd(stf_gr$score, na.rm=T)),
-                       4))
+rownames <- c("Mean stiffness", "Std. Dev. stiffness")
+a <- mean(stf_gr$score, na.rm=TRUE)
+b <- sd(stf_gr$score, na.rm=TRUE)
+gw_stat <- data.frame(c("Statistic", rownames),
+                      c("Value", round(c(a, b), 4)))
 
 write.table(gw_stat,
             params$out_gw,
-            row.names=FALSE,
-            col.names=FALSE,
-            quote=FALSE,
-            sep=",")
+            row.names = FALSE,
+            col.names = FALSE,
+            quote     = FALSE,
+            sep       = ",")
 
 #--- Plot distribution ---
 
@@ -114,20 +114,22 @@ stf$class[stf$score >= 0.4] <- "0.4 - 1"
 
 df <- as.data.frame(table(stf$class)/sum(table(stf$class)))
 
+colors <- c("0 - 0.1"   = "#98F5FF",
+            "0.1 - 0.2" = "#71DAE2",
+            "0.2 - 0.3" = "#4CC0C4",
+            "0.3 - 0.4" = "#26A5A8",
+            "0.4 - 1"   = "#008B8B")
+
 p <- ggplot(df, aes(Var1, Freq)) +
     geom_bar(stat="identity", aes(fill=Var1)) +
-    scale_fill_manual(values=c("0 - 0.1"   = "#98F5FF",
-                               "0.1 - 0.2" = "#71DAE2",
-                               "0.2 - 0.3" = "#4CC0C4",
-                               "0.3 - 0.4" = "#26A5A8",
-                               "0.4 - 1"   = "#008B8B")) +
+    scale_fill_manual(values=colors) +
     labs(x="Stiffness", y="Proportion of genes") +
     theme_bw() +
-    theme(legend.position="none",
-          text=element_text(size=3))
-ggsave(filename=params$out_gw2,
-       plot=p,
-       width=41,
-       height=41,
-       units="mm",
-       dpi=300)
+    theme(legend.position="none", text=element_text(size=3))
+
+ggsave(filename = params$out_gw2,
+       plot     = p,
+       width    = 41,
+       height   = 41,
+       units    = "mm",
+       dpi      = 300)
