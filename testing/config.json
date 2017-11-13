@@ -2,33 +2,39 @@
     "input_files": [
         {
             "name": "MNaseSeq",
-            "value": "MuGUSER59f30c53b3cf6_5a002e5e1e9611.01493352",
+            "value": "MuGUSER59f30c53b3cf6_5a056c69ac3a06.23446843",
             "required": null,
             "allow_multiple": null
         },
         {
             "name": "MNaseSeq",
-            "value": "MuGUSER59f30c53b3cf6_5a002e3c010ed4.83727950",
+            "value": "MuGUSER59f30c53b3cf6_5a056c68896f43.44693869",
             "required": null,
             "allow_multiple": null
         },
         {
             "name": "condition1",
-            "value": "MuGUSER59f30c53b3cf6_5a002e5e1e9611.01493352",
+            "value": "MuGUSER59f30c53b3cf6_5a056c69ac3a06.23446843",
             "required": true,
             "allow_multiple": false
         },
         {
             "name": "condition2",
-            "value": "MuGUSER59f30c53b3cf6_5a002e3c010ed4.83727950",
+            "value": "MuGUSER59f30c53b3cf6_5a056c68896f43.44693869",
             "required": false,
+            "allow_multiple": false
+        },
+        {
+            "name": "refGenome_chromSizes",
+            "value": "MuGUSER59f30c53b3cf6_5a096979d25e56.64046479_dummy",
+            "required": true,
             "allow_multiple": false
         }
     ],
     "arguments": [
         {
             "name": "project",
-            "value": "/orozco/services/MuG/MuG_userdata/MuGUSER59f30c53b3cf6/run000"
+            "value": "/orozco/services/MuG/MuG_userdata/MuGUSER59f30c53b3cf6/all_test"
         },
         {
             "name": "description",
@@ -99,6 +105,26 @@
             "value": "0.05"
         },
         {
+            "name": "NFR",
+            "value": true
+        },
+        {
+            "name": "NFR:minwidth",
+            "value": 110
+        },
+        {
+            "name": "NFR:threshold",
+            "value": 400
+        },
+        {
+            "name": "periodicity",
+            "value": true
+        },
+        {
+            "name": "periodicity:periodicity",
+            "value": 165
+        },
+        {
             "name": "txstart",
             "value": true
         },
@@ -109,6 +135,14 @@
         {
             "name": "txstart:open_thresh",
             "value": 215
+        },
+        {
+            "name": "gausfitting",
+            "value": true
+        },
+        {
+            "name": "gausfitting:range",
+            "value": "All"
         }
     ],
     "output_files": [
