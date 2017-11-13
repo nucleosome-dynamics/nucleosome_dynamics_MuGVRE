@@ -268,7 +268,7 @@ class Calculation():
         print_str = "running {0} ({1})".format(self.exec_name, calc_type)
         print(print_str)
         print(cmd)
-        #call(cmd)
+        call(cmd)
         print("==============================================================")
 
     def get_bin_path(self, calc_type="bin"):
