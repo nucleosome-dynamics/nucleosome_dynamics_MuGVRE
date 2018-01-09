@@ -27,36 +27,6 @@ loadSingleBam <- function (exp)
                strand = filtered.bam[["strand"]])
 }
 
-#Binary conversion
-int2base <- function (x, b=2)
-{
-    xi <- as.integer(x)
-    if (any(is.na(xi) | ((x-xi) != 0))) {
-        print(list(ERROR="x not integer", x=x))
-    }
-    N <- length(x)
-    xMax <- max(x)
-    ndigits <- floor(logb(xMax, base=2)) + 1
-    Base.b <- array(NA, dim=c(N, ndigits))
-    for (i in 1:ndigits) {
-        Base.b[, ndigits-i+1] <- (x %% b)
-        x <- (x %/% b)
-    }
-    if (N == 1) {
-        Base.b[1, ]
-    } else {
-        Base.b
-    }
-}
-
-bamFlagMatrix <- function (flags)
-{
-    bin <- int2base(flags)
-    n <- ncol(bin)
-    colnames(bin) <- c(rev(names(formals(scanBamFlag))[1:n]))
-    return(bin)
-}
-
 processStrand <- function (strand, bam)
 {
     message(sprintf("processing strand %s", strand))
@@ -110,7 +80,6 @@ loadPairedBam <- function (file)
     message("processing flags")
     ## We will process the flags in R
     ## (an alternative is multiple scanBam calls...)
-    #flags <- bamFlagMatrix(bam$flag)
     bam$flag <- bam$flag %% 256
 
     # Process both strand and return the reads in sorted order
