@@ -64,7 +64,7 @@ reads <- get(load(params[["reads"]]))
 reads <- subsetReads(reads, range$chr, range$start, range$end)
 calls <- subsetCalls(calls, range$chr, range$start, range$end)
 
-message("perfroming the fittings")
+message("performing the fittings")
 gauss.df <- fitIt(calls, reads)
 gauss.df$score <- sd2stiffness(gauss.df$sd, params$t)
 

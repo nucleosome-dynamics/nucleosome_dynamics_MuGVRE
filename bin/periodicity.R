@@ -39,7 +39,7 @@ for (x in sourced) {
 
 defaults <- list(periodicity = 165,
                  mc.cores    = 1,
-                 genome      = "R64-1-1")
+                 genome      = "R64-1-1") #unused
 
 spec <- matrix(c("calls",       "a", 1, "character",
                  "genes",       "b", 1, "character",
@@ -106,13 +106,13 @@ names(genes.nucs)[names(genes.nucs) == "first"] <- "nucleosome_first"
 names(genes.nucs)[names(genes.nucs) == "last"] <- "nucleosome_last"
 genes.nucs$nuc.length <- NULL
 
-message("writting GFF")
+message("writing GFF")
 gff <- df2gff(genes.nucs,
               source="nucleR",
               feature="nucleosome periodicity")
 writeGff(gff, params$gffOutput)
 
-message("writting bigWig output")
+message("writing bigWig output")
 splited <- lapply(covPredAll, splitAtZeros)
 writeBigWig(splited, params$bwOutput, params$chrom_sizes)
 

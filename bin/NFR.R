@@ -97,7 +97,7 @@ message("-- saving gff output")
 # save the output as a gff3 too
 writeGff(df2gff(nfr,
                 source="nucleR",
-                feature="Nucleosme Free Region"),
+                feature="Nucleosome Free Region"),
          params[["output"]])
 
 ###############################################################################
