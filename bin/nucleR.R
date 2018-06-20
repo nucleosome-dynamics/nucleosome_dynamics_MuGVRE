@@ -171,7 +171,7 @@ peaks <- peakDetection(fft,
                        width     = params$width,
                        threshold = threshold,
                        score     = FALSE,
-                       #min.cov   = 0, MODIFIED due to incompatibility TODO check nucleR version
+                       min.cov   = 0, 
                        mc.cores  = params$mc.cores)
 
 message("scoring peaks")
