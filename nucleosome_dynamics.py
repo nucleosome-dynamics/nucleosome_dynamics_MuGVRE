@@ -465,7 +465,7 @@ class gauss(IterOnInfs, Bin):
     """
     Gaussian fittness and stiffness constant estimation
     """
-    exec_name = "gausfitting"
+    exec_name = "stiffness"
     names = "MNaseSeq",
 
     def fun(self, f, genome_dir, out_dir):
@@ -624,7 +624,7 @@ class gauss_stats(IterOnInfs, Stats):
     """
     Gaussian fitting and stiffness constant estimation statistics
     """
-    exec_name = "gausfitting"
+    exec_name = "stiffness"
     names = "MNaseSeq",
 
     def fun(self, f, genome_dir, out_dir):
@@ -815,7 +815,7 @@ nucleR_calc   = Calc("nucleR",      nucleR,  nucleR_stats,  [read_bam_calc])
 nfr_calc      = Calc("NFR",         nfr,     nfr_stats,     [nucleR_calc])
 tss_calc      = Calc("txstart",     tss,     tss_stats,     [nucleR_calc])
 period_calc   = Calc("periodicity", period,  period_stats,  [nucleR_calc])
-gauss_calc    = Calc("gausfitting", gauss,   gauss_stats,   [nucleR_calc])
+gauss_calc    = Calc("stiffness", gauss,   gauss_stats,   [nucleR_calc])
 nuc_dyn_calc  = Calc("nucDyn",      nuc_dyn, nuc_dyn_stats, [read_bam_calc])
 
 my_calcs = (read_bam_calc,
