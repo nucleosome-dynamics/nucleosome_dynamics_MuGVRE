@@ -101,30 +101,30 @@ write.table(stat_nd,
 #--- Mean and std.dev ---
 message("-- computing statistics genome-wide")
 
-nd_tab <- table(nd$class) / sum(table(nd$class))
+nd_tab <- table(nd$class) #/ sum(table(nd$class))
 df <- as.data.frame(nd_tab)
 
 if (nrow(df) > 0) {
-    names(df)[names(df) == "Freq"] <- "Proportion"
+    names(df)[names(df) == "Freq"] <- "Total"
 
     levels(df$Var1)[match("EVICTION", levels(df$Var1))] <- "Eviction"
     levels(df$Var1)[match("INCLUSION", levels(df$Var1))] <- "Inclusion"
     levels(df$Var1)[match("SHIFT -", levels(df$Var1))] <- "Shift -"
     levels(df$Var1)[match("SHIFT +", levels(df$Var1))] <- "Shift +"
 } else {
-    df <- data.frame(Var1=character(), Proportion=numeric())
+    df <- data.frame(Var1=character(), Total=numeric())
 }
 
-p <- ggplot(df, aes(Var1, Proportion)) +
+p <- ggplot(df, aes(Var1, Total)) +
     geom_bar(stat="identity", aes(fill=Var1)) +
-    scale_fill_manual(values=c("Eviction"  = "#04B431",
-                               "Inclusion" = "#FF0000",
-                               "Shift -"   = "#8000FF",
-                               "Shift +"   = "#0040FF")) +
+    scale_fill_manual(values=c("Eviction"  = "#ff0000",
+                               "Inclusion" = "#04b431",
+                               "Shift -"   = "#0040ff",
+                               "Shift +"   = "#8000ff")) +
     theme_bw() +
     theme(legend.position="none",
           axis.title.x=element_blank(),
-          text=element_text(size=3))
+          text=element_text(size=6))
 
 ggsave(filename=params$out_gw,
        plot=p,
