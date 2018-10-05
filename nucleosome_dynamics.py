@@ -9,12 +9,15 @@ from argparse   import ArgumentParser
 from copy       import deepcopy
 from functools  import partial
 from itertools  import chain
-from subprocess import call
+import subprocess
+
+from pprint import pprint
+from mg_tool_api.utils import logger
 
 ###############################################################################
 
 RPATH = "/usr/bin/Rscript"
-BIN_BASE = "/home/NucleosomeDynamics"
+BIN_BASE = "/home/pmes/nucleServ"
 GENOME_PATH_NAME = "refGenome_chromSizes"
 
 ###############################################################################
@@ -265,10 +268,18 @@ class Calculation():
         arg_pairs = (("--" + k, str(v)) for k, v in kwargs.items())
         arg_list = chain.from_iterable(arg_pairs)
         cmd = list(chain([RPATH, bin_path], arg_list))
-        print_str = "running {0} ({1})".format(self.exec_name, calc_type)
-        print(print_str)
-        print(cmd)
-        call(cmd)
+        print('[%s]' % ' '.join(map(str, cmd)))
+        #call(cmd)
+
+        pipes = subprocess.Popen(cmd, stdout=subprocess.PIPE)
+
+        for line in iter(pipes.stdout.readline, b''):
+            print(line.rstrip())
+
+        if pipes.returncode is not None and pipes.returncode != 0:
+            logger.progress(str(self.exec_descrip), status="ERROR")
+        else:
+            logger.progress(str(self.exec_descrip), status="FINISHED??")
         print("==============================================================")
 
     def get_bin_path(self, calc_type="bin"):
@@ -281,9 +292,17 @@ class Calculation():
         """
         Run a calculation and return its output metadata
         """
+        logger.progress(str(self.exec_descrip), status="RUNNING")
+
+        if len(xs) == 1:
+            logger.progress(str(self.exec_descrip)+" : "+os.path.basename(xs[0]['file_path']), task_id=self.run_id, total=self.num_runs)
+        else:
+            logger.progress(str(self.exec_descrip)+" : "+os.path.basename(xs[0]['file_path'])+" & "+os.path.basename(xs[1]['file_path']), task_id=self.run_id, total=self.num_runs)
+            
         calc_args, out_meta = self.fun(*xs,
                                        genome_dir=genome_dir,
                                        out_dir=out_dir)
+
         out_meta = self.add_meta(out_meta, *xs)
         calc_args = self.update_args(calc_args, args)
         self.mkdir(out_dir)
@@ -298,16 +317,27 @@ class IterOnInfs(Calculation):
     long as they have the right name (a name present in the sequence
     self.names). Used for calculations that have only one input.
     """
+    num_runs = 0
+    run_id   = 0	
 
     def run(self, in_files, metadata, args, genome_dir, out_dir):
         ids = set([x["value"]
                   for x in in_files
                   if x["name"] in self.names])
-        res = (self.run_calc(metadata[id],
-                             args=args,
-                             genome_dir=genome_dir,
-                             out_dir=out_dir)
-               for id in ids)
+
+        self.num_runs = len(list(ids))
+             
+        res=[]
+        for id in ids:
+            self.run_id += 1
+            res.append(self.run_calc(metadata[id],args=args,genome_dir=genome_dir,out_dir=out_dir))
+
+        #res = (self.run_calc(metadata[id],
+        #                     args=args,
+        #                     genome_dir=genome_dir,
+        #                     out_dir=out_dir)
+        #       for id in ids)
+
         return list(chain.from_iterable(res))
 
 
@@ -317,6 +347,9 @@ class SelectTwo(Calculation):
     have the right names (corresponding to self.name1 and self.name2). Used for
     calculations that take two inputs (i.e. NucDyn).
     """
+
+    num_runs = 1
+    run_id   = 1	
 
     @staticmethod
     def get_file(name, metadata, in_files):
@@ -328,6 +361,8 @@ class SelectTwo(Calculation):
     def run(self, in_files, metadata, args, genome_dir, out_dir):
         f1, f2 = (self.get_file(n, metadata, in_files)
                   for n in (self.name1, self.name2))
+
+        self.run_id = 1
         res = self.run_calc(f1,
                             f2,
                             args=args,
@@ -353,6 +388,7 @@ class read_bam(IterOnInfs, PreProc):
     Convert the input BAM files into a temporary RData
     """
     exec_name = "readBAM"
+    exec_descrip = "Reading and loading BAM sequences"
     names = "MNaseSeq", "condition1", "condition2"
 
     def fun(self, f, genome_dir, out_dir):
@@ -373,6 +409,7 @@ class nucleR(IterOnInfs, Bin):
     Run nucleR for nucleosome positioning
     """
     exec_name = "nucleR"
+    exec_descrip = "Calling Nucleosome positions"
     names = "MNaseSeq",
 
     def fun(self, f, genome_dir, out_dir):
@@ -392,6 +429,7 @@ class nfr(IterOnInfs, Bin):
     Look for nucleosome-free regions
     """
     exec_name = "NFR"
+    exec_descrip = "Looking for Nucleosome Free Regions"
     names = "MNaseSeq",
 
     def fun(self, f, genome_dir, out_dir):
@@ -411,6 +449,7 @@ class tss(IterOnInfs, Bin):
     surround it
     """
     exec_name = "txstart"
+    exec_descrip = "Classifying Transcription Start Sites"
     names = "MNaseSeq",
 
     def fun(self, f, genome_dir, out_dir):
@@ -433,6 +472,7 @@ class period(IterOnInfs, Bin):
     Calculate the periodicity and phase of the coverages on gene bodies
     """
     exec_name = "periodicity"
+    exec_descrip = "Computing Nucleosome Phasing on gene bodies"
     names = "MNaseSeq",
 
     def fun(self, f, genome_dir, out_dir):
@@ -465,7 +505,8 @@ class gauss(IterOnInfs, Bin):
     """
     Gaussian fittness and stiffness constant estimation
     """
-    exec_name = "stiffness"
+    exec_name = "gausfitting"
+    exec_descrip = "Estimating Nucleosome Stiffness constants"
     names = "MNaseSeq",
 
     def fun(self, f, genome_dir, out_dir):
@@ -486,6 +527,7 @@ class nuc_dyn(SelectTwo, Bin):
     Compare two states with nucleosomeDynamics
     """
     exec_name = "nucDyn"
+    exec_descrip = "Analysing Nucleosome Dynamics"
     name1 = "condition1"
     name2 = "condition2"
 
@@ -498,6 +540,11 @@ class nuc_dyn(SelectTwo, Bin):
                              [base1, base2],
                              [in_dir1, in_dir2],
                              ["RData", "RData"])
+        calls1, calls2 = map(PathHelpers.build_path,
+                             [base1, base2],
+                             [out_dir, out_dir],
+                             ["gff", "gff"],
+                             ["NR", "NR"])
         outputGff = PathHelpers.build_path(nd_base, out_dir, "gff", "ND")
         plotRData = PathHelpers.build_path(nd_base, out_dir, "RData", "ND", "plot")
         outputBigWig = PathHelpers.build_path(nd_base, out_dir, "bw", "ND")
@@ -507,6 +554,8 @@ class nuc_dyn(SelectTwo, Bin):
 
         args = {"input1":       input1,
                 "input2":       input2,
+                "calls1":       calls1,
+                "calls2":       calls2,
                 "outputGff":    outputGff,
                 "outputBigWig": outputBigWig,
                 "plotRData":    plotRData,
@@ -523,6 +572,7 @@ class nucleR_stats(IterOnInfs, Stats):
     nucleR's statistics
     """
     exec_name = "nucleR"
+    exec_descrip = "Preparing statistics for Nucleosome Position Calling"
     names = "MNaseSeq",
 
     def fun(self, f, genome_dir, out_dir):
@@ -549,6 +599,7 @@ class nfr_stats(IterOnInfs, Stats):
     Nucleosome-free regions statistics
     """
     exec_name = "NFR"
+    exec_descrip = "Preparing statistics for Nucleosome Free Regions analysis"
     names = "MNaseSeq",
 
     def fun(self, f, genome_dir, out_dir):
@@ -571,6 +622,7 @@ class tss_stats(IterOnInfs, Stats):
     Transcription start site classification statistics
     """
     exec_name = "txstart"
+    exec_descrip = "Preparing statitics for Transcription Start Sites Classification"
     names = "MNaseSeq",
 
     def fun(self, f, genome_dir, out_dir):
@@ -599,6 +651,7 @@ class period_stats(IterOnInfs, Stats):
     Periodicity statistics
     """
     exec_name = "periodicity"
+    exec_descrip = "Preparing statistics for Nucleosome Gene Phasing Analysis"
     names = "MNaseSeq",
 
     def fun(self, f, genome_dir, out_dir):
@@ -624,7 +677,8 @@ class gauss_stats(IterOnInfs, Stats):
     """
     Gaussian fitting and stiffness constant estimation statistics
     """
-    exec_name = "stiffness"
+    exec_name = "gausfitting"
+    exec_descrip = "Preparing statistics for Nucleosome Stiffness Analysis"
     names = "MNaseSeq",
 
     def fun(self, f, genome_dir, out_dir):
@@ -653,6 +707,7 @@ class nuc_dyn_stats(SelectTwo, Stats):
     NucleosomeDynamics statistics
     """
     exec_name = "nucDyn"
+    exec_descrip = "Preparing statistics for Nucleosome Dynamics Analysis"
     name1 = "condition1"
     name2 = "condition2"
 
@@ -772,6 +827,8 @@ class Calc:
         self.stats = stats
         self.deps = deps
         self.todo = todo
+        self.calc_id = 0
+        self.calc_runs = 0
 
     def mark_as_todo(self):
         self.todo = True
@@ -789,6 +846,20 @@ class Calc:
         else:
             return [], []
 
+    def set_calc_runs(self, in_files, metadata, arguments, genome_dir, out_dir):
+        num_MNaseSeqs = sum(1 for x in in_files if x["name"] == "MNaseSeq")
+        if self.todo:
+            if self.name in ("readBam", "nucleR", "NFR", "txstart", "periodicity", "gausfitting"):
+                self.calc_runs = num_MNaseSeqs
+            else:
+                self.calc_runs = 1
+        else:
+            self.calc_runs = 0
+
+    def set_calc_id(self,calc_id):
+        self.calc_id = calc_id
+
+             
 
 class Run:
     def __init__(self, calcs, col_order):
@@ -800,7 +871,24 @@ class Run:
         calc_args = in_files, metadata, arguments, genome_dir, out_dir
         for x in self.calcs:
             x.check_todo(asked)
-        res = [x.run(*calc_args) for x in self.calcs]
+
+        total_calcs = 0
+        logger.info("The following analyses are going to be executed:")
+        for x in self.calcs:
+            if x.todo:
+                x.set_calc_runs(*calc_args)
+                logger.info(" - {0} (x{1})".format(x.name,x.calc_runs))
+                total_calcs +=1
+        res=[]
+        calc_id = 1
+        for x in self.calcs:
+            if x.todo:
+                x.set_calc_id(calc_id)
+                logger.progress("{0} - starting analysis".format(x.name),task_id=x.calc_id, total=total_calcs)
+                res.append(x.run(*calc_args))
+                calc_id +=1
+        #res = [x.run(*calc_args) for x in self.calcs]
+
         calcs_meta = list(chain.from_iterable(x for x, _ in res))
         stats_files = set(chain.from_iterable(x for _, x in res))
         stats_meta = StatsProc.proc(stats_files, in_files, out_dir, self.col_order)
@@ -815,8 +903,9 @@ nucleR_calc   = Calc("nucleR",      nucleR,  nucleR_stats,  [read_bam_calc])
 nfr_calc      = Calc("NFR",         nfr,     nfr_stats,     [nucleR_calc])
 tss_calc      = Calc("txstart",     tss,     tss_stats,     [nucleR_calc])
 period_calc   = Calc("periodicity", period,  period_stats,  [nucleR_calc])
-gauss_calc    = Calc("stiffness", gauss,   gauss_stats,   [nucleR_calc])
-nuc_dyn_calc  = Calc("nucDyn",      nuc_dyn, nuc_dyn_stats, [read_bam_calc])
+gauss_calc    = Calc("gausfitting", gauss,   gauss_stats,   [nucleR_calc])
+nuc_dyn_calc  = Calc("nucDyn",      nuc_dyn, nuc_dyn_stats, [nucleR_calc])
+#nuc_dyn_calc  = Calc("nucDyn",      nuc_dyn, nuc_dyn_stats, [read_bam_calc])
 
 my_calcs = (read_bam_calc,
             nucleR_calc,
@@ -846,7 +935,8 @@ def main():
 
     metadata = preproc_meta(in_meta)
     genome_path = get_genome_path(in_files, metadata, GENOME_PATH_NAME)
-    out_dir = arguments["project"]
+    out_dir = arguments["execution"]
+    os.chdir(out_dir)
 
     out_meta = my_run.run(in_files, metadata, arguments, genome_path, out_dir)
     cleanup(in_files, metadata)

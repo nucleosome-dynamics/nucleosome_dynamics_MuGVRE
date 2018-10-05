@@ -56,7 +56,11 @@ spec <- matrix(c("input1", "a", 1, "character",
                  "indel_threshold",  "s", 1, "double",
 
                  "roundPow",       "t", 1, "logical",
-                 "same_magnitude", "u", 1, "logical"),
+                 "same_magnitude", "u", 1, "logical",
+
+                 "calls1", "v", 1, "character",
+                 "calls2", "w", 1, "character"),
+
                byrow=TRUE,
                ncol=4)
 args <- getopt(spec)
@@ -102,8 +106,20 @@ if (!is.null(params$plotRData)) {
     save(plotable, file=params$plotRData)
 }
 
+message("loading nucleosome calls")
+nuc <- lapply(params[c("calls1", "calls2")], function(x){
+              tmp <- readGff(x)
+              GRanges(tmp$seqname, IRanges(start=tmp$start, end=tmp$end))
+             })
+
+
 message("finding hotspots")
-hs <- findHotspots(dyn=dyn, mc.cores=params$cores)
+hs <- findHotspots(dyn=dyn, nuc=nuc, mc.cores=params$cores ,
+                   indel.threshold=params$indel_threshold,
+                   shift.threshold=params$shift_threshold,
+                   indel.nreads=params$indel_min_nreads,
+                   shift.nreads=params$shift_min_nreads)
+
 
 ## Calculate vector of -log10(p-value)s  ######################################
 
@@ -114,21 +130,6 @@ chrs <- intersect(names(cov1), names(cov2))
 pvals <- lapply(chrs, function (x) -log10(findPVals(cov1[[x]], cov2[[x]])))
 names(pvals) <- chrs
 
-###############################################################################
-
-indel.threshold <- params$indel_threshold
-indel.min.nreads <- params$indel_min_nreads
-shift.threshold <- params$shift_threshold
-shift.min.nreads <- params$shift_min_nreads
-
-is.indel <- hs$type == "EVICTION" | hs$type == "INCLUSION"
-is.shift <- hs$type == "SHIFT +"  | hs$type == "SHIFT -"
-indel.sel <- hs$score <= indel.threshold & hs$nreads >= indel.min.nreads
-shift.sel <- hs$score <= shift.threshold & hs$nreads >= shift.min.nreads
-i <- is.indel & indel.sel
-j <- is.shift & shift.sel
-
-hs <- hs[i | j, ]
 
 ## Store the Result ###########################################################
 

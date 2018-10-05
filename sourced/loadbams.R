@@ -21,9 +21,9 @@ loadSingleBam <- function (exp)
     filtered.bam <- lapply(bam, `[`, non.na)
 
     # IRanges
-    RangedData(space  = filtered.bam$rname,
-               ranges = IRanges(start = filtered.bam[["pos"]],
-                                width = filtered.bam[["qwidth"]]),
+    GRanges(   filtered.bam$rname,
+               IRanges(start = filtered.bam[["pos"]],
+                       width = filtered.bam[["qwidth"]]),
                strand = filtered.bam[["strand"]])
 }
 
@@ -56,9 +56,9 @@ processStrand <- function (strand, bam)
         stop(sprintf("ERROR: Mate selection for %s strand is invalid",
                      strand))
     } else {
-        RangedData(space  = as.character(reads1$rname),
-                   ranges = IRanges(start = reads1$pos,
-                                    end   = reads2$pos + reads2$qwidth - 1))
+        GRanges( as.character(reads1$rname),
+                 IRanges(start = reads1$pos,
+                         end   = reads2$pos + reads2$qwidth - 1))
     }
 }
 
@@ -83,8 +83,8 @@ loadPairedBam <- function (file)
     bam$flag <- bam$flag %% 256
 
     # Process both strand and return the reads in sorted order
-    sortReads(rbind(processStrand("+", bam),
-                    processStrand("-", bam)))
+    sortReads(c(processStrand("+", bam),
+                processStrand("-", bam)))
 }
 
 loadBAM <- function (f, type="single")

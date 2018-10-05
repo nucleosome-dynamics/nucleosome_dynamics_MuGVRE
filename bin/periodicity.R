@@ -68,7 +68,7 @@ genes <- getGenes(params$genes)
 message("reading calls")
 calls.df <- readGff(params$calls)
 calls.rd <- with(calls.df,
-                 RangedData(space=seqname,
+                 RangedData(space=seqnames,
                             range=IRanges(start=start,
                                           end=end)))
 

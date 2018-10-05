@@ -72,7 +72,7 @@ message("-- loading inputs")
 nucs <- with(readGff(params$calls),
              RangedData(ranges  = IRanges(start = as.numeric(start),
                                           end   = as.numeric(end)),
-                        space   = as.character(seqname),
+                        space   = as.character(seqnames),
                         score   = as.numeric(score),
                         score_w = as.numeric(score_width),
                         score_h = as.numeric(score_height),
