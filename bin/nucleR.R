@@ -8,11 +8,11 @@
 
 ## Imports ####################################################################
 
-library(getopt)
-library(htSeqTools)
-library(nucleR)
-library(IRanges)
-library(GenomicRanges)
+suppressPackageStartupMessages(library(getopt))
+suppressPackageStartupMessages(library(htSeqTools))
+suppressPackageStartupMessages(library(nucleR))
+suppressPackageStartupMessages(library(IRanges))
+suppressPackageStartupMessages(library(GenomicRanges))
 
 where <- function () {
     spath <-parent.frame(2)$ofile
@@ -149,7 +149,8 @@ prep <- processReads(f.reads,
                      trim        = params$trim)
 
 message("calculating coverage")
-cover <- coverage.rpm(prep)
+cover <- coverage.rpm(as(prep, "GRanges"))
+
 
 emptyHandler <- function (f)
     function (x, ...)

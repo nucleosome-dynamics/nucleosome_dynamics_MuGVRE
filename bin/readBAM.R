@@ -1,6 +1,6 @@
 #!/usr/bin/Rscript
 
-library(getopt)
+suppressPackageStartupMessages(library(getopt))
 
 where <- function () {
     spath <-parent.frame(2)$ofile
@@ -28,8 +28,14 @@ spec <- matrix(c("type",   "t", 1, "character",
                ncol=4)
 args <- getopt(spec)
 
-message("-- loading ", args[["input"]])
-reads <- loadBAM(args[["input"]], args[["type"]])
+if(!file.exists(args[["output"]])){
 
-message("-- saving ", args[["output"]])
-save(reads, file=args[["output"]])
+   cat("-- loading ", args[["input"]], "\n")
+   reads <- loadBAM(args[["input"]], args[["type"]])
+   
+   cat("-- saving ", args[["output"]], "\n")
+   save(reads, file=args[["output"]])
+
+} else {
+   cat("-- RData found\n")
+}
