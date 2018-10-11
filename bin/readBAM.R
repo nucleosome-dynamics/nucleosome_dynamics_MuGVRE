@@ -30,12 +30,12 @@ args <- getopt(spec)
 
 if(!file.exists(args[["output"]])){
 
-   cat("-- loading ", args[["input"]], "\n")
+   message("-- loading ", args[["input"]], "\n")
    reads <- loadBAM(args[["input"]], args[["type"]])
    
-   cat("-- saving ", args[["output"]], "\n")
+   message("-- saving ", args[["output"]], "\n")
    save(reads, file=args[["output"]])
 
 } else {
-   cat("-- RData found\n")
+   message("-- RData found\n")
 }
