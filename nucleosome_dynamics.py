@@ -948,12 +948,11 @@ def main():
     logger.info("Starting Nucleosome Dynamics pipeline")
     out_meta = my_run.run(in_files, metadata, arguments, genome_path, out_dir)
 
-    logger.info("Cleaning up temporaly files")
-    cleanup(in_files, metadata)
+    #logger.info("Cleaning temporaly RData files")
+    #cleanup(in_files, metadata)
 
     logger.info("Writting down output files metadata into {0}".format(out_metadata))
     json_out = json.dumps(out_meta, indent=4, separators=(',', ': '))
-    print(json_out)
 
     with open(out_metadata, 'w') as fh:
         fh.write(json_out)
