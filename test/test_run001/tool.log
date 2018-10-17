@@ -1,0 +1,357 @@
+2018-10-16 18:43:37 | INFO: Starting Nucleosome Dynamics pipeline
+2018-10-16 18:43:37 | INFO: The following analyses are going to be executed:
+2018-10-16 18:43:37 | INFO:  - readBam (x2)
+2018-10-16 18:43:37 | INFO:  - nucleR (x2)
+2018-10-16 18:43:37 | INFO:  - NFR (x2)
+2018-10-16 18:43:37 | INFO:  - txstart (x2)
+2018-10-16 18:43:37 | INFO:  - periodicity (x2)
+2018-10-16 18:43:37 | INFO:  - gausfitting (x2)
+2018-10-16 18:43:37 | INFO:  - nucDyn (x1)
+2018-10-16 18:43:37 | PROGRESS: readBam - starting analysis (1/7)
+2018-10-16 18:43:37 | PROGRESS: Reading and loading BAM sequences - RUNNING
+2018-10-16 18:43:37 | PROGRESS: Reading and loading BAM sequences : cellcycleM_chrII.bam (1/2)
+[/usr/bin/Rscript /home/pmes/nucleServ/bin/readBAM.R --type paired --input /home/pmes/nucleServ/test/data/cellcycleM_chrII.bam --output /home/pmes/nucleServ/test/data/cellcycleM_chrII.RData]
+-- RData found
+
+2018-10-16 18:43:40 | PROGRESS: Reading and loading BAM sequences - FINISHED
+==============================================================
+2018-10-16 18:43:40 | PROGRESS: Reading and loading BAM sequences - RUNNING
+2018-10-16 18:43:40 | PROGRESS: Reading and loading BAM sequences : cellcycleG2_chrII.bam (2/2)
+[/usr/bin/Rscript /home/pmes/nucleServ/bin/readBAM.R --type paired --input /home/pmes/nucleServ/test/data/cellcycleG2_chrII.bam --output /home/pmes/nucleServ/test/data/cellcycleG2_chrII.RData]
+-- RData found
+
+2018-10-16 18:43:43 | PROGRESS: Reading and loading BAM sequences - FINISHED
+==============================================================
+2018-10-16 18:43:43 | PROGRESS: nucleR - starting analysis (2/7)
+2018-10-16 18:43:43 | PROGRESS: Calling Nucleosome positions - RUNNING
+2018-10-16 18:43:43 | PROGRESS: Calling Nucleosome positions : cellcycleM_chrII.bam (1/2)
+[/usr/bin/Rscript /home/pmes/nucleServ/bin/nucleR.R --wthresh 0.6 --dyad_length 50 --type paired --input /home/pmes/nucleServ/test/data/cellcycleM_chrII.RData --thresholdPercentage 35 --hthresh 0.4 --minoverlap 80 --output /home/pmes/nucleServ/test/test_run001/NR_cellcycleM_chrII.gff --pcKeepComp 0.02 --width 147]
+loading data
+filtering duplicated reads
+processing reads
+calculating coverage
+filtering with filterFFT
+detecting peaks
+scoring peaks
+merging peaks
+* Starting space: chrII
+ - Finding overlapped reads
+ - Done (4410 non-overlapped | 954 merged calls)
+saving output as gff
+done
+2018-10-16 18:44:08 | PROGRESS: Calling Nucleosome positions - FINISHED
+==============================================================
+2018-10-16 18:44:08 | PROGRESS: Calling Nucleosome positions - RUNNING
+2018-10-16 18:44:08 | PROGRESS: Calling Nucleosome positions : cellcycleG2_chrII.bam (2/2)
+[/usr/bin/Rscript /home/pmes/nucleServ/bin/nucleR.R --wthresh 0.6 --dyad_length 50 --type paired --input /home/pmes/nucleServ/test/data/cellcycleG2_chrII.RData --thresholdPercentage 35 --hthresh 0.4 --minoverlap 80 --output /home/pmes/nucleServ/test/test_run001/NR_cellcycleG2_chrII.gff --pcKeepComp 0.02 --width 147]
+loading data
+filtering duplicated reads
+processing reads
+calculating coverage
+filtering with filterFFT
+detecting peaks
+scoring peaks
+merging peaks
+* Starting space: chrII
+ - Finding overlapped reads
+ - Done (4517 non-overlapped | 815 merged calls)
+saving output as gff
+done
+2018-10-16 18:44:34 | PROGRESS: Calling Nucleosome positions - FINISHED
+==============================================================
+2018-10-16 18:44:34 | PROGRESS: Preparing statistics for Nucleosome Position Calling - RUNNING
+2018-10-16 18:44:34 | PROGRESS: Preparing statistics for Nucleosome Position Calling : cellcycleM_chrII.bam (1/2)
+[/usr/bin/Rscript /home/pmes/nucleServ/statistics/nucleR.R --out_gw /home/pmes/nucleServ/test/test_run001/NR_cellcycleM_chrII_stats.csv --input /home/pmes/nucleServ/test/test_run001/NR_cellcycleM_chrII.gff --out_genes /home/pmes/nucleServ/test/test_run001/NR_cellcycleM_chrII_genes_stats.csv --genome /home/pmes/nucleServ/test/data/refGenomes//R64-1-1/genes.gff]
+-- loading used genome
+-- computing statistics per gene
+-- computing statistics genome-wide
+2018-10-16 18:44:39 | PROGRESS: Preparing statistics for Nucleosome Position Calling - FINISHED
+==============================================================
+2018-10-16 18:44:39 | PROGRESS: Preparing statistics for Nucleosome Position Calling - RUNNING
+2018-10-16 18:44:39 | PROGRESS: Preparing statistics for Nucleosome Position Calling : cellcycleG2_chrII.bam (2/2)
+[/usr/bin/Rscript /home/pmes/nucleServ/statistics/nucleR.R --out_gw /home/pmes/nucleServ/test/test_run001/NR_cellcycleG2_chrII_stats.csv --input /home/pmes/nucleServ/test/test_run001/NR_cellcycleG2_chrII.gff --out_genes /home/pmes/nucleServ/test/test_run001/NR_cellcycleG2_chrII_genes_stats.csv --genome /home/pmes/nucleServ/test/data/refGenomes//R64-1-1/genes.gff]
+-- loading used genome
+-- computing statistics per gene
+-- computing statistics genome-wide
+2018-10-16 18:44:44 | PROGRESS: Preparing statistics for Nucleosome Position Calling - FINISHED
+==============================================================
+2018-10-16 18:44:44 | PROGRESS: NFR - starting analysis (3/7)
+2018-10-16 18:44:44 | PROGRESS: Looking for Nucleosome Free Regions - RUNNING
+2018-10-16 18:44:44 | PROGRESS: Looking for Nucleosome Free Regions : cellcycleM_chrII.bam (1/2)
+[/usr/bin/Rscript /home/pmes/nucleServ/bin/NFR.R --minwidth 110 --output /home/pmes/nucleServ/test/test_run001/NFR_cellcycleM_chrII.gff --input /home/pmes/nucleServ/test/test_run001/NR_cellcycleM_chrII.gff --threshold 140]
+-- reading input
+-- looking for Nucleosome Free regions
+-- saving gff output
+2018-10-16 18:44:48 | PROGRESS: Looking for Nucleosome Free Regions - FINISHED
+==============================================================
+2018-10-16 18:44:48 | PROGRESS: Looking for Nucleosome Free Regions - RUNNING
+2018-10-16 18:44:48 | PROGRESS: Looking for Nucleosome Free Regions : cellcycleG2_chrII.bam (2/2)
+[/usr/bin/Rscript /home/pmes/nucleServ/bin/NFR.R --minwidth 110 --output /home/pmes/nucleServ/test/test_run001/NFR_cellcycleG2_chrII.gff --input /home/pmes/nucleServ/test/test_run001/NR_cellcycleG2_chrII.gff --threshold 140]
+-- reading input
+-- looking for Nucleosome Free regions
+-- saving gff output
+2018-10-16 18:44:51 | PROGRESS: Looking for Nucleosome Free Regions - FINISHED
+==============================================================
+2018-10-16 18:44:51 | PROGRESS: Preparing statistics for Nucleosome Free Regions analysis - RUNNING
+2018-10-16 18:44:51 | PROGRESS: Preparing statistics for Nucleosome Free Regions analysis : cellcycleM_chrII.bam (1/2)
+[/usr/bin/Rscript /home/pmes/nucleServ/statistics/NFR.R --out_gw /home/pmes/nucleServ/test/test_run001/NFR_cellcycleM_chrII_stats.csv --genome /home/pmes/nucleServ/test/data/refGenomes//R64-1-1/genes.gff --input /home/pmes/nucleServ/test/test_run001/NFR_cellcycleM_chrII.gff]
+-- computing statistics genome-wide
+2018-10-16 18:44:53 | PROGRESS: Preparing statistics for Nucleosome Free Regions analysis - FINISHED
+==============================================================
+2018-10-16 18:44:53 | PROGRESS: Preparing statistics for Nucleosome Free Regions analysis - RUNNING
+2018-10-16 18:44:53 | PROGRESS: Preparing statistics for Nucleosome Free Regions analysis : cellcycleG2_chrII.bam (2/2)
+[/usr/bin/Rscript /home/pmes/nucleServ/statistics/NFR.R --out_gw /home/pmes/nucleServ/test/test_run001/NFR_cellcycleG2_chrII_stats.csv --genome /home/pmes/nucleServ/test/data/refGenomes//R64-1-1/genes.gff --input /home/pmes/nucleServ/test/test_run001/NFR_cellcycleG2_chrII.gff]
+-- computing statistics genome-wide
+2018-10-16 18:44:56 | PROGRESS: Preparing statistics for Nucleosome Free Regions analysis - FINISHED
+==============================================================
+2018-10-16 18:44:56 | PROGRESS: txstart - starting analysis (4/7)
+2018-10-16 18:44:56 | PROGRESS: Classifying Transcription Start Sites - RUNNING
+2018-10-16 18:44:56 | PROGRESS: Classifying Transcription Start Sites : cellcycleM_chrII.bam (1/2)
+[/usr/bin/Rscript /home/pmes/nucleServ/bin/txstart.R --genome /home/pmes/nucleServ/test/data/refGenomes//R64-1-1/genes.gff --open_thresh 215 --output /home/pmes/nucleServ/test/test_run001/TSS_cellcycleM_chrII.gff --calls /home/pmes/nucleServ/test/test_run001/NR_cellcycleM_chrII.gff --window 300]
+-- loading inputs
+-- loading used genome
+-- checking the classes
+chrI
+chrII
+10/389
+20/389
+30/389
+40/389
+50/389
+60/389
+70/389
+80/389
+90/389
+100/389
+110/389
+120/389
+130/389
+140/389
+150/389
+160/389
+170/389
+180/389
+190/389
+200/389
+210/389
+220/389
+230/389
+240/389
+250/389
+260/389
+270/389
+280/389
+290/389
+300/389
+310/389
+320/389
+330/389
+340/389
+350/389
+360/389
+370/389
+380/389
+chrIII
+chrIV
+chrIX
+chrM
+chrV
+chrVI
+chrVII
+chrVIII
+chrX
+chrXI
+chrXII
+chrXIII
+chrXIV
+chrXV
+chrXVI
+-- saving gff output
+2018-10-16 18:45:44 | PROGRESS: Classifying Transcription Start Sites - FINISHED
+==============================================================
+2018-10-16 18:45:44 | PROGRESS: Classifying Transcription Start Sites - RUNNING
+2018-10-16 18:45:44 | PROGRESS: Classifying Transcription Start Sites : cellcycleG2_chrII.bam (2/2)
+[/usr/bin/Rscript /home/pmes/nucleServ/bin/txstart.R --genome /home/pmes/nucleServ/test/data/refGenomes//R64-1-1/genes.gff --open_thresh 215 --output /home/pmes/nucleServ/test/test_run001/TSS_cellcycleG2_chrII.gff --calls /home/pmes/nucleServ/test/test_run001/NR_cellcycleG2_chrII.gff --window 300]
+-- loading inputs
+-- loading used genome
+-- checking the classes
+chrI
+chrII
+10/389
+20/389
+30/389
+40/389
+50/389
+60/389
+70/389
+80/389
+90/389
+100/389
+110/389
+120/389
+130/389
+140/389
+150/389
+160/389
+170/389
+180/389
+190/389
+200/389
+210/389
+220/389
+230/389
+240/389
+250/389
+260/389
+270/389
+280/389
+290/389
+300/389
+310/389
+320/389
+330/389
+340/389
+350/389
+360/389
+370/389
+380/389
+chrIII
+chrIV
+chrIX
+chrM
+chrV
+chrVI
+chrVII
+chrVIII
+chrX
+chrXI
+chrXII
+chrXIII
+chrXIV
+chrXV
+chrXVI
+-- saving gff output
+2018-10-16 18:46:33 | PROGRESS: Classifying Transcription Start Sites - FINISHED
+==============================================================
+2018-10-16 18:46:33 | PROGRESS: Preparing statitics for Transcription Start Sites Classification - RUNNING
+2018-10-16 18:46:33 | PROGRESS: Preparing statitics for Transcription Start Sites Classification : cellcycleM_chrII.bam (1/2)
+[/usr/bin/Rscript /home/pmes/nucleServ/statistics/txstart.R --out_gw /home/pmes/nucleServ/test/test_run001/TSS_cellcycleM_chrII_stats1.png --genome /home/pmes/nucleServ/test/data/refGenomes//R64-1-1/genes.gff --out_gw2 /home/pmes/nucleServ/test/test_run001/TSS_cellcycleM_chrII_stats2.png --input /home/pmes/nucleServ/test/test_run001/TSS_cellcycleM_chrII.gff --out_genes /home/pmes/nucleServ/test/test_run001/TSS_cellcycleM_chrII_genes_stats.csv]
+-- loading used genome
+-- computing statistics per gene
+-- computing statistics genome-wide
+Warning message:
+NAs introduced by coercion
+Warning message:
+Removed 1 rows containing non-finite values (stat_density).
+2018-10-16 18:46:37 | PROGRESS: Preparing statitics for Transcription Start Sites Classification - FINISHED
+==============================================================
+2018-10-16 18:46:37 | PROGRESS: Preparing statitics for Transcription Start Sites Classification - RUNNING
+2018-10-16 18:46:37 | PROGRESS: Preparing statitics for Transcription Start Sites Classification : cellcycleG2_chrII.bam (2/2)
+[/usr/bin/Rscript /home/pmes/nucleServ/statistics/txstart.R --out_gw /home/pmes/nucleServ/test/test_run001/TSS_cellcycleG2_chrII_stats1.png --genome /home/pmes/nucleServ/test/data/refGenomes//R64-1-1/genes.gff --out_gw2 /home/pmes/nucleServ/test/test_run001/TSS_cellcycleG2_chrII_stats2.png --input /home/pmes/nucleServ/test/test_run001/TSS_cellcycleG2_chrII.gff --out_genes /home/pmes/nucleServ/test/test_run001/TSS_cellcycleG2_chrII_genes_stats.csv]
+-- loading used genome
+-- computing statistics per gene
+-- computing statistics genome-wide
+Warning message:
+NAs introduced by coercion
+Warning message:
+Removed 1 rows containing non-finite values (stat_density).
+2018-10-16 18:46:42 | PROGRESS: Preparing statitics for Transcription Start Sites Classification - FINISHED
+==============================================================
+2018-10-16 18:46:42 | PROGRESS: periodicity - starting analysis (5/7)
+2018-10-16 18:46:42 | PROGRESS: Computing Nucleosome Phasing on gene bodies - RUNNING
+2018-10-16 18:46:42 | PROGRESS: Computing Nucleosome Phasing on gene bodies : cellcycleM_chrII.bam (1/2)
+[/usr/bin/Rscript /home/pmes/nucleServ/bin/periodicity.R --gffOutput /home/pmes/nucleServ/test/test_run001/P_cellcycleM_chrII.gff --chrom_sizes /home/pmes/nucleServ/test/data/refGenomes//R64-1-1/R64-1-1.fa.chrom.sizes --type paired --calls /home/pmes/nucleServ/test/test_run001/NR_cellcycleM_chrII.gff --genes /home/pmes/nucleServ/test/data/refGenomes//R64-1-1/genes.gff --reads /home/pmes/nucleServ/test/data/cellcycleM_chrII.RData --periodicity 165 --bwOutput /home/pmes/nucleServ/test/test_run001/P_cellcycleM_chrII.bw]
+loading genes
+reading calls
+calculating coverage
+identifying first and last nucleosomes
+writing GFF
+writing bigWig output
+2018-10-16 18:47:02 | PROGRESS: Computing Nucleosome Phasing on gene bodies - FINISHED
+==============================================================
+2018-10-16 18:47:02 | PROGRESS: Computing Nucleosome Phasing on gene bodies - RUNNING
+2018-10-16 18:47:02 | PROGRESS: Computing Nucleosome Phasing on gene bodies : cellcycleG2_chrII.bam (2/2)
+[/usr/bin/Rscript /home/pmes/nucleServ/bin/periodicity.R --gffOutput /home/pmes/nucleServ/test/test_run001/P_cellcycleG2_chrII.gff --chrom_sizes /home/pmes/nucleServ/test/data/refGenomes//R64-1-1/R64-1-1.fa.chrom.sizes --type paired --calls /home/pmes/nucleServ/test/test_run001/NR_cellcycleG2_chrII.gff --genes /home/pmes/nucleServ/test/data/refGenomes//R64-1-1/genes.gff --reads /home/pmes/nucleServ/test/data/cellcycleG2_chrII.RData --periodicity 165 --bwOutput /home/pmes/nucleServ/test/test_run001/P_cellcycleG2_chrII.bw]
+loading genes
+reading calls
+calculating coverage
+identifying first and last nucleosomes
+writing GFF
+writing bigWig output
+2018-10-16 18:47:24 | PROGRESS: Computing Nucleosome Phasing on gene bodies - FINISHED
+==============================================================
+2018-10-16 18:47:24 | PROGRESS: Preparing statistics for Nucleosome Gene Phasing Analysis - RUNNING
+2018-10-16 18:47:24 | PROGRESS: Preparing statistics for Nucleosome Gene Phasing Analysis : cellcycleM_chrII.bam (1/2)
+[/usr/bin/Rscript /home/pmes/nucleServ/statistics/periodicity.R --out_gw /home/pmes/nucleServ/test/test_run001/P_cellcycleM_chrII_stats.csv --genome /home/pmes/nucleServ/test/data/refGenomes//R64-1-1/genes.gff --input /home/pmes/nucleServ/test/test_run001/P_cellcycleM_chrII.gff --out_genes /home/pmes/nucleServ/test/test_run001/P_cellcycleM_chrII_genes_stats.csv]
+-- loading used genome
+-- computing statistics per gene
+-- computing statistics genome-wide
+2018-10-16 18:47:28 | PROGRESS: Preparing statistics for Nucleosome Gene Phasing Analysis - FINISHED
+==============================================================
+2018-10-16 18:47:28 | PROGRESS: Preparing statistics for Nucleosome Gene Phasing Analysis - RUNNING
+2018-10-16 18:47:28 | PROGRESS: Preparing statistics for Nucleosome Gene Phasing Analysis : cellcycleG2_chrII.bam (2/2)
+[/usr/bin/Rscript /home/pmes/nucleServ/statistics/periodicity.R --out_gw /home/pmes/nucleServ/test/test_run001/P_cellcycleG2_chrII_stats.csv --genome /home/pmes/nucleServ/test/data/refGenomes//R64-1-1/genes.gff --input /home/pmes/nucleServ/test/test_run001/P_cellcycleG2_chrII.gff --out_genes /home/pmes/nucleServ/test/test_run001/P_cellcycleG2_chrII_genes_stats.csv]
+-- loading used genome
+-- computing statistics per gene
+-- computing statistics genome-wide
+2018-10-16 18:47:32 | PROGRESS: Preparing statistics for Nucleosome Gene Phasing Analysis - FINISHED
+==============================================================
+2018-10-16 18:47:32 | PROGRESS: gausfitting - starting analysis (6/7)
+2018-10-16 18:47:32 | PROGRESS: Estimating Nucleosome Stiffness constants - RUNNING
+2018-10-16 18:47:32 | PROGRESS: Estimating Nucleosome Stiffness constants : cellcycleM_chrII.bam (1/2)
+[/usr/bin/Rscript /home/pmes/nucleServ/bin/gausfitting.R --range All --reads /home/pmes/nucleServ/test/data/cellcycleM_chrII.RData --output /home/pmes/nucleServ/test/test_run001/STF_cellcycleM_chrII.gff --calls /home/pmes/nucleServ/test/test_run001/NR_cellcycleM_chrII.gff]
+loading inputs
+performing the fittings
+2018-10-16 18:48:48 | PROGRESS: Estimating Nucleosome Stiffness constants - FINISHED
+==============================================================
+2018-10-16 18:48:48 | PROGRESS: Estimating Nucleosome Stiffness constants - RUNNING
+2018-10-16 18:48:48 | PROGRESS: Estimating Nucleosome Stiffness constants : cellcycleG2_chrII.bam (2/2)
+[/usr/bin/Rscript /home/pmes/nucleServ/bin/gausfitting.R --range All --reads /home/pmes/nucleServ/test/data/cellcycleG2_chrII.RData --output /home/pmes/nucleServ/test/test_run001/STF_cellcycleG2_chrII.gff --calls /home/pmes/nucleServ/test/test_run001/NR_cellcycleG2_chrII.gff]
+loading inputs
+performing the fittings
+2018-10-16 18:50:28 | PROGRESS: Estimating Nucleosome Stiffness constants - FINISHED
+==============================================================
+2018-10-16 18:50:28 | PROGRESS: Preparing statistics for Nucleosome Stiffness Analysis - RUNNING
+2018-10-16 18:50:28 | PROGRESS: Preparing statistics for Nucleosome Stiffness Analysis : cellcycleM_chrII.bam (1/2)
+[/usr/bin/Rscript /home/pmes/nucleServ/statistics/gausfitting.R --out_gw /home/pmes/nucleServ/test/test_run001/STF_cellcycleM_chrII_stats1.csv --genome /home/pmes/nucleServ/test/data/refGenomes//R64-1-1/genes.gff --out_gw2 /home/pmes/nucleServ/test/test_run001/STF_cellcycleM_chrII_stats2.png --input /home/pmes/nucleServ/test/test_run001/STF_cellcycleM_chrII.gff --out_genes /home/pmes/nucleServ/test/test_run001/STF_cellcycleM_chrII_genes_stats.csv]
+-- loading used genome
+-- computing statistics per gene
+-- computing statistics genome-wide
+2018-10-16 18:50:34 | PROGRESS: Preparing statistics for Nucleosome Stiffness Analysis - FINISHED
+==============================================================
+2018-10-16 18:50:34 | PROGRESS: Preparing statistics for Nucleosome Stiffness Analysis - RUNNING
+2018-10-16 18:50:34 | PROGRESS: Preparing statistics for Nucleosome Stiffness Analysis : cellcycleG2_chrII.bam (2/2)
+[/usr/bin/Rscript /home/pmes/nucleServ/statistics/gausfitting.R --out_gw /home/pmes/nucleServ/test/test_run001/STF_cellcycleG2_chrII_stats1.csv --genome /home/pmes/nucleServ/test/data/refGenomes//R64-1-1/genes.gff --out_gw2 /home/pmes/nucleServ/test/test_run001/STF_cellcycleG2_chrII_stats2.png --input /home/pmes/nucleServ/test/test_run001/STF_cellcycleG2_chrII.gff --out_genes /home/pmes/nucleServ/test/test_run001/STF_cellcycleG2_chrII_genes_stats.csv]
+-- loading used genome
+-- computing statistics per gene
+-- computing statistics genome-wide
+2018-10-16 18:50:40 | PROGRESS: Preparing statistics for Nucleosome Stiffness Analysis - FINISHED
+==============================================================
+2018-10-16 18:50:40 | PROGRESS: nucDyn - starting analysis (7/7)
+2018-10-16 18:50:40 | PROGRESS: Analysing Nucleosome Dynamics - RUNNING
+2018-10-16 18:50:40 | PROGRESS: Analysing Nucleosome Dynamics : cellcycleG2_chrII.bam & cellcycleM_chrII.bam (1/1)
+[/usr/bin/Rscript /home/pmes/nucleServ/bin/nucDyn.R --maxDiff 70 --indel_threshold 0.05 --outputBigWig /home/pmes/nucleServ/test/test_run001/ND_cellcycleG2_chrII_cellcycleM_chrII.bw --shift_min_nreads 3 --range All --indel_min_nreads 3 --input1 /home/pmes/nucleServ/test/data/cellcycleG2_chrII.RData --calls1 /home/pmes/nucleServ/test/test_run001/NR_cellcycleG2_chrII.gff --shift_threshold 0.1 --plotRData /home/pmes/nucleServ/test/test_run001/ND_cellcycleG2_chrII_cellcycleM_chrII_plot.RData --input2 /home/pmes/nucleServ/test/data/cellcycleM_chrII.RData --maxLen 140 --calls2 /home/pmes/nucleServ/test/test_run001/NR_cellcycleM_chrII.gff --genome /home/pmes/nucleServ/test/data/refGenomes//R64-1-1/R64-1-1.fa.chrom.sizes --outputGff /home/pmes/nucleServ/test/test_run001/ND_cellcycleG2_chrII_cellcycleM_chrII.gff]
+loading and subsetting reads
+running NucleosomeDynamics
+Starting chrII
+chrII done
+Combining the calculations from different chromosomes...
+building structure to be saved for future plotting
+loading nucleosome calls
+finding hotspots
+Starting chrII
+chrII done
+saving output as gff
+saving bigWig output
+done
+2018-10-16 18:53:36 | PROGRESS: Analysing Nucleosome Dynamics - FINISHED
+==============================================================
+2018-10-16 18:53:36 | PROGRESS: Preparing statistics for Nucleosome Dynamics Analysis - RUNNING
+2018-10-16 18:53:36 | PROGRESS: Preparing statistics for Nucleosome Dynamics Analysis : cellcycleG2_chrII.bam & cellcycleM_chrII.bam (1/1)
+[/usr/bin/Rscript /home/pmes/nucleServ/statistics/nucDyn.R --out_gw /home/pmes/nucleServ/test/test_run001/ND_cellcycleG2_chrII_cellcycleM_chrII_stats.png --genome /home/pmes/nucleServ/test/data/refGenomes//R64-1-1/genes.gff --input /home/pmes/nucleServ/test/test_run001/ND_cellcycleG2_chrII_cellcycleM_chrII.gff --out_genes /home/pmes/nucleServ/test/test_run001/ND_cellcycleG2_chrII_cellcycleM_chrII_genes_stats.csv]
+-- loading used genome
+-- computing statistics per gene
+-- computing statistics genome-wide
+2018-10-16 18:53:48 | PROGRESS: Preparing statistics for Nucleosome Dynamics Analysis - FINISHED
+==============================================================
+2018-10-16 18:53:48 | INFO: Writting down output files metadata into /home/pmes/nucleServ/test/test_run001/out_metadata.json

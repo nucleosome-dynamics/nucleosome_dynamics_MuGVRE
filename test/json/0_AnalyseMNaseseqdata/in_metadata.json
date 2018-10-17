@@ -1,0 +1,118 @@
+[
+    {
+        "_id": "MuGUSER5a0c0314c20d1_5b6036ff52b083.07917231",
+        "file_path": "cellcycleG2_chrII.bam",
+        "file_type": "BAM",
+        "data_type": "data_mnase_seq",
+        "compressed": 0,
+        "user_id": "MuGUSER5a0c0314c20d1",
+        "taxon_id": 4932,
+        "meta_data": {
+            "type": "file",
+            "size": 58214952,
+            "project": "__PROJ5b48d0cde464b6.37547956",
+            "taxon_id": 4932,
+            "compressed": false,
+            "description": "MNase-seq data of yest G2 cell cycle",
+            "paired": "paired",
+            "sorted": "sorted",
+            "associated_files": [
+                "MuGUSER5a0c0314c20d1_5b6036fd921414.26881315"
+            ],
+            "validated": true,
+            "visible": true,
+            "assembly": "R64-1-1"
+        },
+        "sources": []
+    },
+    {
+        "_id": "MuGUSER5a0c0314c20d1_5b6036fd921414.26881315",
+        "file_path": "cellcycleG2_chrII.bam.bai",
+        "file_type": "BAI",
+        "data_type": "data_mnase_seq",
+        "compressed": 0,
+        "user_id": "MuGUSER5a0c0314c20d1",
+        "taxon_id": 4932,
+        "meta_data": {
+            "type": "file",
+            "expiration": -1,
+            "size": 2608,
+            "project": "__PROJ5b48d0cde464b6.37547956",
+            "taxon_id": 4932,
+            "compressed": false,
+            "description": "BAI index for ChrII of yeast",
+            "visible": false,
+            "validated": true,
+            "assembly": "R64-1-1"
+        },
+        "sources": []
+    },
+    {
+        "_id": "MuGUSER5a0c0314c20d1_5b6036fd86ece2.60948856",
+        "file_path": "cellcycleM_chrII.bam",
+        "file_type": "BAM",
+        "data_type": "data_mnase_seq",
+        "compressed": 0,
+        "user_id": "MuGUSER5a0c0314c20d1",
+        "creation_time": {
+            "sec": 1533032189,
+            "usec": 0
+        },
+        "taxon_id": 4932,
+        "meta_data": {
+            "type": "file",
+            "expiration": -1,
+            "size": 28958409,
+            "project": "__PROJ5b48d0cde464b6.37547956",
+            "taxon_id": 4932,
+            "compressed": false,
+            "description": "MNase-seq data of yest M cell cycle",
+            "paired": "paired",
+            "sorted": "sorted",
+            "associated_files": [
+                "MuGUSER5a0c0314c20d1_5b6036fc841340.71403487"
+            ],
+            "validated": true,
+            "visible": true,
+            "assembly": "R64-1-1"
+        },
+        "sources": []
+    },
+    {
+        "_id": "MuGUSER5a0c0314c20d1_5b6036fc841340.71403487",
+        "file_path": "cellcycleM_chrII.bam.bai",
+        "file_type": "BAI",
+        "data_type": "data_mnase_seq",
+        "compressed": 0,
+        "user_id": "MuGUSER5a0c0314c20d1",
+        "creation_time": {
+            "sec": 1533032188,
+            "usec": 0
+        },
+        "taxon_id": 4932,
+        "meta_data": {
+            "type": "file",
+            "expiration": -1,
+            "size": 2592,
+            "project": "__PROJ5b48d0cde464b6.37547956",
+            "taxon_id": 4932,
+            "compressed": false,
+            "description": "BAI index for ChrII of yeast",
+            "visible": false,
+            "validated": true,
+            "assembly": "R64-1-1"
+        },
+        "sources": []
+    },
+    {
+        "_id": "MuGUSER5a0c0314c20d1_5b60371dc316e9.06013480_dummy",
+        "file_path": "refGenomes/",
+        "meta_data": [],
+        "sources": [],
+        "taxon_id": 0,
+        "data_type": "configuration_file",
+        "file_type": "TXT",
+        "user_id": "public",
+        "type": "dir"
+    }
+]
