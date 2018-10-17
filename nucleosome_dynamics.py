@@ -4,6 +4,7 @@ import json
 import os
 import sys
 import tarfile
+import time
 
 from argparse   import ArgumentParser
 from copy       import deepcopy
@@ -269,17 +270,21 @@ class Calculation():
         arg_list = chain.from_iterable(arg_pairs)
         cmd = list(chain([RPATH, bin_path], arg_list))
         print('[%s]' % ' '.join(map(str, cmd)))
-        #call(cmd)
 
-        pipes = subprocess.Popen(cmd, stdout=subprocess.PIPE)
+        pipes = subprocess.Popen(cmd, stdout=subprocess.PIPE,stderr=subprocess.PIPE)
 
-        for line in iter(pipes.stdout.readline, b''):
-            print(line.rstrip())
+        for line in iter(pipes.stderr.readline, b''):
+            print(line.rstrip().decode("utf-8"))
 
-        if pipes.returncode is not None and pipes.returncode != 0:
+        rc = pipes.poll()
+        while rc is None:
+            rc = pipes.poll()
+            time.sleep(0.1)
+
+        if rc is not None and rc != 0:
             logger.progress(str(self.exec_descrip), status="ERROR")
         else:
-            logger.progress(str(self.exec_descrip), status="FINISHED??")
+            logger.progress(str(self.exec_descrip), status="FINISHED")
         print("==============================================================")
 
     def get_bin_path(self, calc_type="bin"):
@@ -318,7 +323,7 @@ class IterOnInfs(Calculation):
     self.names). Used for calculations that have only one input.
     """
     num_runs = 0
-    run_id   = 0	
+    run_id   = 0    
 
     def run(self, in_files, metadata, args, genome_dir, out_dir):
         ids = set([x["value"]
@@ -349,7 +354,7 @@ class SelectTwo(Calculation):
     """
 
     num_runs = 1
-    run_id   = 1	
+    run_id   = 1    
 
     @staticmethod
     def get_file(name, metadata, in_files):
@@ -817,6 +822,8 @@ def cleanup(in_files, metadata):
             os.remove(rdata_file)
         except FileNotFoundError:
             pass
+        except PermissionError:
+            pass
 
 ###############################################################################
 
@@ -938,10 +945,16 @@ def main():
     out_dir = arguments["execution"]
     os.chdir(out_dir)
 
+    logger.info("Starting Nucleosome Dynamics pipeline")
     out_meta = my_run.run(in_files, metadata, arguments, genome_path, out_dir)
+
+    logger.info("Cleaning up temporaly files")
     cleanup(in_files, metadata)
 
+    logger.info("Writting down output files metadata into {0}".format(out_metadata))
     json_out = json.dumps(out_meta, indent=4, separators=(',', ': '))
+    print(json_out)
+
     with open(out_metadata, 'w') as fh:
         fh.write(json_out)
 
