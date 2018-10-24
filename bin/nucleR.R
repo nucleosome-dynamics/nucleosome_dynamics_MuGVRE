@@ -199,6 +199,7 @@ merged <- rd2df(merged)
 names(merged)[names(merged) == "score_h"] <- "score_height"
 names(merged)[names(merged) == "score_w"] <- "score_width"
 merged$nmerge <- NULL
+colnames(merged)[1] = "seqname"
 
 message("saving output as gff")
 writeGff(df2gff(merged,

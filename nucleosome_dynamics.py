@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/python3 
 
 import json
 import os
@@ -926,6 +926,9 @@ my_run = Run(my_calcs, col_order)
 ###############################################################################
 
 def main():
+    # set env
+    os.environ['PYTHONUNBUFFERED']="0"
+
     # get arguments
     args = get_args()
 
