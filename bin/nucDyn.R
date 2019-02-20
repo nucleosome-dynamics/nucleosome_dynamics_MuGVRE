@@ -122,9 +122,10 @@ hs <- findHotspots(dyn=dyn, nuc=nuc, mc.cores=params$cores ,
 
 
 ## Calculate vector of -log10(p-value)s  ######################################
+message("calculate p-val")
 
-cov1 <- lapply(coverage(rs[[1]]), as.vector)
-cov2 <- lapply(coverage(rs[[2]]), as.vector)
+cov1 <- lapply(coverage(as(rs[[1]], "GRanges")), as.vector)
+cov2 <- lapply(coverage(as(rs[[2]], "GRanges")), as.vector)
 
 chrs <- intersect(names(cov1), names(cov2))
 pvals <- lapply(chrs, function (x) -log10(findPVals(cov1[[x]], cov2[[x]])))
