@@ -11,6 +11,7 @@
 suppressPackageStartupMessages(library(getopt))
 suppressPackageStartupMessages(library(NucDyn))
 suppressPackageStartupMessages(library(plyr))
+suppressPackageStartupMessages(library(parallel))
 
 where <- function () {
     spath <- parent.frame(2)$ofile
