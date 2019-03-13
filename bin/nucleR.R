@@ -133,7 +133,7 @@ if (is.null(params$fragmentLen)) {
 }
 
 if (!is.null(params$chr)) {
-    f.reads <- f.reads[space(f.reads) == params$chr, ]
+    f.reads <- f.reads[seqnames(f.reads) == params$chr, ]
     if (!is.null(params$start) && !is.null(params$end)) {
         sel <- isIn(f.reads,
                     IRanges(start=params$start,
