@@ -1,33 +1,19 @@
 # nucleServ - Nucleosome Dynamics Server
 
-Scripts and wrappers to run nucleR and NucleosomeDynamics on the backend of a server
+Scripts and wrappers to run nucleR and NucDyn on the backend of a server
 
 ## Analyses
 
-#### Stiffness
+#### NucDyn
 
 Primary data
-* Score: Stiffness estimation. It's the energy required to move the nucleosome (expressed in cal/bp), it's derived from the gaussian standard deviation.
-
-Attributes
-* nucleR_score: the nucleR score given to that nucleosome
-* nucleR.class: the nucleR class given to that nucleosome
-* gauss_k: the height of the peak of the gaussian curve
-* gauss_m: the position of the peak of the gaussian curve
-* gauss_sd: the standard deviation of the gaussian curve
-
-#### NucleosomeDynamics
-
-Primary data
-* Position: region where the movement happens
+* Position: region where a nucleosome movement is detected
 * Type: change in the nucleosome map
 * Score: magnitude of the change
 
 Attributes
 * class: type of hotspot (see help for all possible types)
-* nuc: to which nucleosome the movement belongs. NA means that the hostpot couldn't be unequivocally associated to one nucleosome.
-* number_of_reads: number of reads involved in this movement
-* hreads: number of reads involved in the movement relative to the number of reads present in the area. This value ranges from 0 to 1 and the closest it is to 1, the more significant the movement.
+* nreads: number of reads involved in this movement
 
 
 #### nucleR
@@ -41,7 +27,23 @@ Attributes
 * class: Whether the nucleosome is well-positioned (W) or fuzzy (F) or undetermined. The taken value depends on score_h and score_w. Undetermined means the exact position of the nucleosome cannot be determined due to strong fuzziness.
 
 
+#### Stiffness
+
+Primary data
+* Score: Stiffness estimation. It represents the energy required to move the nucleosome (expressed in kcal/mol/bp), it's derived from the Gaussian standard deviation.
+
+Attributes
+* nucleR_score: the nucleR score given to that nucleosome
+* nucleR.class: the nucleR class given to that nucleosome
+* gauss_k: the height of the peak of the gaussian curve
+* gauss_m: the position of the peak of the gaussian curve
+* gauss_sd: the standard deviation of the gaussian curve
+
+
 #### Periodicity
+
+Primary data
+* Position: gene position (from TSS to TTS) 
 
 Attributes
 * nucleosome_first: First nucleosome of the gene.
@@ -53,15 +55,14 @@ Attributes
 #### TSS classes
 
 Primary data
-* Position: Region between two nucleosomes surrounding the TSS.
+* Position: Region between the dyads of two nucleosomes surrounding the TSS.
 
 Attributes
 * classification: Descriptor of the Transcription Start Site. See the help for possible options.
 * distance: Distance in base pairs between the nucleosome +1 and the nucleosome -1.
-* id
 * nucleosome minus1: Position of the nucleosome -1.
 * nucleosome plus1: Position of the nucleosome +1
-* HTTS_position: Position of the Transcription Start Site.
+* TTS_position: Position of the Transcription Start Site.
 
 # Complete workflow
 

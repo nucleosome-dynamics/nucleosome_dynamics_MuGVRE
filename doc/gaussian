@@ -1,9 +1,14 @@
+Description: 
+Apparent stiffness of a nucleosome derived from Gaussian fitting of its 
+coverage
+
+Details: 
 The coverage corresponding to a single nucleosome call can be fitted to a
-gaussian distribution according to three parameters: m, sd, and k.
+Gaussian distribution according to three parameters: m, sd, and k.
 
 k is the height of the curve's peak.
 m is the position of the center of the peak.
 sd is it's standard deviation and controls the width of the bell.
 
-Additionally, as stiffness constant for the given nucleosome can be derived
-from the sd of the gaussian function.
+Then, the apparent stiffness for the given nucleosome can be derived
+from the sd of the Gaussian function.

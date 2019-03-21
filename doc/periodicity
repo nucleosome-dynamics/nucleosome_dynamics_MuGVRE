@@ -2,12 +2,17 @@ Description:
 Periodicity in nucleosome positioning along the gene.
 
 Details:
-Score is a measure of the phase between the first and the last nucleosomes.
-Specifically it is computed as the residue of the nuc.length divided by the
-period (165 bp).
+Score is a measure of the phase between the first (immediately downstream 
+or covering the TSS) and the last (immediately upstrem from the TTS) 
+nucleosomes.
+Specifically, given a periodic distance between neighboring nucleosomes, T,  
+the score is computed as the residue of the nuc.length (distance between 
+dyads of the first and the last nucleosomes within the gene) divided by the
+period (T=165 bp in S. cerevisiae).
 Therefore a score of 0 means the nucleosomes are completeley phased and a
-score of 82 corresponds to totally anti-phased nucleosomes.
+score of T/2 (82 in S. cerevisiae) corresponds to totally anti-phased 
+nucleosomes.
 
 Autocor is computed directly from the experimental coverage and is a
 quantitative measure of the periodicity of the nucleosomes inside the
-gene-body.
+gene-body, ranging from 0 (non-periodic) to 1 (periodic). 
