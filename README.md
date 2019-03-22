@@ -1,5 +1,4 @@
 # Nucleosome Dynamics CLI
------------- 
 
 This repository includes the set of R programs implementing 'Nucleosome Dynamics' analyses. 
 
@@ -9,22 +8,50 @@ This repository includes the set of R programs implementing 'Nucleosome Dynamics
 ## Table of contents
 
 - [Nucleosome Dynamics](#Nucleosome_Dynamics)
-- [Requirement](#Requirements)
+- [Requirements](#Requirements)
 - [Installation](INSTALL.md)
 - [Running Nucleomse Dynamics CLI](#Running_Nucleosome_Dynamics_CLI)
 - [Usage](Usage)
     - [Analyses usage](#Analyses_usage)
-        - [ReadBAM](#ReadBAM)
+        - [ReadBAM](#usage_readBAM)
+        - [nucleR](#usage_nucleR)
+        - [NucDyn](#usage_nucDyn)
+        - [NFR](#usage_NFR)
+        - [txstart -- or TSS???](#usage_txstart)
+        - [Periodicity](#usage_periodicity)
+        - [Stiffness](#usage_stiffness)
     - [Statistics usage](#Statistics_usage)
+        - [nucleR](#usage_nucleR_stats)
+        - [NucDyn](#usage_nucDyn_stats)
+        - [NFR](#usage_NFR_stats)
+        - [txstart -- or TSS???](#usage_txstart_stats)
+        - [Periodicity](#usage_periodicity_stats)
+        - [Stiffness](#usage_stiffness_stats)
 - [Results](#Results)
-    - [NucDyn](#NucDyn)
-    - [nucleR](#nucleR)
-    - [Stiffness](#Stiffness)
-    - [Periodicity](#Periodicity)
-    - [TSS classes](#TSS_classes)
-    - [](#)
+    - [Analyses](#)
+        - [NucDyn](#NucDyn)
+        - [nucleR](#nucleR)
+        - [Stiffness](#Stiffness)
+        - [Periodicity](#Periodicity)
+        - [TSS classes](#TSS_classes)
 
 ----
+
+
+<a name="Statistics_usage"></a>
+<a name="usage_nucleR_stats"></a>
+<a name="usage_NFR_stats"></a>
+<a name="usage_txstart_stats"></a>
+<a name="usage_periodicity_stats"></a>
+<a name="usage_stiffness_stats"></a>
+<a name="usage_nucDyn_stats"></a>
+<a name="Results"></a>
+<a name="NucDyn"></a>
+<a name="nucleR"></a>
+<a name="Stiffness"></a>
+<a name="Periodicity"></a>
+<a name="TSS_classes"></a>
+
 
 <a name="Nucleosome_Dynamics"></a>
 # Nucleosome Dynamics
@@ -51,15 +78,40 @@ The instructions on how to install 'Nucleosome Dynamics CLI' are detailed at [IN
 
 Simply run each of the analysis like follows:
 
-```
+```sh
 Rscript bin/[analysis].R [analysis_arguments]
 ```
 
+Where `analysis.R` are:
+
+| `[analysis]` | Description |
+| -------- | -------- |
+| readBAM         | Read Aligned MSase-seq BAM into a RData structure (required for further process) |
+| nucleR           | Determine the positions of the nucleosomes across the genome |
+| nucDyn          | Comparison of two diferent MNase-seq experiments to nucleosome architecture local changes |
+| NFR             | Short regions depleted of nucleosomes |
+| txstart         | Classify Transciption start accordint to the properties of surrounding nucleosomes  |
+| periodicity  | Periodic properties of nucleosomes inside gene bodies |
+| stiffness | Aparent stiffness constant foreach nucleosome obtained by fitting the coverage to a gaussian distribution |
+
+
 Additionally, each analysis has an statistics module that creates a report (tabular or graphical) for summarising the calculation. So, after running an analysis:
 
-```
+```sh
 Rscript statistics/[analysis_stats].R [analysis_stats_arguments]
 ```
+
+Available `analysis_stats`.R are:
+
+| `[analysis_stats]` | Description |
+| -------- | -------- |
+| nucleR_stats|  Nucleosome call statistics|
+| NFR_stats|             Nucleosome Free Regions statistics|
+| txstart_stats|         TSS and TTS statistics|
+| periodicity_stats|  Statistics on Nucleosome periodicity|
+| stiffness_stats|      Statistics on stiffness|
+| nucDyn_stats|    Statistics on Nucleosome Dynamics analysis|
+
 
 The [Usage](#Usage) section below describes the available arguments for each individual analysis, and similary, the [Results](#Results) section includes their output file descriptions.
 
@@ -122,6 +174,44 @@ The [Usage](#Usage) section below describes the available arguments for each ind
                 Start genomic position to consider for the analysis in the given input file. By default, all the genomic range is considered. Optional.
         --end
                 End genomic position to consider for the analysis in the given input file. By default, all the genomic range is considered. Optional.
+
+
+<a name="usage_nucDyn"></a>
+**nucDyn**  --input1 {RData} --input2 {RData} --calls1 {gff} --calls2 {gff} --outputGff {gff} --outputBigWig {bw}  --genome {chrom.sizes} --range {str}
+[ --plotRData {RData} --maxDiff {int} --maxLen {int} --shift_min_nreads {int} --shift_threshold {double} --indel_min_nreads {int} --indel_threshold {double} --cores {int} --equal_size (logical) --readSize {int} ]
+
+        -- input1, --input2
+                Input BAM from MNase-seq in RData format (from readBAM)
+        --calls1, --calls2
+                Nucleosome calls in GFF format as obtained from NucleR
+        -outputGff
+                Output of NucleosomeDynamics in GFF format
+        --outputBigWig {bw}
+                Output of NucleosomeDynamics in BigWig format: -log10 of the p-value of the significance of the differences found.
+        --genome {chrom.sizes}
+                Chromosome sizes from reference Genome
+        --range (All|chr|chr:start-end)
+                Genomic range to be analyzed. All: all chromosomes; chr: a Whole chromosome; chr:start-end: a specific region given the coordinates. Default All
+        --plotRData {RData}
+
+        --maxDiff
+                Maximum distance between the centers of two fragments for them to be paired as shifts. (bp) Optional,default 70bp
+        --maxLen
+                This value is used in a preliminar filtering. Fragments longer than this will be filtered out, since they are likely the result of MNase under-digestion and represent two or more nucleosomes. (bp) Optional, default 140bp
+        --shift_min_nreads
+                Minimum number of shifted reads for a shift hostspot to be reported {int}, optional, default 3
+        --shift_threshold
+                Threshold applied to the shift hostpots. Only hotspots with a score better than the value will be reported. Notice the score has to be lower than the threshold, since these numbers represent p-values. Optional, default 0.1
+        --indel_min_nreads
+                Minimum number of shifted reads for an indel hostspot to be reported {int}, optional, default 3
+        --indel_threshold [float, 0.05]
+                Threshold applied to the indel hostpots. Only hotspots with a score better than the value will be reported. Notice the score has to be lower than the threshold, since these numbers represent p-values. Optional, default 0.05
+        --cores 
+                Number of computer threads. Optional, default 1
+        --equal_size
+                Set all fragments to the same size. Optional, default FALSE
+        --readSize  
+                Length to which all reads will be set in case `equalSize` is `TRUE`. It is ignored when `equalSize` is set to `FALSE`. Default 140
 
 
 <a name="usage_NFR"></a>
@@ -196,42 +286,6 @@ The [Usage](#Usage) section below describes the available arguments for each ind
                 Temperature (K). Optional, default 310.15
 
 
-<a name="usage_nucDyn"></a>
-**nucDyn**  --input1 {RData} --input2 {RData} --calls1 {gff} --calls2 {gff} --outputGff {gff} --outputBigWig {bw}  --genome {chrom.sizes} --range {str}
-[ --plotRData {RData} --maxDiff {int} --maxLen {int} --shift_min_nreads {int} --shift_threshold {double} --indel_min_nreads {int} --indel_threshold {double} --cores {int} --equal_size (logical) --readSize {int} ]
-
-        -- input1, --input2
-                Input BAM from MNase-seq in RData format (from readBAM)
-        --calls1, --calls2
-                Nucleosome calls in GFF format as obtained from NucleR
-        -outputGff
-                Output of NucleosomeDynamics in GFF format
-        --outputBigWig {bw}
-                Output of NucleosomeDynamics in BigWig format: -log10 of the p-value of the significance of the differences found.
-        --genome {chrom.sizes}
-                Chromosome sizes from reference Genome
-        --range (All|chr|chr:start-end)
-                Genomic range to be analyzed. All: all chromosomes; chr: a Whole chromosome; chr:start-end: a specific region given the coordinates. Default All
-        --plotRData {RData}
-
-        --maxDiff
-                Maximum distance between the centers of two fragments for them to be paired as shifts. (bp) Optional,default 70bp
-        --maxLen
-                This value is used in a preliminar filtering. Fragments longer than this will be filtered out, since they are likely the result of MNase under-digestion and represent two or more nucleosomes. (bp) Optional, default 140bp
-        --shift_min_nreads
-                Minimum number of shifted reads for a shift hostspot to be reported {int}, optional, default 3
-        --shift_threshold
-                Threshold applied to the shift hostpots. Only hotspots with a score better than the value will be reported. Notice the score has to be lower than the threshold, since these numbers represent p-values. Optional, default 0.1
-        --indel_min_nreads
-                Minimum number of shifted reads for an indel hostspot to be reported {int}, optional, default 3
-        --indel_threshold [float, 0.05]
-                Threshold applied to the indel hostpots. Only hotspots with a score better than the value will be reported. Notice the score has to be lower than the threshold, since these numbers represent p-values. Optional, default 0.05
-        --cores 
-                Number of computer threads. Optional, default 1
-        --equal_size
-                Set all fragments to the same size. Optional, default FALSE
-        --readSize  
-                Length to which all reads will be set in case `equalSize` is `TRUE`. It is ignored when `equalSize` is set to `FALSE`. Default 140
 
 <a name="Statistics_usage"></a>
 ## Statistics usage
@@ -249,7 +303,20 @@ The [Usage](#Usage) section below describes the available arguments for each ind
                 Output file containing table of genome wide statistics. CSV format 
 
 
-<a name="usage__stats"></a>
+<a name="usage_nucDyn_stats"></a>
+**nucDyn_stats** --input {gff} --genome {gff} --out_genes {csv} --out_gw {png}
+
+        --input 
+                Nucleosome calls in GFF format as obtained from stiffness_stats
+        --genome
+                Gene positions from the reference genome. GFF Format
+        --out_genes
+                Output file containing statistics of all calculations for each gene. CSV format
+        --out_gw
+                Output file containing table of genome wide statistics. PNG format
+
+
+<a name="usage_NFR_stats"></a>
 **NFR_stats** --input {gff}  --genome {gff} --out_gw {csv}
         --input
                 Nucleosome calls in GFF format as obtained from NFR
@@ -301,18 +368,6 @@ The [Usage](#Usage) section below describes the available arguments for each ind
         --out_gw2
                 Output file containing table of genome wide statistics. PNG format
 
-
-<a name="usage_nucDyn_stats"></a>
-**nucDyn_stats** --input {gff} --genome {gff} --out_genes {csv} --out_gw {png}
-
-        --input 
-                Nucleosome calls in GFF format as obtained from stiffness_stats
-        --genome
-                Gene positions from the reference genome. GFF Format
-        --out_genes
-                Output file containing statistics of all calculations for each gene. CSV format
-        --out_gw
-                Output file containing table of genome wide statistics. PNG format
 
 <a name="Results"></a>
 # Results
