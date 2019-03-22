@@ -1,0 +1,535 @@
+{ 
+    "_id" : "nucldynwf_pmes", 
+    "name" : "Nucleosome Dynamics", 
+    "title" : "Nucleosome Dynamics Worflow", 
+    "short_description" : "Nucleosome Dynamics Tools for performing  nucleosome-related analysis based on MNase-seq experimental data", 
+    "long_description" : "The nucleosome dynamics worflow offers different tools to analyze nucleosome positioning from MNase-seq experimental data and to compare experiments to account for the transient and dynamic nature of nucleosome positioning under different cellular states. The main analyses included are nucleR, that performs Fourier transform filtering and peak calling to define nucleosome location, and NucleosomeDynamics, that compares different MNase-seq experiments at read level to identify variations in nucleosomes fuzzines and location (shifts, evictions, inclusions). Additionally, other nucleosome related features are studied, like nucleosome-free regions, prediction of nucleosome phasing at gene level, classification of transcription start sites based on the surrounding nucleosomes and nucleosome stiffness.", 
+    "url" : "http://mmb.pcb.ub.es/NucleosomeDynamics/", 
+    "owner" : {
+        "institution" : "IRB", 
+        "author" : "Illa Ricard, Buitrago Diana, Brun Isabelle", 
+        "contact" : "ricard.illa@irbbarcelona.org", 
+        "url" : "http://mmb.irbbarcelona.org/NucleosomeDynamics"
+    }, 
+    "status" : 1, 
+    "sampleData" : "nucldynwf", 
+    "external" : true, 
+    "keywords" : [
+        "dna", 
+        "chromatin", 
+        "nucleosome", 
+        "next gen seq", 
+        "sequence"
+    ], 
+    "keywords_tool" : [
+        "mnase-seq", 
+        "nucleosome caller", 
+        "nucleR", 
+        "accessibility", 
+        "periodicity", 
+        "stiffness", 
+        "nucleosome free region", 
+        "NFR", 
+        "nucleosome change", 
+        "fuzziness"
+    ], 
+    "infrastructure" : {
+        "memory" : 50, 
+        "cpus" : 2, 
+        "executable" : "/home/pmes/nucleServ/nucleosome_dynamics.py", 
+        "interpreter" : "python3", 
+        "clouds" : {
+            "mug-irb" : {
+                "launcher" : "PMES", 
+                "workflowType" : "Single", 
+                "imageName" : "uuid_nucldynmgtoolapi_48", 
+                "default_cloud" : true
+            }
+        }
+    }, 
+    "input_files" : [
+        {
+            "name" : "MNaseSeq", 
+            "description" : "MNase-seq reads", 
+            "help" : "MNase aligned reads in which nucleosome analyses are to be carried out. Multiple files can be given here, and for each, the selected analyses are going to be performed.", 
+            "file_type" : [
+                "BAM"
+            ], 
+            "data_type" : [
+                "data_mnase_seq"
+            ], 
+            "required" : true, 
+            "allow_multiple" : true
+        }, 
+        {
+            "name" : "condition1", 
+            "description" : "MNase-seq reference state (condition C1)", 
+            "help" : "MNase data used to define the initial state  when comparing nucleosome positioning", 
+            "file_type" : [
+                "BAM"
+            ], 
+            "data_type" : [
+                "data_mnase_seq"
+            ], 
+            "required" : false, 
+            "allow_multiple" : false
+        }, 
+        {
+            "name" : "condition2", 
+            "description" : "MNAse-seq final state (condition C2)", 
+            "help" : "MNase data used to define the final state  when comparing nucleosome positioning", 
+            "file_type" : [
+                "BAM"
+            ], 
+            "data_type" : [
+                "data_mnase_seq"
+            ], 
+            "required" : false, 
+            "allow_multiple" : false
+        }
+    ], 
+    "input_files_combinations" : [
+        {
+            "description" : "Analyse MNase-seq data", 
+            "input_files" : [
+                "MNaseSeq"
+            ]
+        }
+    ], 
+    "input_files_combinations_internal" : [
+        [
+            {
+                "data_mnase_seq" : "+"
+            }
+        ]
+    ], 
+    "input_files_public_dir" : [
+        {
+            "name" : "refGenome_chromSizes", 
+            "description" : "Folder where the information about the chromosome sizes of the reference genome is found", 
+            "help" : "Reference genome Folder", 
+            "type" : "hidden", 
+            "value" : "refGenomes/", 
+            "file_type" : [
+                "TXT"
+            ], 
+            "data_type" : [
+                "configuration_file"
+            ], 
+            "required" : true, 
+            "allow_multiple" : false
+        }
+    ], 
+    "arguments" : [
+        {
+            "name" : "nucleR", 
+            "description" : "NucleR", 
+            "help" : "NucleR finds nucleosome positions from MNase experiments using Fourier transform filtering and classifies nucleosomes according to their fuzziness", 
+            "type" : "boolean", 
+            "required" : true, 
+            "allow_multiple" : false, 
+            "default" : "true"
+        }, 
+        {
+            "name" : "nucleR:width", 
+            "description" : "Width", 
+            "help" : "Size of each nucleosome, in bp, to be considered by NucleR", 
+            "type" : "integer", 
+            "required" : true, 
+            "allow_multiple" : false, 
+            "default" : "147", 
+            "maximum" : 150, 
+            "minimum" : 1)
+        }, 
+        {
+            "name" : "nucleR:minoverlap", 
+            "description" : "Minimum Overlap", 
+            "help" : "Minimum overlap between two nucleosomes for merging them.", 
+            "type" : "integer", 
+            "required" : true, 
+            "allow_multiple" : false, 
+            "default" : "80"
+        }, 
+        {
+            "name" : "nucleR:dyad_length", 
+            "description" : "Dyad Length", 
+            "help" : "Length of the reads that should be used for nucleosome calling to define the dyad of the nucleosomes keeping the given number of bases around the center of the read.", 
+            "type" : "integer", 
+            "required" : true, 
+            "allow_multiple" : false, 
+            "default" : "50"
+        }, 
+        {
+            "name" : "nucleR:threshold", 
+            "description" : "Background Level", 
+            "type" : "boolean", 
+            "help" : "Minimum number of reads (Coverage) to call a nucleosome. Can be given as a percentage (i.e., '25%' means that the peaks with coverage in the 1st quartile of data won't be considered); or as an absolute coverage value (i.e., '20' means that the peaks with less than 20 reads per million of mapped reads won't be considered). Default = 35%.", 
+            "required" : true, 
+            "allow_multiple" : false
+        }, 
+        {
+            "name" : "nucleR:thresholdPercentage", 
+            "description" : "Percentage", 
+            "help" : "Minimum number of reads (Coverage) to call a nucleosome given as percentage (i.e., '25%' means that the peaks with coverage in the 1st quartile of data won't be considered).", 
+            "type" : "number", 
+            "required" : true, 
+            "allow_multiple" : false, 
+            "default" : "35", 
+            "maximum" : 100, 
+            "minimum" : 0)
+        }, 
+        {
+            "name" : "nucleR:thresholdValue", 
+            "description" : "Absolute value", 
+            "help" : "Minimum number of reads (Coverage) to call a nucleosome (i.e., '20' means that the peaks with less than 20 reads per million of mapped reads won't be considered).", 
+            "type" : "integer", 
+            "required" : true, 
+            "allow_multiple" : false, 
+            "default" : ""
+        }, 
+        {
+            "name" : "nucleR:hthresh", 
+            "description" : "Height Threshold", 
+            "help" : "Height threshold (between 0 and 1) to classify a nucleosome as fuzzy (class=F) or well-positioned ( class=W) according to the number of reads at the dyad. Nucleosomes below this value will be defined as fuzzy. Default = 0.4.", 
+            "type" : "number", 
+            "required" : true, 
+            "allow_multiple" : false, 
+            "default" : "0.4"
+        }, 
+        {
+            "name" : "nucleR:wthresh", 
+            "description" : "Width Threshold", 
+            "help" : "Width threshold (between 0 and 1) to classify a nucleosome as fuzzy (class=F) or well-positioned (class=W) according to the dispersion of the reads around the dyad. ", 
+            "type" : "number", 
+            "required" : true, 
+            "allow_multiple" : false, 
+            "default" : "0.6"
+        }, 
+        {
+            "name" : "nucleR:pcKeepComp", 
+            "description" : "Coverage Smoothing", 
+            "help" : "Parameter used in the smoothing when Fourier transformation is applied. Number of components to select with respect to the total size of the sample. llowed values are numeric (in range 0:1) for manual setting, or auto for automatic detection.", 
+            "type" : "number", 
+            "required" : true, 
+            "allow_multiple" : false, 
+            "default" : "0.02"
+        }, 
+        {
+            "name" : "nucDyn", 
+            "description" : "Nucleosome Dynamics", 
+            "help" : "Detection of local changes in the position of nucleosomes at the single read level observed between two reference nucleosome maps", 
+            "type" : "boolean", 
+            "required" : true, 
+            "allow_multiple" : false, 
+            "default" : "true"
+        }, 
+        {
+            "name" : "nucDyn:range", 
+            "description" : "Range", 
+            "help" : "Genomic region to be analyzed: whole genome ('all', entire chromosome (chromosome name i.e. 'chrX'), or region of a chromosome ('chromosomeName:start-end).", 
+            "type" : "string", 
+            "required" : true, 
+            "allow_multiple" : false, 
+            "default" : "All"
+        }, 
+        {
+            "name" : "nucDyn:maxDiff", 
+            "description" : "Maximum Diff", 
+            "help" : "Maximum distance between the dyads of two reads that allows them to still be considered a <i>shift</i>. If unspecified but <i>readSize</i> is specified, it will be set to the half of readSize. If neither of them is specified, it will be set to 70", 
+            "type" : "integer", 
+            "required" : true, 
+            "allow_multiple" : false, 
+            "default" : "70"
+        }, 
+        {
+            "name" : "nucDyn:maxLen", 
+            "description" : "Maximum Length", 
+            "help" : "Used in the preliminar filtering. Reads longer than this number will be filtered out", 
+            "type" : "integer", 
+            "required" : true, 
+            "allow_multiple" : false, 
+            "default" : "140"
+        }, 
+        {
+            "name" : "nucDyn:shift_min_nreads", 
+            "type" : "integer", 
+            "description" : "Shift minimum num. reads", 
+            "help" : "Minimum number of reads in a 'SHIFT +' or a 'SHIFT -' hotspot", 
+            "required" : true, 
+            "allow_multiple" : false, 
+            "default" : "3"
+        }, 
+        {
+            "name" : "nucDyn:shift_threshold", 
+            "type" : "number", 
+            "description" : "Shifts threshold", 
+            "help" : "Minimum score for a 'SHIFT +' or a 'SHIFT -' hotspot", 
+            "required" : true, 
+            "allow_multiple" : false, 
+            "default" : "0.1"
+        }, 
+        {
+            "name" : "nucDyn:indel_min_nreads", 
+            "type" : "integer", 
+            "description" : "Indels minimum num. reads", 
+            "help" : "Minimum number of reads in an 'INCLUSION +' or a 'DELETION -' hotspot", 
+            "required" : true, 
+            "allow_multiple" : false, 
+            "default" : "3"
+        }, 
+        {
+            "name" : "nucDyn:indel_threshold", 
+            "type" : "number", 
+            "description" : "Indels threshold", 
+            "help" : "Minimum score for an 'INCLUSION' or a 'DELETION' hotspot", 
+            "required" : true, 
+            "allow_multiple" : false, 
+            "default" : "0.05"
+        }, 
+        {
+            "name" : "nucDyn:equal_size", 
+            "description" : "Equal Size", 
+            "help" : "If set to TRUE, all sets will be set to the same length, conserving their original dyad position", 
+            "type" : "boolean", 
+            "required" : true, 
+            "allow_multiple" : false
+        }, 
+        {
+            "name" : "nucDyn:readSize", 
+            "type" : "integer", 
+            "description" : "Read Size", 
+            "help" : "Length to which all reads will be set in case 'equalSize' is TRUE", 
+            "required" : true, 
+            "allow_multiple" : false, 
+            "default" : "140"
+        }, 
+        {
+            "name" : "NFR", 
+            "description" : "Nucleosome Free Regions", 
+            "help" : "Nucleosome-free regions (NFR) are regions depleted of nucleosomes and larger than an average linker fragment.", 
+            "type" : "boolean", 
+            "required" : true, 
+            "allow_multiple" : false, 
+            "default" : "true"
+        }, 
+        {
+            "name" : "NFR:minwidth", 
+            "type" : "integer", 
+            "description" : "Minimum Width", 
+            "help" : "Minimum width for a linker fragment to be considered a nucleosome-free region", 
+            "required" : true, 
+            "allow_multiple" : false, 
+            "default" : "110"
+        }, 
+        {
+            "name" : "NFR:threshold", 
+            "type" : "integer", 
+            "description" : "Maximum width", 
+            "help" : "Maximum width for a linker fragment to be considered a nucleosome-free region", 
+            "required" : true, 
+            "allow_multiple" : false, 
+            "default" : "140"
+        }, 
+        {
+            "name" : "periodicity", 
+            "description" : "Nucleosome Gene Phasing", 
+            "help" : "Nucleosome phasing along a given gene between the first and last nucleosome", 
+            "type" : "boolean", 
+            "required" : true, 
+            "allow_multiple" : false, 
+            "default" : "true"
+        }, 
+        {
+            "name" : "periodicity:periodicity", 
+            "type" : "integer", 
+            "description" : "Period", 
+            "help" : "Average distance between two consecutive nucleosomes (repeat length).", 
+            "required" : true, 
+            "allow_multiple" : false, 
+            "default" : "165"
+        }, 
+        {
+            "name" : "txstart", 
+            "description" : "TSS classification", 
+            "help" : "Classification of the Transcription Start Sites (TSS) according to the nucleosome architecture.", 
+            "type" : "boolean", 
+            "required" : true, 
+            "allow_multiple" : false, 
+            "default" : "true"
+        }, 
+        {
+            "name" : "txstart:window", 
+            "type" : "integer", 
+            "description" : "Window", 
+            "help" : "Number of nucleotides on each side of the TSS where -1 and +1 nucleosome are search for.", 
+            "required" : true, 
+            "allow_multiple" : false, 
+            "default" : "300"
+        }, 
+        {
+            "name" : "txstart:open_thresh", 
+            "type" : "integer", 
+            "description" : "Open threshold", 
+            "help" : "Distance between nucleosomes -1 and +1 to discriminate between 'open' and 'close' classes.", 
+            "required" : true, 
+            "allow_multiple" : false, 
+            "default" : "215"
+        }, 
+        {
+            "name" : "gausfitting", 
+            "description" : "Stiffness", 
+            "help" : "Measure of the resistance of a given nucleosome to be displaced, derived from the properties of the nucleosome calls fitted into a Gaussian distribution.", 
+            "type" : "boolean", 
+            "required" : true, 
+            "allow_multiple" : false, 
+            "default" : "true"
+        }, 
+        {
+            "name" : "gausfitting:range", 
+            "type" : "string", 
+            "description" : "Genomic range", 
+            "help" : "Genomic region to be analyzed: whole genome ('all', entire chromosome (chromosome name i.e. 'chrX'), or region of a chromosome ('chromosomeName:start-end).", 
+            "required" : true, 
+            "allow_multiple" : false, 
+            "default" : "All"
+        }
+    ], 
+    "control_file" : ".summary.json", 
+    "output_files" : [
+        {
+            "name" : "NR_gff", 
+            "required" : false, 
+            "allow_multiple" : true, 
+            "file" : {
+                "file_type" : "GFF3", 
+                "data_type" : "nucleosome_positioning", 
+                "compressed" : "null", 
+                "meta_data" : {
+                    "description" : "Nuclesome positions predicted by NucleR from MNase-seq data", 
+                    "tool" : "nucldynwf", 
+                    "visible" : true
+                }
+            }
+        }, 
+        {
+            "name" : "ND_gff", 
+            "required" : false, 
+            "allow_multiple" : true, 
+            "file" : {
+                "file_type" : "GFF3", 
+                "data_type" : "nucleosome_dynamics", 
+                "compressed" : "null", 
+                "meta_data" : {
+                    "description" : "Nucleosome positioning differences given two MNAse-seq states", 
+                    "tool" : "nucldynwf", 
+                    "visible" : true
+                }
+            }
+        }, 
+        {
+            "name" : "ND_bw", 
+            "required" : false, 
+            "allow_multiple" : true, 
+            "file" : {
+                "file_type" : "BW", 
+                "data_type" : "nucleosome_dynamics", 
+                "compressed" : "null", 
+                "meta_data" : {
+                    "description" : "Nucleosome positioning differences given two MNAse-seq states", 
+                    "tool" : "nucldynwf", 
+                    "visible" : true
+                }
+            }
+        }, 
+        {
+            "name" : "NFR_gff", 
+            "required" : false, 
+            "allow_multiple" : true, 
+            "file" : {
+                "file_type" : "GFF3", 
+                "data_type" : "nucleosome_free_regions", 
+                "compressed" : "null", 
+                "meta_data" : {
+                    "description" : "Nucleosome Free Regions computed from MNase-seq data", 
+                    "tool" : "nucldynwf", 
+                    "visible" : true
+                }
+            }
+        }, 
+        {
+            "name" : "TSS_gff", 
+            "required" : false, 
+            "allow_multiple" : true, 
+            "file" : {
+                "file_type" : "GFF3", 
+                "data_type" : "tss_classification_by_nucleosomes", 
+                "compressed" : "null", 
+                "meta_data" : {
+                    "description" : "Transcriptions Start Site classification based on nucleosome architecture", 
+                    "tool" : "nucldynwf", 
+                    "visible" : true
+                }
+            }
+        }, 
+        {
+            "name" : "STF_gff", 
+            "required" : false, 
+            "allow_multiple" : true, 
+            "file" : {
+                "file_type" : "GFF3", 
+                "data_type" : "nucleosome_stiffness", 
+                "compressed" : "null", 
+                "meta_data" : {
+                    "description" : "Nucleosome stiffness computed from MNase-seq data", 
+                    "tool" : "nucldynwf", 
+                    "visible" : true
+                }
+            }
+        }, 
+        {
+            "name" : "P_gff", 
+            "required" : false, 
+            "allow_multiple" : true, 
+            "file" : {
+                "file_type" : "GFF3", 
+                "data_type" : "nucleosome_gene_phasing", 
+                "compressed" : "null", 
+                "meta_data" : {
+                    "description" : "Nucleosome phasing along a given gene computed from MNase-seq data", 
+                    "tool" : "nucldynwf", 
+                    "visible" : true
+                }
+            }
+        }, 
+        {
+            "name" : "P_bw", 
+            "required" : false, 
+            "allow_multiple" : true, 
+            "file" : {
+                "file_type" : "BW", 
+                "data_type" : "nucleosome_gene_phasing", 
+                "compressed" : "null", 
+                "meta_data" : {
+                    "description" : "Nucleosome phasing along a given gene computed from MNase-seq data", 
+                    "tool" : "nucldynwf", 
+                    "visible" : true
+                }
+            }
+        }, 
+        {
+            "name" : "statistics", 
+            "required" : true, 
+            "allow_multiple" : false, 
+            "file" : {
+                "file_type" : "TAR", 
+                "data_type" : "tool_statistics", 
+                "compressed" : "gzip", 
+                "meta_data" : {
+                    "description" : "Statistical data from nucleosome analysis workflow", 
+                    "tool" : "nucldynwf", 
+                    "visible" : false
+                }
+            }
+        }
+    ]
+}
