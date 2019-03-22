@@ -95,6 +95,9 @@ Where `analysis.R` are:
 | stiffness | Aparent stiffness constant foreach nucleosome obtained by fitting the coverage to a gaussian distribution |
 
 
+<br/>
+<br/>
+
 Additionally, each analysis has an statistics module that creates a report (tabular or graphical) for summarising the calculation. So, after running an analysis:
 
 ```sh
@@ -112,6 +115,8 @@ Available `analysis_stats`.R are:
 | stiffness_stats|      Statistics on stiffness|
 | nucDyn_stats|    Statistics on Nucleosome Dynamics analysis|
 
+<br/>
+<br/>
 
 The [Usage](#Usage) section below describes the available arguments for each individual analysis, and similary, the [Results](#Results) section includes their output file descriptions.
 
