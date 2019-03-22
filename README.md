@@ -1,8 +1,57 @@
-# nucleServ - Nucleosome Dynamics Server
+# Nucleosome Dynamics CLI
+------------ 
 
-Scripts and wrappers to run nucleR and NucDyn on the backend of a server
+This repository includes the set of R programs implementing 'Nucleosome Dynamics' analyses. 
 
-## Analyses
+
+----
+
+## Table of contents
+{:.no_toc}
+
+- TOC
+{:toc}
+
+----
+
+## Nucleosome Dynamics
+
+TDB - ND introduction?
+
+## Requirements
+
+* R >= 3.5
+* R packages
+    -  NucDyn
+    -  nucleR
+* UCSC wig utilities
+    - wigToBigWig
+
+## Installation
+
+The instruction on how to install 'Nucleosome Dynamics CLI' are detailed at [INSTALL.md](INSTALL.md)
+
+## Running Nucleosome Dynamics CLI
+
+Run each of the analysis offered simply:
+
+```
+Rscript bin/[analysis].R [analysis_arguments]
+```
+
+Additionally, each analysis has an statistics module that creates a report (tabular or graphical) for summarising the calculation. So, after running an analysis:
+
+```
+Rscript statistics/[analysis_stats].R [analysis_stats_arguments]
+```
+
+Bellow, 
+
+## Analyses usage
+
+TBD - current docker usage??
+
+## Analyses results
 
 #### NucDyn
 
