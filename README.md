@@ -5,7 +5,7 @@ This repository **wrapps Nucleosome Dynamics CLI** as a tool to make it accessib
   
 #### Nucleosome Dynamics  
   
-Nucleosome Dynamics is a suite of programs for defining nucleosome architecture and dynamics from MNase-seq and ATAC-seq experiments. They are implemented as a set of R libraries ([nucleR] http://mmb.pcb.ub.es/gitlab/NuclDynamics/nucleR) and [nucDyn](http://mmb.pcb.ub.es/gitlab/NuclDynamics/NucleosomeDynamics_core)) and programs  ([Nucleosome Dynamics CLI](http://mmb.pcb.ub.es/gitlab/NuclDynamics/distpkg)) on top of which several implementations have been created in order to improve accessibility and usability. These include:  
+Nucleosome Dynamics is a suite of programs for defining nucleosome architecture and dynamics from MNase-seq and ATAC-seq experiments. They are implemented as a set of R libraries ([nucleR] (http://mmb.pcb.ub.es/gitlab/NuclDynamics/nucleR) and [nucDyn](http://mmb.pcb.ub.es/gitlab/NuclDynamics/NucleosomeDynamics_core)) and programs  ([Nucleosome Dynamics CLI](http://mmb.pcb.ub.es/gitlab/NuclDynamics/distpkg)) on top of which several implementations have been created in order to improve accessibility and usability. These include:  
   
 1. MuGVRE platform: the domain-specific virtual research environment for 3D/4D genomics  - http://multiscalegenomics.eu  
 2. Galaxy platform {[GIT](http://mmb.pcb.ub.es/gitlab/NuclDynamics/galaxy)}: the popular analysis platform - https://dev.usegalaxy.es  
