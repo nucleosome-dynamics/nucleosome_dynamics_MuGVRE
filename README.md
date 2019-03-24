@@ -1,74 +1,54 @@
-# nucleServ - Nucleosome Dynamics Server
+Nucleosome Dynamics Server  
+------------  
+  
+This repository **wrapps Nucleosome Dynamics CLI** as a tool to make it accessible at the **MuGVRE platform** (http://multiscalegenomics.eu).  
+  
+#### Nucleosome Dynamics  
+  
+Nucleosome Dynamics is a suite of programs for defining nucleosome architecture and dynamics from MNase-seq and ATAC-seq experiments. They are implemented as a set of R libraries ([nucleR] http://mmb.pcb.ub.es/gitlab/NuclDynamics/nucleR) and [nucDyn](http://mmb.pcb.ub.es/gitlab/NuclDynamics/NucleosomeDynamics_core)) and programs  ([Nucleosome Dynamics CLI](http://mmb.pcb.ub.es/gitlab/NuclDynamics/distpkg)) on top of which several implementations have been created in order to improve accessibility and usability. These include:  
+  
+1. MuGVRE platform: the domain-specific virtual research environment for 3D/4D genomics  - http://multiscalegenomics.eu  
+2. Galaxy platform {[GIT](http://mmb.pcb.ub.es/gitlab/NuclDynamics/galaxy)}: the popular analysis platform - https://dev.usegalaxy.es  
+3. Docker container {[GIT](http://mmb.pcb.ub.es/gitlab/NuclDynamics/docker)}: find the image [here](https://hub.docker.com/r/mmbirb/nucldyn)  
+4. Singularity container {[GIT](https://github.com/nucleosome-dynamics/nucleosome_dynamics_singularity)}: find the image [here](https://www.singularity-hub.org/collections/2579)
 
-Scripts and wrappers to run nucleR and NucDyn on the backend of a server
+#### MuGVRE platform
 
-## Analyses
+MuG Virtual Research Environment (MuGVRE) is the virtual research environment specifically developed for the [Multiscale complex Genomics (MuG)](http://multiscalegenomics.eu/MuG/) group, a research community focused on the 3D/4D genomics field. MuGVRE is a cloud-based e-infrastructure that integrates in a single framework rellevant data, tools and visualizers for the community in order to build a one-stop research platform.
 
-#### NucDyn
+> Learn more and access MuGVRE : http://multiscalegenomics.eu
 
-Primary data
-* Position: region where a nucleosome movement is detected
-* Type: change in the nucleosome map
-* Score: magnitude of the change
-
-Attributes
-* class: type of hotspot (see help for all possible types)
-* nreads: number of reads involved in this movement
-
-
-#### nucleR
-
-Primary data
-* Score: Positionning score. It is calculated as the weighted sum of width and height scores.
-
-Attributes
-* score_width: Witdth score. It is a measure of how sharp a peak is. A value of 0 would be an extremely wide peak and a value of 1 a very sharp one.
-* score_height: Height score. Tells how large a peak of a nucleosome is. The bigger this number, the higher the peak.
-* class: Whether the nucleosome is well-positioned (W) or fuzzy (F) or undetermined. The taken value depends on score_h and score_w. Undetermined means the exact position of the nucleosome cannot be determined due to strong fuzziness.
+'Nucleosome Dynamics' is one of the tools offered at the platform (check the [complete catalog](http://multiscalegenomics.eu/MuGVRE/tools-catalog/)).
 
 
-#### Stiffness
+## Requirements
+* Nucleosome Dynamics:
+    * Nucleosome Dynamics CLI
+        -  NucDyn
+        -  nucleR
+* Python Modules:
+    * mg-tool-api logger
 
-Primary data
-* Score: Stiffness estimation. It represents the energy required to move the nucleosome (expressed in kcal/mol/bp), it's derived from the Gaussian standard deviation.
+#####  Nucleosome Dynamics CLI
+Follow the instructions detailed at the [Nucleosome Dynamics CLI](http://mmb.pcb.ub.es/gitlab/NuclDynamics/distpkg) repository on how to install the set of R scripts and dependencies.
 
-Attributes
-* nucleR_score: the nucleR score given to that nucleosome
-* nucleR.class: the nucleR class given to that nucleosome
-* gauss_k: the height of the peak of the gaussian curve
-* gauss_m: the position of the peak of the gaussian curve
-* gauss_sd: the standard deviation of the gaussian curve
-
-
-#### Periodicity
-
-Primary data
-* Position: gene position (from TSS to TTS) 
-
-Attributes
-* nucleosome_first: First nucleosome of the gene.
-* nucleosme_last: Last nucleosome of the gene.
-* score_phase: Is a measure of the phase between the first and the last nucleosome. A score of 0 means the nucleosome are completely phased and a score of 82 corresponds to totally antiphased nucleosomes.
-* score_autocorrelation: It is directly computed from the experimental coverage and is quantitative measure of the periodicity of nucleosomes inside the gene body.
+##### mg-tool-api
+The present Nucleosome Dynamics wrapping makes use of some MuG-developed utilities like [mg-tool-api logger](https://github.com/Multiscale-Genomics/mg-tool-api/tree/master/utils), already included in this repository. It is a python logging falicity to report execution progress, exceptions, etc 
 
 
-#### TSS classes
+# Nucleosome Dynamics Server
 
-Primary data
-* Position: Region between the dyads of two nucleosomes surrounding the TSS.
+This repository contains the python wrappers and the configuration files necessary to register and integrate 'Nucleosome Dynamics CLI' into  MuGVRE server:
 
-Attributes
-* classification: Descriptor of the Transcription Start Site. See the help for possible options.
-* distance: Distance in base pairs between the nucleosome +1 and the nucleosome -1.
-* nucleosome minus1: Position of the nucleosome -1.
-* nucleosome plus1: Position of the nucleosome +1
-* TTS_position: Position of the Transcription Start Site.
+- `nucleosome_dynamics.py` : MuGVRE tool. Interface for MuGVRE backend that receives web-user input files and calls 'Nucleosome Dynamics CLI' with them.
+- `nucleosome_dynamics.json`: Tool definition. MuGVRE registry entry that defines 'Nucleosome Dynamics' tool with its input and output files, parameter definitions, resources, metadatam, etc.
+- `test/`: Files for reproducing a 'Nucleosome Dynamics' run.
 
-# Complete workflow
+MuGVRE [documentation](http://multiscalegenomics.eu/MuGVRE/instructions/) includes a detailed explanation on the number of steps necessary to integrate a new tool into the platform.
 
-#### nucleosome_dynamics.py
+##### Running 'Nucleosome Dynamics' tool
 
-Sequencially runs the analyses above listed in a complete Nucleosome Dynamics workflow.
+MUGVRE platform interacts with `nucleosome_dynamics.py` through a set of configuration JSON files that contains the rellevant information on the web-user input files and arguments for a certain run. Also includes the data for the expected output files. The script sequencially runs 'Nucleosome Dynamics CLI' according these configuration files to end up executing a custom Nucleosome Dynamics workflow.
 
 Arguments
 * config: JSON file containing workflow parameters
@@ -76,9 +56,9 @@ Arguments
 * out_metadata: Filename for the JSON that will contain output file metadata
 * log_file: Filename for the log file
 
-The following bash script runs `nucleosome_dynamics.py` with the sample MNase-seq data found at `test/data`. 
+The following bash script runs `nucleosome_dynamics.py` with the sample MNase-seq data found at `test/data`.
 ```sh
 cd test/
-bash test_0_AnalyseMNaseseqdata.sh 
+bash test_0_AnalyseMNaseseqdata.sh
 ```
 
