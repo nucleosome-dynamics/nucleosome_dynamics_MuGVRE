@@ -682,7 +682,7 @@ class gauss_stats(IterOnInfs, Stats):
     """
     Gaussian fitting and stiffness constant estimation statistics
     """
-    exec_name = "gausfitting"
+    exec_name = "stiffness"
     exec_descrip = "Preparing statistics for Nucleosome Stiffness Analysis"
     names = "MNaseSeq",
 

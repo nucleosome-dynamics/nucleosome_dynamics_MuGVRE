@@ -1,0 +1,169 @@
+{
+    "output_files": [
+        {
+            "file_path": "/home/pmes/nucleosome_dynamics_MuGVRE/test/test/../example_run/NR_cellcycleM_chrII.gff",
+            "name": "NR_gff",
+            "taxon_id": 4932,
+            "sources": [
+                "unique_file_id_5b6036fd86ece2.60948856"
+            ],
+            "meta_data": {
+                "assembly": "R64-1-1"
+            }
+        },
+        {
+            "file_path": "/home/pmes/nucleosome_dynamics_MuGVRE/test/test/../example_run/NR_cellcycleG2_chrII.gff",
+            "name": "NR_gff",
+            "taxon_id": 4932,
+            "sources": [
+                "unique_file_id_5b6036ff52b083.07917231"
+            ],
+            "meta_data": {
+                "assembly": "R64-1-1"
+            }
+        },
+        {
+            "file_path": "/home/pmes/nucleosome_dynamics_MuGVRE/test/test/../example_run/NFR_cellcycleM_chrII.gff",
+            "name": "NFR_gff",
+            "taxon_id": 4932,
+            "sources": [
+                "unique_file_id_5b6036fd86ece2.60948856"
+            ],
+            "meta_data": {
+                "assembly": "R64-1-1"
+            }
+        },
+        {
+            "file_path": "/home/pmes/nucleosome_dynamics_MuGVRE/test/test/../example_run/NFR_cellcycleG2_chrII.gff",
+            "name": "NFR_gff",
+            "taxon_id": 4932,
+            "sources": [
+                "unique_file_id_5b6036ff52b083.07917231"
+            ],
+            "meta_data": {
+                "assembly": "R64-1-1"
+            }
+        },
+        {
+            "file_path": "/home/pmes/nucleosome_dynamics_MuGVRE/test/test/../example_run/TSS_cellcycleM_chrII.gff",
+            "name": "TSS_gff",
+            "taxon_id": 4932,
+            "sources": [
+                "unique_file_id_5b6036fd86ece2.60948856"
+            ],
+            "meta_data": {
+                "assembly": "R64-1-1"
+            }
+        },
+        {
+            "file_path": "/home/pmes/nucleosome_dynamics_MuGVRE/test/test/../example_run/TSS_cellcycleG2_chrII.gff",
+            "name": "TSS_gff",
+            "taxon_id": 4932,
+            "sources": [
+                "unique_file_id_5b6036ff52b083.07917231"
+            ],
+            "meta_data": {
+                "assembly": "R64-1-1"
+            }
+        },
+        {
+            "file_path": "/home/pmes/nucleosome_dynamics_MuGVRE/test/test/../example_run/P_cellcycleM_chrII.gff",
+            "name": "P_gff",
+            "taxon_id": 4932,
+            "sources": [
+                "unique_file_id_5b6036fd86ece2.60948856"
+            ],
+            "meta_data": {
+                "assembly": "R64-1-1"
+            }
+        },
+        {
+            "file_path": "/home/pmes/nucleosome_dynamics_MuGVRE/test/test/../example_run/P_cellcycleM_chrII.bw",
+            "name": "P_bw",
+            "taxon_id": 4932,
+            "sources": [
+                "unique_file_id_5b6036fd86ece2.60948856"
+            ],
+            "meta_data": {
+                "assembly": "R64-1-1"
+            }
+        },
+        {
+            "file_path": "/home/pmes/nucleosome_dynamics_MuGVRE/test/test/../example_run/P_cellcycleG2_chrII.gff",
+            "name": "P_gff",
+            "taxon_id": 4932,
+            "sources": [
+                "unique_file_id_5b6036ff52b083.07917231"
+            ],
+            "meta_data": {
+                "assembly": "R64-1-1"
+            }
+        },
+        {
+            "file_path": "/home/pmes/nucleosome_dynamics_MuGVRE/test/test/../example_run/P_cellcycleG2_chrII.bw",
+            "name": "P_bw",
+            "taxon_id": 4932,
+            "sources": [
+                "unique_file_id_5b6036ff52b083.07917231"
+            ],
+            "meta_data": {
+                "assembly": "R64-1-1"
+            }
+        },
+        {
+            "file_path": "/home/pmes/nucleosome_dynamics_MuGVRE/test/test/../example_run/STF_cellcycleM_chrII.gff",
+            "name": "STF_gff",
+            "taxon_id": 4932,
+            "sources": [
+                "unique_file_id_5b6036fd86ece2.60948856"
+            ],
+            "meta_data": {
+                "assembly": "R64-1-1"
+            }
+        },
+        {
+            "file_path": "/home/pmes/nucleosome_dynamics_MuGVRE/test/test/../example_run/STF_cellcycleG2_chrII.gff",
+            "name": "STF_gff",
+            "taxon_id": 4932,
+            "sources": [
+                "unique_file_id_5b6036ff52b083.07917231"
+            ],
+            "meta_data": {
+                "assembly": "R64-1-1"
+            }
+        },
+        {
+            "file_path": "/home/pmes/nucleosome_dynamics_MuGVRE/test/test/../example_run/ND_cellcycleG2_chrII_cellcycleM_chrII.gff",
+            "name": "ND_gff",
+            "taxon_id": 4932,
+            "sources": [
+                "unique_file_id_5b6036ff52b083.07917231",
+                "unique_file_id_5b6036fd86ece2.60948856"
+            ],
+            "meta_data": {
+                "assembly": "R64-1-1"
+            }
+        },
+        {
+            "file_path": "/home/pmes/nucleosome_dynamics_MuGVRE/test/test/../example_run/ND_cellcycleG2_chrII_cellcycleM_chrII.bw",
+            "name": "ND_bw",
+            "taxon_id": 4932,
+            "sources": [
+                "unique_file_id_5b6036ff52b083.07917231",
+                "unique_file_id_5b6036fd86ece2.60948856"
+            ],
+            "meta_data": {
+                "assembly": "R64-1-1"
+            }
+        },
+        {
+            "file_path": "/home/pmes/nucleosome_dynamics_MuGVRE/test/test/../example_run/statistics.tgz",
+            "name": "statistics",
+            "sources": [
+                "unique_file_id_5b60371dc316e9.06013480_dummy",
+                "unique_file_id_5b6036fd86ece2.60948856",
+                "unique_file_id_5b6036ff52b083.07917231"
+            ]
+        }
+    ]
+}

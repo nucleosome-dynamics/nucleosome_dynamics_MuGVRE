@@ -1,16 +1,16 @@
-chrII	NucleosomeDynamics	Nucleosome change	12453	12686	0.0145905861502489	.	.	nreads=3.35583137722519;class=INCLUSION
-chrII	NucleosomeDynamics	Nucleosome change	16527	16679	0.0116178639233301	.	.	nreads=3.32010826742652;class=INCLUSION
-chrII	NucleosomeDynamics	Nucleosome change	17813	17978	0.00244022288092387	.	.	nreads=3.76846113314784;class=INCLUSION
-chrII	NucleosomeDynamics	Nucleosome change	37509	37662	0.0188279663158348	.	.	nreads=3.0026735322627;class=INCLUSION
-chrII	NucleosomeDynamics	Nucleosome change	37680	37965	0.000449408121787405	.	.	nreads=4.90937327810431;class=INCLUSION
-chrII	NucleosomeDynamics	Nucleosome change	42220	42420	0.00515117881707874	.	.	nreads=3.62446352577001;class=INCLUSION
-chrII	NucleosomeDynamics	Nucleosome change	48952	49138	0.0174820397546826	.	.	nreads=3.12224345105165;class=INCLUSION
-chrII	NucleosomeDynamics	Nucleosome change	60041	60213	0.00752990883595927	.	.	nreads=3.46115105617404;class=INCLUSION
-chrII	NucleosomeDynamics	Nucleosome change	63974	64184	0.0204239568573379	.	.	nreads=3.26787918041301;class=INCLUSION
-chrII	NucleosomeDynamics	Nucleosome change	66137	66370	0.00693722416549654	.	.	nreads=3.75995674495063;class=INCLUSION
-chrII	NucleosomeDynamics	Nucleosome change	67666	67853	0.0130522050957899	.	.	nreads=3.27843468004489;class=INCLUSION
-chrII	NucleosomeDynamics	Nucleosome change	83543	83768	0.00784042922041864	.	.	nreads=3.76569634817574;class=INCLUSION
-chrII	NucleosomeDynamics	Nucleosome change	84503	84695	0.00565162083864906	.	.	nreads=3.51913948422993;class=INCLUSION
+chrII	NucleosomeDynamics	Nucleosome change	 12453	 12686	0.0145905861502489	.	.	nreads=3.35583137722519;class=INCLUSION
+chrII	NucleosomeDynamics	Nucleosome change	 16527	 16679	0.0116178639233301	.	.	nreads=3.32010826742652;class=INCLUSION
+chrII	NucleosomeDynamics	Nucleosome change	 17813	 17978	0.00244022288092387	.	.	nreads=3.76846113314784;class=INCLUSION
+chrII	NucleosomeDynamics	Nucleosome change	 37509	 37662	0.0188279663158348	.	.	nreads=3.0026735322627;class=INCLUSION
+chrII	NucleosomeDynamics	Nucleosome change	 37680	 37965	0.000449408121787405	.	.	nreads=4.90937327810431;class=INCLUSION
+chrII	NucleosomeDynamics	Nucleosome change	 42220	 42420	0.00515117881707874	.	.	nreads=3.62446352577001;class=INCLUSION
+chrII	NucleosomeDynamics	Nucleosome change	 48952	 49138	0.0174820397546826	.	.	nreads=3.12224345105165;class=INCLUSION
+chrII	NucleosomeDynamics	Nucleosome change	 60041	 60213	0.00752990883595927	.	.	nreads=3.46115105617404;class=INCLUSION
+chrII	NucleosomeDynamics	Nucleosome change	 63974	 64184	0.0204239568573379	.	.	nreads=3.26787918041301;class=INCLUSION
+chrII	NucleosomeDynamics	Nucleosome change	 66137	 66370	0.00693722416549654	.	.	nreads=3.75995674495063;class=INCLUSION
+chrII	NucleosomeDynamics	Nucleosome change	 67666	 67853	0.0130522050957899	.	.	nreads=3.27843468004489;class=INCLUSION
+chrII	NucleosomeDynamics	Nucleosome change	 83543	 83768	0.00784042922041864	.	.	nreads=3.76569634817574;class=INCLUSION
+chrII	NucleosomeDynamics	Nucleosome change	 84503	 84695	0.00565162083864906	.	.	nreads=3.51913948422993;class=INCLUSION
 chrII	NucleosomeDynamics	Nucleosome change	100895	101079	0.00328559494434197	.	.	nreads=3.49612711163579;class=INCLUSION
 chrII	NucleosomeDynamics	Nucleosome change	102972	103183	0.016066352618141	.	.	nreads=3.13361957497686;class=INCLUSION
 chrII	NucleosomeDynamics	Nucleosome change	111868	112024	0.00827526598026395	.	.	nreads=3.28236436923612;class=INCLUSION
@@ -168,23 +168,23 @@ chrII	NucleosomeDynamics	Nucleosome change	780274	780480	5.87713044264886e-06	.	
 chrII	NucleosomeDynamics	Nucleosome change	793075	793245	9.09049243794916e-05	.	.	nreads=4.91064109808991;class=INCLUSION
 chrII	NucleosomeDynamics	Nucleosome change	795864	796073	0.0167239677619516	.	.	nreads=3.22132898374708;class=INCLUSION
 chrII	NucleosomeDynamics	Nucleosome change	802662	803002	0.0111256956194599	.	.	nreads=3.59476001170608;class=INCLUSION
-chrII	NucleosomeDynamics	Nucleosome change	10662	10849	0.00762078369376427	.	.	nreads=3.17133002342515;class=EVICTION
-chrII	NucleosomeDynamics	Nucleosome change	13965	14244	0.0270314117349959	.	.	nreads=3.14893689942105;class=EVICTION
-chrII	NucleosomeDynamics	Nucleosome change	21125	21356	0.014544774590219	.	.	nreads=3.28852014678903;class=EVICTION
-chrII	NucleosomeDynamics	Nucleosome change	36335	36734	0.000246275720689716	.	.	nreads=4.49240557324933;class=EVICTION
-chrII	NucleosomeDynamics	Nucleosome change	45111	45268	0.0117472442065895	.	.	nreads=3.06472994675042;class=EVICTION
-chrII	NucleosomeDynamics	Nucleosome change	47272	47449	0.000210247554427141	.	.	nreads=4.33614177190485;class=EVICTION
-chrII	NucleosomeDynamics	Nucleosome change	62545	62788	0.0202413713004625	.	.	nreads=3.12591941864113;class=EVICTION
-chrII	NucleosomeDynamics	Nucleosome change	66860	67094	0.010003618571424	.	.	nreads=3.30421783227418;class=EVICTION
-chrII	NucleosomeDynamics	Nucleosome change	67096	67378	0.00949706957015484	.	.	nreads=3.37261186657181;class=EVICTION
-chrII	NucleosomeDynamics	Nucleosome change	67380	67559	0.0210711047909272	.	.	nreads=3.02942027226081;class=EVICTION
-chrII	NucleosomeDynamics	Nucleosome change	68745	69007	0.00408882722661855	.	.	nreads=3.66072018930435;class=EVICTION
-chrII	NucleosomeDynamics	Nucleosome change	74650	74831	0.00255000897722763	.	.	nreads=3.97666073840687;class=EVICTION
-chrII	NucleosomeDynamics	Nucleosome change	79528	79753	0.00138101487991498	.	.	nreads=4.12987328081771;class=EVICTION
-chrII	NucleosomeDynamics	Nucleosome change	81536	81776	0.020702084056699	.	.	nreads=3.07737801443815;class=EVICTION
-chrII	NucleosomeDynamics	Nucleosome change	89285	89514	0.0118216760176375	.	.	nreads=3.28507485933524;class=EVICTION
-chrII	NucleosomeDynamics	Nucleosome change	89530	89759	3.6027426604311e-06	.	.	nreads=5.11723723403339;class=EVICTION
-chrII	NucleosomeDynamics	Nucleosome change	97955	98122	0.0158053498307978	.	.	nreads=3.03416797269421;class=EVICTION
+chrII	NucleosomeDynamics	Nucleosome change	 10662	 10849	0.00762078369376427	.	.	nreads=3.17133002342515;class=EVICTION
+chrII	NucleosomeDynamics	Nucleosome change	 13965	 14244	0.0270314117349959	.	.	nreads=3.14893689942105;class=EVICTION
+chrII	NucleosomeDynamics	Nucleosome change	 21125	 21356	0.014544774590219	.	.	nreads=3.28852014678903;class=EVICTION
+chrII	NucleosomeDynamics	Nucleosome change	 36335	 36734	0.000246275720689716	.	.	nreads=4.49240557324933;class=EVICTION
+chrII	NucleosomeDynamics	Nucleosome change	 45111	 45268	0.0117472442065895	.	.	nreads=3.06472994675042;class=EVICTION
+chrII	NucleosomeDynamics	Nucleosome change	 47272	 47449	0.000210247554427141	.	.	nreads=4.33614177190485;class=EVICTION
+chrII	NucleosomeDynamics	Nucleosome change	 62545	 62788	0.0202413713004625	.	.	nreads=3.12591941864113;class=EVICTION
+chrII	NucleosomeDynamics	Nucleosome change	 66860	 67094	0.010003618571424	.	.	nreads=3.30421783227418;class=EVICTION
+chrII	NucleosomeDynamics	Nucleosome change	 67096	 67378	0.00949706957015484	.	.	nreads=3.37261186657181;class=EVICTION
+chrII	NucleosomeDynamics	Nucleosome change	 67380	 67559	0.0210711047909272	.	.	nreads=3.02942027226081;class=EVICTION
+chrII	NucleosomeDynamics	Nucleosome change	 68745	 69007	0.00408882722661855	.	.	nreads=3.66072018930435;class=EVICTION
+chrII	NucleosomeDynamics	Nucleosome change	 74650	 74831	0.00255000897722763	.	.	nreads=3.97666073840687;class=EVICTION
+chrII	NucleosomeDynamics	Nucleosome change	 79528	 79753	0.00138101487991498	.	.	nreads=4.12987328081771;class=EVICTION
+chrII	NucleosomeDynamics	Nucleosome change	 81536	 81776	0.020702084056699	.	.	nreads=3.07737801443815;class=EVICTION
+chrII	NucleosomeDynamics	Nucleosome change	 89285	 89514	0.0118216760176375	.	.	nreads=3.28507485933524;class=EVICTION
+chrII	NucleosomeDynamics	Nucleosome change	 89530	 89759	3.6027426604311e-06	.	.	nreads=5.11723723403339;class=EVICTION
+chrII	NucleosomeDynamics	Nucleosome change	 97955	 98122	0.0158053498307978	.	.	nreads=3.03416797269421;class=EVICTION
 chrII	NucleosomeDynamics	Nucleosome change	104665	104808	0.00712374273008602	.	.	nreads=3.31625805686457;class=EVICTION
 chrII	NucleosomeDynamics	Nucleosome change	105417	105576	0.000569664070583264	.	.	nreads=4.18174441851414;class=EVICTION
 chrII	NucleosomeDynamics	Nucleosome change	108329	108556	0.00226951248269443	.	.	nreads=3.79185452717173;class=EVICTION
@@ -333,25 +333,25 @@ chrII	NucleosomeDynamics	Nucleosome change	758200	758343	0.0135397325206953	.	.	
 chrII	NucleosomeDynamics	Nucleosome change	765704	765933	0.0124795547969794	.	.	nreads=3.01052600841465;class=EVICTION
 chrII	NucleosomeDynamics	Nucleosome change	766029	766169	0.00801056096121977	.	.	nreads=3.30579200572913;class=EVICTION
 chrII	NucleosomeDynamics	Nucleosome change	788257	788450	0.00116882592321904	.	.	nreads=4.09852798557361;class=EVICTION
-chrII	NucleosomeDynamics	Nucleosome change	12379	12525	0.00264952884550316	.	.	nreads=3.01962863096802;class=SHIFT +
-chrII	NucleosomeDynamics	Nucleosome change	12707	12853	0.0145240845325004	.	.	nreads=5.35867117950432;class=SHIFT +
-chrII	NucleosomeDynamics	Nucleosome change	17028	17174	0.0231897589576518	.	.	nreads=4.45383753813844;class=SHIFT +
-chrII	NucleosomeDynamics	Nucleosome change	25120	25266	0.0554018563545256	.	.	nreads=4.46044530729825;class=SHIFT +
-chrII	NucleosomeDynamics	Nucleosome change	27912	28058	0.00990425818574743	.	.	nreads=5.6160602540745;class=SHIFT +
-chrII	NucleosomeDynamics	Nucleosome change	37508	37654	0.00811893305644013	.	.	nreads=4.27362753812575;class=SHIFT +
-chrII	NucleosomeDynamics	Nucleosome change	37592	37805	0.00744689509370783	.	.	nreads=5.44914768829212;class=SHIFT +
-chrII	NucleosomeDynamics	Nucleosome change	42210	42356	0.0011529610605301	.	.	nreads=5.91973825234864;class=SHIFT +
-chrII	NucleosomeDynamics	Nucleosome change	48945	49091	0.00307263604625588	.	.	nreads=3.60720351085661;class=SHIFT +
-chrII	NucleosomeDynamics	Nucleosome change	56683	56829	0.0100289866995545	.	.	nreads=4.02761280792451;class=SHIFT +
-chrII	NucleosomeDynamics	Nucleosome change	57502	57648	0.0152689709219279	.	.	nreads=4.57453808469573;class=SHIFT +
-chrII	NucleosomeDynamics	Nucleosome change	60055	60201	0.00180590172260472	.	.	nreads=4.08201624648688;class=SHIFT +
-chrII	NucleosomeDynamics	Nucleosome change	65243	65389	0.0285826807816972	.	.	nreads=7.33344143679429;class=SHIFT +
-chrII	NucleosomeDynamics	Nucleosome change	67566	67752	0.00639900836935173	.	.	nreads=9.42675283539197;class=SHIFT +
-chrII	NucleosomeDynamics	Nucleosome change	69261	69407	0.0262265197095132	.	.	nreads=3.72830124749962;class=SHIFT +
-chrII	NucleosomeDynamics	Nucleosome change	70735	70881	0.0108258616479137	.	.	nreads=3.76779525376487;class=SHIFT +
-chrII	NucleosomeDynamics	Nucleosome change	74292	74438	0.0472271661488978	.	.	nreads=3.53401691448649;class=SHIFT +
-chrII	NucleosomeDynamics	Nucleosome change	78801	78947	0.0138591916080268	.	.	nreads=3.90266825384946;class=SHIFT +
-chrII	NucleosomeDynamics	Nucleosome change	92683	92829	0.0401042095528583	.	.	nreads=3.80517573954327;class=SHIFT +
+chrII	NucleosomeDynamics	Nucleosome change	 12379	 12525	0.00264952884550316	.	.	nreads=3.01962863096802;class=SHIFT +
+chrII	NucleosomeDynamics	Nucleosome change	 12707	 12853	0.0145240845325004	.	.	nreads=5.35867117950432;class=SHIFT +
+chrII	NucleosomeDynamics	Nucleosome change	 17028	 17174	0.0231897589576518	.	.	nreads=4.45383753813844;class=SHIFT +
+chrII	NucleosomeDynamics	Nucleosome change	 25120	 25266	0.0554018563545256	.	.	nreads=4.46044530729825;class=SHIFT +
+chrII	NucleosomeDynamics	Nucleosome change	 27912	 28058	0.00990425818574743	.	.	nreads=5.6160602540745;class=SHIFT +
+chrII	NucleosomeDynamics	Nucleosome change	 37508	 37654	0.00811893305644013	.	.	nreads=4.27362753812575;class=SHIFT +
+chrII	NucleosomeDynamics	Nucleosome change	 37592	 37805	0.00744689509370783	.	.	nreads=5.44914768829212;class=SHIFT +
+chrII	NucleosomeDynamics	Nucleosome change	 42210	 42356	0.0011529610605301	.	.	nreads=5.91973825234864;class=SHIFT +
+chrII	NucleosomeDynamics	Nucleosome change	 48945	 49091	0.00307263604625588	.	.	nreads=3.60720351085661;class=SHIFT +
+chrII	NucleosomeDynamics	Nucleosome change	 56683	 56829	0.0100289866995545	.	.	nreads=4.02761280792451;class=SHIFT +
+chrII	NucleosomeDynamics	Nucleosome change	 57502	 57648	0.0152689709219279	.	.	nreads=4.57453808469573;class=SHIFT +
+chrII	NucleosomeDynamics	Nucleosome change	 60055	 60201	0.00180590172260472	.	.	nreads=4.08201624648688;class=SHIFT +
+chrII	NucleosomeDynamics	Nucleosome change	 65243	 65389	0.0285826807816972	.	.	nreads=7.33344143679429;class=SHIFT +
+chrII	NucleosomeDynamics	Nucleosome change	 67566	 67752	0.00639900836935173	.	.	nreads=9.42675283539197;class=SHIFT +
+chrII	NucleosomeDynamics	Nucleosome change	 69261	 69407	0.0262265197095132	.	.	nreads=3.72830124749962;class=SHIFT +
+chrII	NucleosomeDynamics	Nucleosome change	 70735	 70881	0.0108258616479137	.	.	nreads=3.76779525376487;class=SHIFT +
+chrII	NucleosomeDynamics	Nucleosome change	 74292	 74438	0.0472271661488978	.	.	nreads=3.53401691448649;class=SHIFT +
+chrII	NucleosomeDynamics	Nucleosome change	 78801	 78947	0.0138591916080268	.	.	nreads=3.90266825384946;class=SHIFT +
+chrII	NucleosomeDynamics	Nucleosome change	 92683	 92829	0.0401042095528583	.	.	nreads=3.80517573954327;class=SHIFT +
 chrII	NucleosomeDynamics	Nucleosome change	100786	100932	0.00682204786765811	.	.	nreads=3.31085314421002;class=SHIFT +
 chrII	NucleosomeDynamics	Nucleosome change	102173	102319	0.0290094292526271	.	.	nreads=6.31143951449528;class=SHIFT +
 chrII	NucleosomeDynamics	Nucleosome change	102659	102805	0.0670719864110292	.	.	nreads=4.02211220770357;class=SHIFT +
@@ -523,21 +523,21 @@ chrII	NucleosomeDynamics	Nucleosome change	795896	796105	0.00529729685792996	.	.
 chrII	NucleosomeDynamics	Nucleosome change	796098	796244	0.0074976008630952	.	.	nreads=3.64060369204178;class=SHIFT +
 chrII	NucleosomeDynamics	Nucleosome change	797143	797289	0.0662927249651853	.	.	nreads=3.19869423654165;class=SHIFT +
 chrII	NucleosomeDynamics	Nucleosome change	802694	802840	0.00093077815997167	.	.	nreads=5.11933640068735;class=SHIFT +
-chrII	NucleosomeDynamics	Nucleosome change	12546	12692	0.00250549545077705	.	.	nreads=10.9604799552865;class=SHIFT -
-chrII	NucleosomeDynamics	Nucleosome change	17829	17975	0.000587530383846541	.	.	nreads=3.53513265422927;class=SHIFT -
-chrII	NucleosomeDynamics	Nucleosome change	22254	22400	0.0518511139713435	.	.	nreads=3.23286730886116;class=SHIFT -
-chrII	NucleosomeDynamics	Nucleosome change	22724	22870	0.0391262628658885	.	.	nreads=4.66613597122299;class=SHIFT -
-chrII	NucleosomeDynamics	Nucleosome change	37794	37940	1.60248017099102e-05	.	.	nreads=4.23874885062561;class=SHIFT -
-chrII	NucleosomeDynamics	Nucleosome change	37981	38127	0.0257682852492434	.	.	nreads=5.34003280152658;class=SHIFT -
-chrII	NucleosomeDynamics	Nucleosome change	43398	43544	0.0855971776579782	.	.	nreads=3.38537349317013;class=SHIFT -
-chrII	NucleosomeDynamics	Nucleosome change	57676	57822	0.0238159029960076	.	.	nreads=4.37771769394096;class=SHIFT -
-chrII	NucleosomeDynamics	Nucleosome change	63018	63164	0.0224914118573673	.	.	nreads=5.69029270515855;class=SHIFT -
-chrII	NucleosomeDynamics	Nucleosome change	64987	65133	0.0639395813859582	.	.	nreads=3.74193050387453;class=SHIFT -
-chrII	NucleosomeDynamics	Nucleosome change	66344	66490	0.00102115272978881	.	.	nreads=3.58225537520543;class=SHIFT -
-chrII	NucleosomeDynamics	Nucleosome change	73950	74096	0.0100553590754868	.	.	nreads=5.04158876771038;class=SHIFT -
-chrII	NucleosomeDynamics	Nucleosome change	75822	75968	0.0547387476236716	.	.	nreads=4.2182298110259;class=SHIFT -
-chrII	NucleosomeDynamics	Nucleosome change	75822	75968	0.00977619579315382	.	.	nreads=5.29191294072299;class=SHIFT -
-chrII	NucleosomeDynamics	Nucleosome change	99883	100029	0.0969231070410321	.	.	nreads=3.04985092847294;class=SHIFT -
+chrII	NucleosomeDynamics	Nucleosome change	 12546	 12692	0.00250549545077705	.	.	nreads=10.9604799552865;class=SHIFT -
+chrII	NucleosomeDynamics	Nucleosome change	 17829	 17975	0.000587530383846541	.	.	nreads=3.53513265422927;class=SHIFT -
+chrII	NucleosomeDynamics	Nucleosome change	 22254	 22400	0.0518511139713435	.	.	nreads=3.23286730886116;class=SHIFT -
+chrII	NucleosomeDynamics	Nucleosome change	 22724	 22870	0.0391262628658885	.	.	nreads=4.66613597122299;class=SHIFT -
+chrII	NucleosomeDynamics	Nucleosome change	 37794	 37940	1.60248017099102e-05	.	.	nreads=4.23874885062561;class=SHIFT -
+chrII	NucleosomeDynamics	Nucleosome change	 37981	 38127	0.0257682852492434	.	.	nreads=5.34003280152658;class=SHIFT -
+chrII	NucleosomeDynamics	Nucleosome change	 43398	 43544	0.0855971776579782	.	.	nreads=3.38537349317013;class=SHIFT -
+chrII	NucleosomeDynamics	Nucleosome change	 57676	 57822	0.0238159029960076	.	.	nreads=4.37771769394096;class=SHIFT -
+chrII	NucleosomeDynamics	Nucleosome change	 63018	 63164	0.0224914118573673	.	.	nreads=5.69029270515855;class=SHIFT -
+chrII	NucleosomeDynamics	Nucleosome change	 64987	 65133	0.0639395813859582	.	.	nreads=3.74193050387453;class=SHIFT -
+chrII	NucleosomeDynamics	Nucleosome change	 66344	 66490	0.00102115272978881	.	.	nreads=3.58225537520543;class=SHIFT -
+chrII	NucleosomeDynamics	Nucleosome change	 73950	 74096	0.0100553590754868	.	.	nreads=5.04158876771038;class=SHIFT -
+chrII	NucleosomeDynamics	Nucleosome change	 75822	 75968	0.0547387476236716	.	.	nreads=4.2182298110259;class=SHIFT -
+chrII	NucleosomeDynamics	Nucleosome change	 75822	 75968	0.00977619579315382	.	.	nreads=5.29191294072299;class=SHIFT -
+chrII	NucleosomeDynamics	Nucleosome change	 99883	100029	0.0969231070410321	.	.	nreads=3.04985092847294;class=SHIFT -
 chrII	NucleosomeDynamics	Nucleosome change	102329	102475	0.0167895622990023	.	.	nreads=3.20880280017527;class=SHIFT -
 chrII	NucleosomeDynamics	Nucleosome change	106691	106837	0.0558380149966542	.	.	nreads=4.04119438806023;class=SHIFT -
 chrII	NucleosomeDynamics	Nucleosome change	108034	108180	0.0622983505015831	.	.	nreads=3.6658698665282;class=SHIFT -

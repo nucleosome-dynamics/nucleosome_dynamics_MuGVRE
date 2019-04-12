@@ -2,38 +2,38 @@
     "input_files": [
         {
             "name": "MNaseSeq",
-            "value": "MuGUSER5a0c0314c20d1_5b6036ff52b083.07917231",
+            "value": "unique_file_id_5b6036ff52b083.07917231",
             "required": true,
             "allow_multiple": true
         },
         {
             "name": "MNaseSeq",
-            "value": "MuGUSER5a0c0314c20d1_5b6036fd86ece2.60948856",
+            "value": "unique_file_id_5b6036fd86ece2.60948856",
             "required": true,
             "allow_multiple": true
         },
         {
             "name": "condition1",
-            "value": "MuGUSER5a0c0314c20d1_5b6036ff52b083.07917231",
+            "value": "unique_file_id_5b6036ff52b083.07917231",
             "required": false,
             "allow_multiple": false
         },
         {
             "name": "condition2",
-            "value": "MuGUSER5a0c0314c20d1_5b6036fd86ece2.60948856",
+            "value": "unique_file_id_5b6036fd86ece2.60948856",
             "required": false,
             "allow_multiple": false
         },
         {
             "name": "refGenome_chromSizes",
-            "value": "MuGUSER5a0c0314c20d1_5b60371dc316e9.06013480_dummy",
+            "value": "unique_file_id_5b60371dc316e9.06013480_dummy",
             "required": true,
             "allow_multiple": false
         }
     ],
     "arguments": [
         {
-            "name": "execution", "value": "/local/installation/nucleserv/test/test_run001"
+            "name": "execution", "value": "$WORKING_DIR"
         },
         {
             "name": "project",   "value": "_PROJ1234"
@@ -124,7 +124,7 @@
         {
             "name": "NR_gff",
             "required": false,
-            "allow_multiple": true,
+             "allow_multiple": true,
             "file": {
                 "file_type": "GFF3",
                 "data_type": "nucleosome_positioning",

@@ -59,44 +59,44 @@ chrII	nucleR	nucleosome periodicity	107903	110033	.	+	.	id=YBL060W (YEL1);nucleo
 chrII	nucleR	nucleosome periodicity	105248	107510	.	-	.	id=YBL061C (SKT5 CAL2 CHS4 CSD4);nucleosome_first=107459;nucleosome_last=105284;score_phase=30;score_autocorrelation=0.77339994373406
 chrII	nucleR	nucleosome periodicity	101878	105299	.	+	.	id=YBL063W (KIP1 CIN9);nucleosome_first=101913;nucleosome_last=105284;score_phase=71;score_autocorrelation=0.731975218103495
 chrII	nucleR	nucleosome periodicity	100299	101186	.	-	.	id=YBL064C (PRX1);nucleosome_first=101165;nucleosome_last=100397;score_phase=57;score_autocorrelation=0.594066216935913
-chrII	nucleR	nucleosome periodicity	96342	100154	.	-	.	id=YBL066C (SEF1);nucleosome_first=100115;nucleosome_last=96554;score_phase=69;score_autocorrelation=0.863643642182912
-chrII	nucleR	nucleosome periodicity	93515	96157	.	-	.	id=YBL067C (UBP13);nucleosome_first=96099;nucleosome_last=93634;score_phase=10;score_autocorrelation=0.822840483450605
-chrII	nucleR	nucleosome periodicity	92372	93488	.	+	.	id=YBL068W (PRS4);nucleosome_first=92423;nucleosome_last=93364;score_phase=49;score_autocorrelation=0.681312599365593
-chrII	nucleR	nucleosome periodicity	90684	92162	.	+	.	id=YBL069W (AST1);nucleosome_first=90717;nucleosome_last=92155;score_phase=47;score_autocorrelation=0.682456756832937
-chrII	nucleR	nucleosome periodicity	88955	89594	.	-	.	id=YBL071C-B;nucleosome_first=89428;nucleosome_last=88982;score_phase=49;score_autocorrelation=0.430654156585149
-chrII	nucleR	nucleosome periodicity	89943	90670	.	+	.	id=YBL071W-A (KTI11 DPH3);nucleosome_first=90001;nucleosome_last=90440;score_phase=56;score_autocorrelation=0.433591357469975
-chrII	nucleR	nucleosome periodicity	88412	89148	.	-	.	id=YBL072C (RPS8A);nucleosome_first=89110;nucleosome_last=88982;score_phase=37;score_autocorrelation=NA
-chrII	nucleR	nucleosome periodicity	86499	87926	.	-	.	id=YBL074C (AAR2);nucleosome_first=87768;nucleosome_last=86603;score_phase=10;score_autocorrelation=0.671111875342269
-chrII	nucleR	nucleosome periodicity	84418	86477	.	-	.	id=YBL075C (SSA3 YG106);nucleosome_first=86436;nucleosome_last=84571;score_phase=50;score_autocorrelation=0.746671080243829
-chrII	nucleR	nucleosome periodicity	80947	84282	.	-	.	id=YBL076C (ILS1);nucleosome_first=84247;nucleosome_last=81008;score_phase=61;score_autocorrelation=0.822884243609535
-chrII	nucleR	nucleosome periodicity	80214	80763	.	-	.	id=YBL078C (ATG8 APG8 AUT7 CVT5);nucleosome_first=80716;nucleosome_last=80404;score_phase=18;score_autocorrelation=0.373682004810379
-chrII	nucleR	nucleosome periodicity	75206	79854	.	+	.	id=YBL079W (NUP170 NLE3);nucleosome_first=75244;nucleosome_last=79822;score_phase=42;score_autocorrelation=0.80731611730953
-chrII	nucleR	nucleosome periodicity	72965	74739	.	-	.	id=YBL080C (PET112);nucleosome_first=74715;nucleosome_last=73241;score_phase=11;score_autocorrelation=0.794876473149236
-chrII	nucleR	nucleosome periodicity	71552	73097	.	+	.	id=YBL081W;nucleosome_first=71605;nucleosome_last=72919;score_phase=6;score_autocorrelation=0.792102759654347
-chrII	nucleR	nucleosome periodicity	69664	71168	.	-	.	id=YBL082C (ALG3 RHK1);nucleosome_first=71129;nucleosome_last=69788;score_phase=21;score_autocorrelation=0.735569170660029
-chrII	nucleR	nucleosome periodicity	67035	69566	.	-	.	id=YBL084C (CDC27 APC3 SNB1);nucleosome_first=69509;nucleosome_last=67214;score_phase=15;score_autocorrelation=0.763272657234851
-chrII	nucleR	nucleosome periodicity	63674	66934	.	+	.	id=YBL085W (BOI1 BOB1 GIN7);nucleosome_first=63727;nucleosome_last=66795;score_phase=67;score_autocorrelation=0.800024536658559
-chrII	nucleR	nucleosome periodicity	61155	62672	.	-	.	id=YBL086C;nucleosome_first=62653;nucleosome_last=61234;score_phase=66;score_autocorrelation=0.721464439954305
-chrII	nucleR	nucleosome periodicity	59719	60777	.	-	.	id=YBL087C (RPL23A);nucleosome_first=60755;nucleosome_last=59934;score_phase=4;score_autocorrelation=0.681549427352131
-chrII	nucleR	nucleosome periodicity	50935	59575	.	-	.	id=YBL088C (TEL1);nucleosome_first=59564;nucleosome_last=51103;score_phase=46;score_autocorrelation=0.816960799131571
-chrII	nucleR	nucleosome periodicity	49535	51025	.	+	.	id=YBL089W (AVT5);nucleosome_first=49600;nucleosome_last=50918;score_phase=2;score_autocorrelation=0.805978311798703
-chrII	nucleR	nucleosome periodicity	48808	49481	.	+	.	id=YBL090W (MRP21 MRP50);nucleosome_first=48848;nucleosome_last=49364;score_phase=21;score_autocorrelation=0.540740188459575
-chrII	nucleR	nucleosome periodicity	47263	48659	.	-	.	id=YBL091C (MAP2);nucleosome_first=48596;nucleosome_last=47384;score_phase=57;score_autocorrelation=0.763154106394416
-chrII	nucleR	nucleosome periodicity	46433	47193	.	-	.	id=YBL091C-A (SCS22);nucleosome_first=47146;nucleosome_last=46641;score_phase=10;score_autocorrelation=0.67909280017135
-chrII	nucleR	nucleosome periodicity	45603	46478	.	+	.	id=YBL092W (RPL32);nucleosome_first=45657;nucleosome_last=46260.5;score_phase=56.5;score_autocorrelation=0.477167044474312
-chrII	nucleR	nucleosome periodicity	44116	44998	.	-	.	id=YBL093C (ROX3 MED19 NUT3 SSN7);nucleosome_first=44985;nucleosome_last=44143;score_phase=17;score_autocorrelation=0.752209569814174
-chrII	nucleR	nucleosome periodicity	43256	44207	.	+	.	id=YBL095W;nucleosome_first=43303;nucleosome_last=44143;score_phase=15;score_autocorrelation=0.783638714787623
-chrII	nucleR	nucleosome periodicity	40773	43265	.	+	.	id=YBL097W (BRN1);nucleosome_first=40809;nucleosome_last=43025;score_phase=71;score_autocorrelation=0.808535880033317
-chrII	nucleR	nucleosome periodicity	39115	40560	.	+	.	id=YBL098W (BNA4);nucleosome_first=39177;nucleosome_last=40520;score_phase=23;score_autocorrelation=0.658566252596472
-chrII	nucleR	nucleosome periodicity	36749	38922	.	+	.	id=YBL099W (ATP1);nucleosome_first=36774;nucleosome_last=38633;score_phase=44;score_autocorrelation=0.784700706831125
-chrII	nucleR	nucleosome periodicity	28372	28686	.	+	.	id=YBL100W-C (YBL101W-C);nucleosome_first=28586;nucleosome_last=28586;score_phase=0;score_autocorrelation=NA
-chrII	nucleR	nucleosome periodicity	24810	28532	.	-	.	id=YBL101C (ECM21 ART2);nucleosome_first=28347;nucleosome_last=25020;score_phase=27;score_autocorrelation=0.852001925511476
-chrII	nucleR	nucleosome periodicity	24010	24920	.	+	.	id=YBL102W (SFT2);nucleosome_first=24039;nucleosome_last=24689;score_phase=10;score_autocorrelation=0.6633004365484
-chrII	nucleR	nucleosome periodicity	21698	23796	.	-	.	id=YBL103C (RTG3);nucleosome_first=23746;nucleosome_last=21860;score_phase=71;score_autocorrelation=0.815757781097439
-chrII	nucleR	nucleosome periodicity	18086	21307	.	-	.	id=YBL104C (YBL103C-A);nucleosome_first=21261;nucleosome_last=18199;score_phase=73;score_autocorrelation=0.78079748330671
-chrII	nucleR	nucleosome periodicity	14104	17962	.	-	.	id=YBL105C (PKC1 CLY15 HPO2 STT1);nucleosome_first=17902;nucleosome_last=14154;score_phase=47;score_autocorrelation=0.791540550432688
-chrII	nucleR	nucleosome periodicity	10773	13924	.	-	.	id=YBL106C (SRO77 SNI2 SOP2);nucleosome_first=13708;nucleosome_last=10943;score_phase=40;score_autocorrelation=0.796432304229604
-chrII	nucleR	nucleosome periodicity	9835	10557	.	-	.	id=YBL107C;nucleosome_first=10501;nucleosome_last=9980;score_phase=26;score_autocorrelation=0.370233534550592
+chrII	nucleR	nucleosome periodicity	 96342	100154	.	-	.	id=YBL066C (SEF1);nucleosome_first=100115;nucleosome_last=96554;score_phase=69;score_autocorrelation=0.863643642182912
+chrII	nucleR	nucleosome periodicity	 93515	 96157	.	-	.	id=YBL067C (UBP13);nucleosome_first=96099;nucleosome_last=93634;score_phase=10;score_autocorrelation=0.822840483450605
+chrII	nucleR	nucleosome periodicity	 92372	 93488	.	+	.	id=YBL068W (PRS4);nucleosome_first=92423;nucleosome_last=93364;score_phase=49;score_autocorrelation=0.681312599365593
+chrII	nucleR	nucleosome periodicity	 90684	 92162	.	+	.	id=YBL069W (AST1);nucleosome_first=90717;nucleosome_last=92155;score_phase=47;score_autocorrelation=0.682456756832937
+chrII	nucleR	nucleosome periodicity	 88955	 89594	.	-	.	id=YBL071C-B;nucleosome_first=89428;nucleosome_last=88982;score_phase=49;score_autocorrelation=0.430654156585149
+chrII	nucleR	nucleosome periodicity	 89943	 90670	.	+	.	id=YBL071W-A (KTI11 DPH3);nucleosome_first=90001;nucleosome_last=90440;score_phase=56;score_autocorrelation=0.433591357469975
+chrII	nucleR	nucleosome periodicity	 88412	 89148	.	-	.	id=YBL072C (RPS8A);nucleosome_first=89110;nucleosome_last=88982;score_phase=37;score_autocorrelation=NA
+chrII	nucleR	nucleosome periodicity	 86499	 87926	.	-	.	id=YBL074C (AAR2);nucleosome_first=87768;nucleosome_last=86603;score_phase=10;score_autocorrelation=0.671111875342269
+chrII	nucleR	nucleosome periodicity	 84418	 86477	.	-	.	id=YBL075C (SSA3 YG106);nucleosome_first=86436;nucleosome_last=84571;score_phase=50;score_autocorrelation=0.746671080243829
+chrII	nucleR	nucleosome periodicity	 80947	 84282	.	-	.	id=YBL076C (ILS1);nucleosome_first=84247;nucleosome_last=81008;score_phase=61;score_autocorrelation=0.822884243609535
+chrII	nucleR	nucleosome periodicity	 80214	 80763	.	-	.	id=YBL078C (ATG8 APG8 AUT7 CVT5);nucleosome_first=80716;nucleosome_last=80404;score_phase=18;score_autocorrelation=0.373682004810379
+chrII	nucleR	nucleosome periodicity	 75206	 79854	.	+	.	id=YBL079W (NUP170 NLE3);nucleosome_first=75244;nucleosome_last=79822;score_phase=42;score_autocorrelation=0.80731611730953
+chrII	nucleR	nucleosome periodicity	 72965	 74739	.	-	.	id=YBL080C (PET112);nucleosome_first=74715;nucleosome_last=73241;score_phase=11;score_autocorrelation=0.794876473149236
+chrII	nucleR	nucleosome periodicity	 71552	 73097	.	+	.	id=YBL081W;nucleosome_first=71605;nucleosome_last=72919;score_phase=6;score_autocorrelation=0.792102759654347
+chrII	nucleR	nucleosome periodicity	 69664	 71168	.	-	.	id=YBL082C (ALG3 RHK1);nucleosome_first=71129;nucleosome_last=69788;score_phase=21;score_autocorrelation=0.735569170660029
+chrII	nucleR	nucleosome periodicity	 67035	 69566	.	-	.	id=YBL084C (CDC27 APC3 SNB1);nucleosome_first=69509;nucleosome_last=67214;score_phase=15;score_autocorrelation=0.763272657234851
+chrII	nucleR	nucleosome periodicity	 63674	 66934	.	+	.	id=YBL085W (BOI1 BOB1 GIN7);nucleosome_first=63727;nucleosome_last=66795;score_phase=67;score_autocorrelation=0.800024536658559
+chrII	nucleR	nucleosome periodicity	 61155	 62672	.	-	.	id=YBL086C;nucleosome_first=62653;nucleosome_last=61234;score_phase=66;score_autocorrelation=0.721464439954305
+chrII	nucleR	nucleosome periodicity	 59719	 60777	.	-	.	id=YBL087C (RPL23A);nucleosome_first=60755;nucleosome_last=59934;score_phase=4;score_autocorrelation=0.681549427352131
+chrII	nucleR	nucleosome periodicity	 50935	 59575	.	-	.	id=YBL088C (TEL1);nucleosome_first=59564;nucleosome_last=51103;score_phase=46;score_autocorrelation=0.816960799131571
+chrII	nucleR	nucleosome periodicity	 49535	 51025	.	+	.	id=YBL089W (AVT5);nucleosome_first=49600;nucleosome_last=50918;score_phase=2;score_autocorrelation=0.805978311798703
+chrII	nucleR	nucleosome periodicity	 48808	 49481	.	+	.	id=YBL090W (MRP21 MRP50);nucleosome_first=48848;nucleosome_last=49364;score_phase=21;score_autocorrelation=0.540740188459575
+chrII	nucleR	nucleosome periodicity	 47263	 48659	.	-	.	id=YBL091C (MAP2);nucleosome_first=48596;nucleosome_last=47384;score_phase=57;score_autocorrelation=0.763154106394416
+chrII	nucleR	nucleosome periodicity	 46433	 47193	.	-	.	id=YBL091C-A (SCS22);nucleosome_first=47146;nucleosome_last=46641;score_phase=10;score_autocorrelation=0.67909280017135
+chrII	nucleR	nucleosome periodicity	 45603	 46478	.	+	.	id=YBL092W (RPL32);nucleosome_first=45657;nucleosome_last=46260.5;score_phase=56.5;score_autocorrelation=0.477167044474312
+chrII	nucleR	nucleosome periodicity	 44116	 44998	.	-	.	id=YBL093C (ROX3 MED19 NUT3 SSN7);nucleosome_first=44985;nucleosome_last=44143;score_phase=17;score_autocorrelation=0.752209569814174
+chrII	nucleR	nucleosome periodicity	 43256	 44207	.	+	.	id=YBL095W;nucleosome_first=43303;nucleosome_last=44143;score_phase=15;score_autocorrelation=0.783638714787623
+chrII	nucleR	nucleosome periodicity	 40773	 43265	.	+	.	id=YBL097W (BRN1);nucleosome_first=40809;nucleosome_last=43025;score_phase=71;score_autocorrelation=0.808535880033317
+chrII	nucleR	nucleosome periodicity	 39115	 40560	.	+	.	id=YBL098W (BNA4);nucleosome_first=39177;nucleosome_last=40520;score_phase=23;score_autocorrelation=0.658566252596472
+chrII	nucleR	nucleosome periodicity	 36749	 38922	.	+	.	id=YBL099W (ATP1);nucleosome_first=36774;nucleosome_last=38633;score_phase=44;score_autocorrelation=0.784700706831125
+chrII	nucleR	nucleosome periodicity	 28372	 28686	.	+	.	id=YBL100W-C (YBL101W-C);nucleosome_first=28586;nucleosome_last=28586;score_phase=0;score_autocorrelation=NA
+chrII	nucleR	nucleosome periodicity	 24810	 28532	.	-	.	id=YBL101C (ECM21 ART2);nucleosome_first=28347;nucleosome_last=25020;score_phase=27;score_autocorrelation=0.852001925511476
+chrII	nucleR	nucleosome periodicity	 24010	 24920	.	+	.	id=YBL102W (SFT2);nucleosome_first=24039;nucleosome_last=24689;score_phase=10;score_autocorrelation=0.6633004365484
+chrII	nucleR	nucleosome periodicity	 21698	 23796	.	-	.	id=YBL103C (RTG3);nucleosome_first=23746;nucleosome_last=21860;score_phase=71;score_autocorrelation=0.815757781097439
+chrII	nucleR	nucleosome periodicity	 18086	 21307	.	-	.	id=YBL104C (YBL103C-A);nucleosome_first=21261;nucleosome_last=18199;score_phase=73;score_autocorrelation=0.78079748330671
+chrII	nucleR	nucleosome periodicity	 14104	 17962	.	-	.	id=YBL105C (PKC1 CLY15 HPO2 STT1);nucleosome_first=17902;nucleosome_last=14154;score_phase=47;score_autocorrelation=0.791540550432688
+chrII	nucleR	nucleosome periodicity	 10773	 13924	.	-	.	id=YBL106C (SRO77 SNI2 SOP2);nucleosome_first=13708;nucleosome_last=10943;score_phase=40;score_autocorrelation=0.796432304229604
+chrII	nucleR	nucleosome periodicity	  9835	 10557	.	-	.	id=YBL107C;nucleosome_first=10501;nucleosome_last=9980;score_phase=26;score_autocorrelation=0.370233534550592
 chrII	nucleR	nucleosome periodicity	238872	241422	.	-	.	id=YBR001C (NTH2);nucleosome_first=241398;nucleosome_last=239042;score_phase=46;score_autocorrelation=0.767402951805325
 chrII	nucleR	nucleosome periodicity	241547	242593	.	-	.	id=YBR002C (RER2);nucleosome_first=242529;nucleosome_last=241687;score_phase=17;score_autocorrelation=0.694191010916691
 chrII	nucleR	nucleosome periodicity	242780	244357	.	+	.	id=YBR003W (COQ1);nucleosome_first=242828;nucleosome_last=244147;score_phase=1;score_autocorrelation=0.805813139758772

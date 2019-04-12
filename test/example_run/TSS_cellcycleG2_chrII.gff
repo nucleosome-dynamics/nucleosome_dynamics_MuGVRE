@@ -60,43 +60,43 @@ chrII	nucleR	TSS classification	107459	107705	.	-	.	id=YBL061C (SKT5 CAL2 CHS4 C
 chrII	nucleR	TSS classification	101662	101913	.	+	.	id=YBL063W (KIP1 CIN9);TSS_position=101878;nucleosome_plus1=101913;nucleosome_minus1=101662;distance=251;classification=W-open-W
 chrII	nucleR	TSS classification	101165	101513	.	-	.	id=YBL064C (PRX1);TSS_position=101186;nucleosome_plus1=101165;nucleosome_minus1=NA;distance=NA;classification=-1_missing
 chrII	nucleR	TSS classification	100115	100397	.	-	.	id=YBL066C (SEF1);TSS_position=100154;nucleosome_plus1=100115;nucleosome_minus1=100397;distance=282;classification=W-open-W
-chrII	nucleR	TSS classification	96099	96331	.	-	.	id=YBL067C (UBP13);TSS_position=96157;nucleosome_plus1=96099;nucleosome_minus1=96331;distance=232;classification=F-open-W
-chrII	nucleR	TSS classification	92228	92423	.	+	.	id=YBL068W (PRS4);TSS_position=92372;nucleosome_plus1=92423;nucleosome_minus1=92228;distance=195;classification=F-close-W
-chrII	nucleR	TSS classification	90440	90717	.	+	.	id=YBL069W (AST1);TSS_position=90684;nucleosome_plus1=90717;nucleosome_minus1=90440;distance=277;classification=W-open-W
-chrII	nucleR	TSS classification	89428	89639	.	-	.	id=YBL071C-B;TSS_position=89594;nucleosome_plus1=89428;nucleosome_minus1=89639;distance=211;classification=W-close-W
-chrII	nucleR	TSS classification	89639	90001	.	+	.	id=YBL071W-A (KTI11 DPH3);TSS_position=89943;nucleosome_plus1=90001;nucleosome_minus1=NA;distance=NA;classification=-1_missing
-chrII	nucleR	TSS classification	89110	89273	.	-	.	id=YBL072C (RPS8A);TSS_position=89148;nucleosome_plus1=89110;nucleosome_minus1=89273;distance=163;classification=W-close-W
-chrII	nucleR	TSS classification	87768	88058	.	-	.	id=YBL074C (AAR2);TSS_position=87926;nucleosome_plus1=87768;nucleosome_minus1=88058;distance=290;classification=F-open-W
-chrII	nucleR	TSS classification	86436	86603	.	-	.	id=YBL075C (SSA3 YG106);TSS_position=86477;nucleosome_plus1=86436;nucleosome_minus1=86603;distance=167;classification=W-close-W
-chrII	nucleR	TSS classification	84247	84571	.	-	.	id=YBL076C (ILS1);TSS_position=84282;nucleosome_plus1=84247;nucleosome_minus1=84571;distance=324;classification=W-open-W
-chrII	nucleR	TSS classification	80716	81008	.	-	.	id=YBL078C (ATG8 APG8 AUT7 CVT5);TSS_position=80763;nucleosome_plus1=80716;nucleosome_minus1=81008;distance=292;classification=F-open-W
-chrII	nucleR	TSS classification	74976	75244	.	+	.	id=YBL079W (NUP170 NLE3);TSS_position=75206;nucleosome_plus1=75244;nucleosome_minus1=74976;distance=268;classification=W-open-W
-chrII	nucleR	TSS classification	74715	74976	.	-	.	id=YBL080C (PET112);TSS_position=74739;nucleosome_plus1=74715;nucleosome_minus1=74976;distance=261;classification=W-open-W
-chrII	nucleR	TSS classification	71360	71605	.	+	.	id=YBL081W;TSS_position=71552;nucleosome_plus1=71605;nucleosome_minus1=71360;distance=245;classification=W-open-W
-chrII	nucleR	TSS classification	71129	71360	.	-	.	id=YBL082C (ALG3 RHK1);TSS_position=71168;nucleosome_plus1=71129;nucleosome_minus1=71360;distance=231;classification=W-open-W
-chrII	nucleR	TSS classification	69509	69788	.	-	.	id=YBL084C (CDC27 APC3 SNB1);TSS_position=69566;nucleosome_plus1=69509;nucleosome_minus1=69788;distance=279;classification=W-open-W
-chrII	nucleR	TSS classification	63481	63727	.	+	.	id=YBL085W (BOI1 BOB1 GIN7);TSS_position=63674;nucleosome_plus1=63727;nucleosome_minus1=63481;distance=246;classification=W-open-W
-chrII	nucleR	TSS classification	62653	62912	.	-	.	id=YBL086C;TSS_position=62672;nucleosome_plus1=62653;nucleosome_minus1=62912;distance=259;classification=W-open-W
-chrII	nucleR	TSS classification	60755	61234	.	-	.	id=YBL087C (RPL23A);TSS_position=60777;nucleosome_plus1=60755;nucleosome_minus1=NA;distance=NA;classification=-1_missing
-chrII	nucleR	TSS classification	59564	59934	.	-	.	id=YBL088C (TEL1);TSS_position=59575;nucleosome_plus1=59564;nucleosome_minus1=NA;distance=NA;classification=-1_missing
-chrII	nucleR	TSS classification	49364	49600	.	+	.	id=YBL089W (AVT5);TSS_position=49535;nucleosome_plus1=49600;nucleosome_minus1=49364;distance=236;classification=W-open-W
-chrII	nucleR	TSS classification	48596	48848	.	+	.	id=YBL090W (MRP21 MRP50);TSS_position=48808;nucleosome_plus1=48848;nucleosome_minus1=48596;distance=252;classification=W-open-W
-chrII	nucleR	TSS classification	48596	48848	.	-	.	id=YBL091C (MAP2);TSS_position=48659;nucleosome_plus1=48596;nucleosome_minus1=48848;distance=252;classification=W-open-W
-chrII	nucleR	TSS classification	47146	47384	.	-	.	id=YBL091C-A (SCS22);TSS_position=47193;nucleosome_plus1=47146;nucleosome_minus1=47384;distance=238;classification=W-open-W
-chrII	nucleR	TSS classification	45332	45657	.	+	.	id=YBL092W (RPL32);TSS_position=45603;nucleosome_plus1=45657;nucleosome_minus1=45332;distance=325;classification=F-open-W
-chrII	nucleR	TSS classification	44985	45332	.	-	.	id=YBL093C (ROX3 MED19 NUT3 SSN7);TSS_position=44998;nucleosome_plus1=44985;nucleosome_minus1=NA;distance=NA;classification=-1_missing
-chrII	nucleR	TSS classification	43025	43303	.	+	.	id=YBL095W;TSS_position=43256;nucleosome_plus1=43303;nucleosome_minus1=43025;distance=278;classification=W-open-W
-chrII	nucleR	TSS classification	40520	40809	.	+	.	id=YBL097W (BRN1);TSS_position=40773;nucleosome_plus1=40809;nucleosome_minus1=40520;distance=289;classification=W-open-W
-chrII	nucleR	TSS classification	38937	39177	.	+	.	id=YBL098W (BNA4);TSS_position=39115;nucleosome_plus1=39177;nucleosome_minus1=38937;distance=240;classification=F-open-W
-chrII	nucleR	TSS classification	36581	36774	.	+	.	id=YBL099W (ATP1);TSS_position=36749;nucleosome_plus1=36774;nucleosome_minus1=36581;distance=193;classification=F-close-W
-chrII	nucleR	TSS classification	28347	28586	.	+	.	id=YBL100W-C (YBL101W-C);TSS_position=28372;nucleosome_plus1=28586;nucleosome_minus1=28347;distance=239;classification=F-open-W
-chrII	nucleR	TSS classification	28347	28586	.	-	.	id=YBL101C (ECM21 ART2);TSS_position=28532;nucleosome_plus1=28347;nucleosome_minus1=28586;distance=239;classification=W-open-F
-chrII	nucleR	TSS classification	23746	24039	.	+	.	id=YBL102W (SFT2);TSS_position=24010;nucleosome_plus1=24039;nucleosome_minus1=23746;distance=293;classification=W-open-W
-chrII	nucleR	TSS classification	23746	24039	.	-	.	id=YBL103C (RTG3);TSS_position=23796;nucleosome_plus1=23746;nucleosome_minus1=24039;distance=293;classification=W-open-W
-chrII	nucleR	TSS classification	21261	21506	.	-	.	id=YBL104C (YBL103C-A);TSS_position=21307;nucleosome_plus1=21261;nucleosome_minus1=21506;distance=245;classification=W-open-W
-chrII	nucleR	TSS classification	17902	18199	.	-	.	id=YBL105C (PKC1 CLY15 HPO2 STT1);TSS_position=17962;nucleosome_plus1=17902;nucleosome_minus1=18199;distance=297;classification=W-open-W
-chrII	nucleR	TSS classification	13708	14065	.	-	.	id=YBL106C (SRO77 SNI2 SOP2);TSS_position=13924;nucleosome_plus1=13708;nucleosome_minus1=14065;distance=357;classification=F-open-F
-chrII	nucleR	TSS classification	10501	10771	.	-	.	id=YBL107C;TSS_position=10557;nucleosome_plus1=10501;nucleosome_minus1=10771;distance=270;classification=W-open-W
+chrII	nucleR	TSS classification	 96099	 96331	.	-	.	id=YBL067C (UBP13);TSS_position=96157;nucleosome_plus1=96099;nucleosome_minus1=96331;distance=232;classification=F-open-W
+chrII	nucleR	TSS classification	 92228	 92423	.	+	.	id=YBL068W (PRS4);TSS_position=92372;nucleosome_plus1=92423;nucleosome_minus1=92228;distance=195;classification=F-close-W
+chrII	nucleR	TSS classification	 90440	 90717	.	+	.	id=YBL069W (AST1);TSS_position=90684;nucleosome_plus1=90717;nucleosome_minus1=90440;distance=277;classification=W-open-W
+chrII	nucleR	TSS classification	 89428	 89639	.	-	.	id=YBL071C-B;TSS_position=89594;nucleosome_plus1=89428;nucleosome_minus1=89639;distance=211;classification=W-close-W
+chrII	nucleR	TSS classification	 89639	 90001	.	+	.	id=YBL071W-A (KTI11 DPH3);TSS_position=89943;nucleosome_plus1=90001;nucleosome_minus1=NA;distance=NA;classification=-1_missing
+chrII	nucleR	TSS classification	 89110	 89273	.	-	.	id=YBL072C (RPS8A);TSS_position=89148;nucleosome_plus1=89110;nucleosome_minus1=89273;distance=163;classification=W-close-W
+chrII	nucleR	TSS classification	 87768	 88058	.	-	.	id=YBL074C (AAR2);TSS_position=87926;nucleosome_plus1=87768;nucleosome_minus1=88058;distance=290;classification=F-open-W
+chrII	nucleR	TSS classification	 86436	 86603	.	-	.	id=YBL075C (SSA3 YG106);TSS_position=86477;nucleosome_plus1=86436;nucleosome_minus1=86603;distance=167;classification=W-close-W
+chrII	nucleR	TSS classification	 84247	 84571	.	-	.	id=YBL076C (ILS1);TSS_position=84282;nucleosome_plus1=84247;nucleosome_minus1=84571;distance=324;classification=W-open-W
+chrII	nucleR	TSS classification	 80716	 81008	.	-	.	id=YBL078C (ATG8 APG8 AUT7 CVT5);TSS_position=80763;nucleosome_plus1=80716;nucleosome_minus1=81008;distance=292;classification=F-open-W
+chrII	nucleR	TSS classification	 74976	 75244	.	+	.	id=YBL079W (NUP170 NLE3);TSS_position=75206;nucleosome_plus1=75244;nucleosome_minus1=74976;distance=268;classification=W-open-W
+chrII	nucleR	TSS classification	 74715	 74976	.	-	.	id=YBL080C (PET112);TSS_position=74739;nucleosome_plus1=74715;nucleosome_minus1=74976;distance=261;classification=W-open-W
+chrII	nucleR	TSS classification	 71360	 71605	.	+	.	id=YBL081W;TSS_position=71552;nucleosome_plus1=71605;nucleosome_minus1=71360;distance=245;classification=W-open-W
+chrII	nucleR	TSS classification	 71129	 71360	.	-	.	id=YBL082C (ALG3 RHK1);TSS_position=71168;nucleosome_plus1=71129;nucleosome_minus1=71360;distance=231;classification=W-open-W
+chrII	nucleR	TSS classification	 69509	 69788	.	-	.	id=YBL084C (CDC27 APC3 SNB1);TSS_position=69566;nucleosome_plus1=69509;nucleosome_minus1=69788;distance=279;classification=W-open-W
+chrII	nucleR	TSS classification	 63481	 63727	.	+	.	id=YBL085W (BOI1 BOB1 GIN7);TSS_position=63674;nucleosome_plus1=63727;nucleosome_minus1=63481;distance=246;classification=W-open-W
+chrII	nucleR	TSS classification	 62653	 62912	.	-	.	id=YBL086C;TSS_position=62672;nucleosome_plus1=62653;nucleosome_minus1=62912;distance=259;classification=W-open-W
+chrII	nucleR	TSS classification	 60755	 61234	.	-	.	id=YBL087C (RPL23A);TSS_position=60777;nucleosome_plus1=60755;nucleosome_minus1=NA;distance=NA;classification=-1_missing
+chrII	nucleR	TSS classification	 59564	 59934	.	-	.	id=YBL088C (TEL1);TSS_position=59575;nucleosome_plus1=59564;nucleosome_minus1=NA;distance=NA;classification=-1_missing
+chrII	nucleR	TSS classification	 49364	 49600	.	+	.	id=YBL089W (AVT5);TSS_position=49535;nucleosome_plus1=49600;nucleosome_minus1=49364;distance=236;classification=W-open-W
+chrII	nucleR	TSS classification	 48596	 48848	.	+	.	id=YBL090W (MRP21 MRP50);TSS_position=48808;nucleosome_plus1=48848;nucleosome_minus1=48596;distance=252;classification=W-open-W
+chrII	nucleR	TSS classification	 48596	 48848	.	-	.	id=YBL091C (MAP2);TSS_position=48659;nucleosome_plus1=48596;nucleosome_minus1=48848;distance=252;classification=W-open-W
+chrII	nucleR	TSS classification	 47146	 47384	.	-	.	id=YBL091C-A (SCS22);TSS_position=47193;nucleosome_plus1=47146;nucleosome_minus1=47384;distance=238;classification=W-open-W
+chrII	nucleR	TSS classification	 45332	 45657	.	+	.	id=YBL092W (RPL32);TSS_position=45603;nucleosome_plus1=45657;nucleosome_minus1=45332;distance=325;classification=F-open-W
+chrII	nucleR	TSS classification	 44985	 45332	.	-	.	id=YBL093C (ROX3 MED19 NUT3 SSN7);TSS_position=44998;nucleosome_plus1=44985;nucleosome_minus1=NA;distance=NA;classification=-1_missing
+chrII	nucleR	TSS classification	 43025	 43303	.	+	.	id=YBL095W;TSS_position=43256;nucleosome_plus1=43303;nucleosome_minus1=43025;distance=278;classification=W-open-W
+chrII	nucleR	TSS classification	 40520	 40809	.	+	.	id=YBL097W (BRN1);TSS_position=40773;nucleosome_plus1=40809;nucleosome_minus1=40520;distance=289;classification=W-open-W
+chrII	nucleR	TSS classification	 38937	 39177	.	+	.	id=YBL098W (BNA4);TSS_position=39115;nucleosome_plus1=39177;nucleosome_minus1=38937;distance=240;classification=F-open-W
+chrII	nucleR	TSS classification	 36581	 36774	.	+	.	id=YBL099W (ATP1);TSS_position=36749;nucleosome_plus1=36774;nucleosome_minus1=36581;distance=193;classification=F-close-W
+chrII	nucleR	TSS classification	 28347	 28586	.	+	.	id=YBL100W-C (YBL101W-C);TSS_position=28372;nucleosome_plus1=28586;nucleosome_minus1=28347;distance=239;classification=F-open-W
+chrII	nucleR	TSS classification	 28347	 28586	.	-	.	id=YBL101C (ECM21 ART2);TSS_position=28532;nucleosome_plus1=28347;nucleosome_minus1=28586;distance=239;classification=W-open-F
+chrII	nucleR	TSS classification	 23746	 24039	.	+	.	id=YBL102W (SFT2);TSS_position=24010;nucleosome_plus1=24039;nucleosome_minus1=23746;distance=293;classification=W-open-W
+chrII	nucleR	TSS classification	 23746	 24039	.	-	.	id=YBL103C (RTG3);TSS_position=23796;nucleosome_plus1=23746;nucleosome_minus1=24039;distance=293;classification=W-open-W
+chrII	nucleR	TSS classification	 21261	 21506	.	-	.	id=YBL104C (YBL103C-A);TSS_position=21307;nucleosome_plus1=21261;nucleosome_minus1=21506;distance=245;classification=W-open-W
+chrII	nucleR	TSS classification	 17902	 18199	.	-	.	id=YBL105C (PKC1 CLY15 HPO2 STT1);TSS_position=17962;nucleosome_plus1=17902;nucleosome_minus1=18199;distance=297;classification=W-open-W
+chrII	nucleR	TSS classification	 13708	 14065	.	-	.	id=YBL106C (SRO77 SNI2 SOP2);TSS_position=13924;nucleosome_plus1=13708;nucleosome_minus1=14065;distance=357;classification=F-open-F
+chrII	nucleR	TSS classification	 10501	 10771	.	-	.	id=YBL107C;TSS_position=10557;nucleosome_plus1=10501;nucleosome_minus1=10771;distance=270;classification=W-open-W
 chrII	nucleR	TSS classification	241398	241687	.	-	.	id=YBR001C (NTH2);TSS_position=241422;nucleosome_plus1=241398;nucleosome_minus1=241687;distance=289;classification=W-open-F
 chrII	nucleR	TSS classification	242529	242828	.	-	.	id=YBR002C (RER2);TSS_position=242593;nucleosome_plus1=242529;nucleosome_minus1=242828;distance=299;classification=W-open-W
 chrII	nucleR	TSS classification	242529	242828	.	+	.	id=YBR003W (COQ1);TSS_position=242780;nucleosome_plus1=242828;nucleosome_minus1=242529;distance=299;classification=W-open-W

@@ -1,0 +1,358 @@
+2019-04-12 17:13:32 | INFO: Starting Nucleosome Dynamics pipeline
+2019-04-12 17:13:32 | INFO: The following analyses are going to be executed:
+2019-04-12 17:13:32 | INFO:  - readBam (x2)
+2019-04-12 17:13:32 | INFO:  - nucleR (x2)
+2019-04-12 17:13:32 | INFO:  - NFR (x2)
+2019-04-12 17:13:32 | INFO:  - txstart (x2)
+2019-04-12 17:13:32 | INFO:  - periodicity (x2)
+2019-04-12 17:13:32 | INFO:  - gausfitting (x2)
+2019-04-12 17:13:32 | INFO:  - nucDyn (x1)
+2019-04-12 17:13:32 | PROGRESS: readBam - starting analysis (1/7)
+2019-04-12 17:13:32 | PROGRESS: Reading and loading BAM sequences - RUNNING
+2019-04-12 17:13:32 | PROGRESS: Reading and loading BAM sequences : cellcycleM_chrII.bam (1/2)
+[/usr/bin/Rscript /home/pmes/nucleosome_dynamics/bin/readBAM.R --output /home/pmes/nucleosome_dynamics_MuGVRE/test/test/../data/cellcycleM_chrII.RData --input /home/pmes/nucleosome_dynamics_MuGVRE/test/test/../data/cellcycleM_chrII.bam --type paired]
+-- RData found
+
+2019-04-12 17:13:35 | PROGRESS: Reading and loading BAM sequences - FINISHED
+==============================================================
+2019-04-12 17:13:35 | PROGRESS: Reading and loading BAM sequences - RUNNING
+2019-04-12 17:13:35 | PROGRESS: Reading and loading BAM sequences : cellcycleG2_chrII.bam (2/2)
+[/usr/bin/Rscript /home/pmes/nucleosome_dynamics/bin/readBAM.R --output /home/pmes/nucleosome_dynamics_MuGVRE/test/test/../data/cellcycleG2_chrII.RData --input /home/pmes/nucleosome_dynamics_MuGVRE/test/test/../data/cellcycleG2_chrII.bam --type paired]
+-- RData found
+
+2019-04-12 17:13:38 | PROGRESS: Reading and loading BAM sequences - FINISHED
+==============================================================
+2019-04-12 17:13:38 | PROGRESS: nucleR - starting analysis (2/7)
+2019-04-12 17:13:38 | PROGRESS: Calling Nucleosome positions - RUNNING
+2019-04-12 17:13:38 | PROGRESS: Calling Nucleosome positions : cellcycleM_chrII.bam (1/2)
+[/usr/bin/Rscript /home/pmes/nucleosome_dynamics/bin/nucleR.R --minoverlap 80 --hthresh 0.4 --dyad_length 50 --type paired --wthresh 0.6 --output /home/pmes/nucleosome_dynamics_MuGVRE/test/test/../example_run/NR_cellcycleM_chrII.gff --width 147 --pcKeepComp 0.02 --thresholdPercentage 35 --input /home/pmes/nucleosome_dynamics_MuGVRE/test/test/../data/cellcycleM_chrII.RData]
+loading data
+filtering duplicated reads
+processing reads
+calculating coverage
+filtering with filterFFT
+detecting peaks
+scoring peaks
+merging peaks
+* Starting space: chrII
+ - Finding overlapped reads
+ - Done (4410 non-overlapped | 954 merged calls)
+saving output as gff
+done
+2019-04-12 17:14:05 | PROGRESS: Calling Nucleosome positions - FINISHED
+==============================================================
+2019-04-12 17:14:05 | PROGRESS: Calling Nucleosome positions - RUNNING
+2019-04-12 17:14:05 | PROGRESS: Calling Nucleosome positions : cellcycleG2_chrII.bam (2/2)
+[/usr/bin/Rscript /home/pmes/nucleosome_dynamics/bin/nucleR.R --minoverlap 80 --hthresh 0.4 --dyad_length 50 --type paired --wthresh 0.6 --output /home/pmes/nucleosome_dynamics_MuGVRE/test/test/../example_run/NR_cellcycleG2_chrII.gff --width 147 --pcKeepComp 0.02 --thresholdPercentage 35 --input /home/pmes/nucleosome_dynamics_MuGVRE/test/test/../data/cellcycleG2_chrII.RData]
+loading data
+filtering duplicated reads
+processing reads
+calculating coverage
+filtering with filterFFT
+detecting peaks
+scoring peaks
+merging peaks
+* Starting space: chrII
+ - Finding overlapped reads
+ - Done (4517 non-overlapped | 815 merged calls)
+saving output as gff
+done
+2019-04-12 17:14:32 | PROGRESS: Calling Nucleosome positions - FINISHED
+==============================================================
+2019-04-12 17:14:32 | PROGRESS: Preparing statistics for Nucleosome Position Calling - RUNNING
+2019-04-12 17:14:32 | PROGRESS: Preparing statistics for Nucleosome Position Calling : cellcycleM_chrII.bam (1/2)
+[/usr/bin/Rscript /home/pmes/nucleosome_dynamics/statistics/nucleR.R --out_genes /home/pmes/nucleosome_dynamics_MuGVRE/test/test/../example_run/NR_cellcycleM_chrII_genes_stats.csv --genome /home/pmes/nucleosome_dynamics_MuGVRE/test/test/../data/refGenomes//R64-1-1/genes.gff --out_gw /home/pmes/nucleosome_dynamics_MuGVRE/test/test/../example_run/NR_cellcycleM_chrII_stats.csv --input /home/pmes/nucleosome_dynamics_MuGVRE/test/test/../example_run/NR_cellcycleM_chrII.gff]
+-- loading used genome
+-- computing statistics per gene
+-- computing statistics genome-wide
+2019-04-12 17:14:37 | PROGRESS: Preparing statistics for Nucleosome Position Calling - FINISHED
+==============================================================
+2019-04-12 17:14:37 | PROGRESS: Preparing statistics for Nucleosome Position Calling - RUNNING
+2019-04-12 17:14:37 | PROGRESS: Preparing statistics for Nucleosome Position Calling : cellcycleG2_chrII.bam (2/2)
+[/usr/bin/Rscript /home/pmes/nucleosome_dynamics/statistics/nucleR.R --out_genes /home/pmes/nucleosome_dynamics_MuGVRE/test/test/../example_run/NR_cellcycleG2_chrII_genes_stats.csv --genome /home/pmes/nucleosome_dynamics_MuGVRE/test/test/../data/refGenomes//R64-1-1/genes.gff --out_gw /home/pmes/nucleosome_dynamics_MuGVRE/test/test/../example_run/NR_cellcycleG2_chrII_stats.csv --input /home/pmes/nucleosome_dynamics_MuGVRE/test/test/../example_run/NR_cellcycleG2_chrII.gff]
+-- loading used genome
+-- computing statistics per gene
+-- computing statistics genome-wide
+2019-04-12 17:14:42 | PROGRESS: Preparing statistics for Nucleosome Position Calling - FINISHED
+==============================================================
+2019-04-12 17:14:42 | PROGRESS: NFR - starting analysis (3/7)
+2019-04-12 17:14:42 | PROGRESS: Looking for Nucleosome Free Regions - RUNNING
+2019-04-12 17:14:42 | PROGRESS: Looking for Nucleosome Free Regions : cellcycleM_chrII.bam (1/2)
+[/usr/bin/Rscript /home/pmes/nucleosome_dynamics/bin/NFR.R --output /home/pmes/nucleosome_dynamics_MuGVRE/test/test/../example_run/NFR_cellcycleM_chrII.gff --threshold 140 --input /home/pmes/nucleosome_dynamics_MuGVRE/test/test/../example_run/NR_cellcycleM_chrII.gff --minwidth 110]
+-- reading input
+-- looking for Nucleosome Free regions
+-- saving gff output
+2019-04-12 17:14:45 | PROGRESS: Looking for Nucleosome Free Regions - FINISHED
+==============================================================
+2019-04-12 17:14:45 | PROGRESS: Looking for Nucleosome Free Regions - RUNNING
+2019-04-12 17:14:45 | PROGRESS: Looking for Nucleosome Free Regions : cellcycleG2_chrII.bam (2/2)
+[/usr/bin/Rscript /home/pmes/nucleosome_dynamics/bin/NFR.R --output /home/pmes/nucleosome_dynamics_MuGVRE/test/test/../example_run/NFR_cellcycleG2_chrII.gff --threshold 140 --input /home/pmes/nucleosome_dynamics_MuGVRE/test/test/../example_run/NR_cellcycleG2_chrII.gff --minwidth 110]
+-- reading input
+-- looking for Nucleosome Free regions
+-- saving gff output
+2019-04-12 17:14:49 | PROGRESS: Looking for Nucleosome Free Regions - FINISHED
+==============================================================
+2019-04-12 17:14:49 | PROGRESS: Preparing statistics for Nucleosome Free Regions analysis - RUNNING
+2019-04-12 17:14:49 | PROGRESS: Preparing statistics for Nucleosome Free Regions analysis : cellcycleM_chrII.bam (1/2)
+[/usr/bin/Rscript /home/pmes/nucleosome_dynamics/statistics/NFR.R --genome /home/pmes/nucleosome_dynamics_MuGVRE/test/test/../data/refGenomes//R64-1-1/genes.gff --out_gw /home/pmes/nucleosome_dynamics_MuGVRE/test/test/../example_run/NFR_cellcycleM_chrII_stats.csv --input /home/pmes/nucleosome_dynamics_MuGVRE/test/test/../example_run/NFR_cellcycleM_chrII.gff]
+-- computing statistics genome-wide
+2019-04-12 17:14:51 | PROGRESS: Preparing statistics for Nucleosome Free Regions analysis - FINISHED
+==============================================================
+2019-04-12 17:14:51 | PROGRESS: Preparing statistics for Nucleosome Free Regions analysis - RUNNING
+2019-04-12 17:14:51 | PROGRESS: Preparing statistics for Nucleosome Free Regions analysis : cellcycleG2_chrII.bam (2/2)
+[/usr/bin/Rscript /home/pmes/nucleosome_dynamics/statistics/NFR.R --genome /home/pmes/nucleosome_dynamics_MuGVRE/test/test/../data/refGenomes//R64-1-1/genes.gff --out_gw /home/pmes/nucleosome_dynamics_MuGVRE/test/test/../example_run/NFR_cellcycleG2_chrII_stats.csv --input /home/pmes/nucleosome_dynamics_MuGVRE/test/test/../example_run/NFR_cellcycleG2_chrII.gff]
+-- computing statistics genome-wide
+2019-04-12 17:14:54 | PROGRESS: Preparing statistics for Nucleosome Free Regions analysis - FINISHED
+==============================================================
+2019-04-12 17:14:54 | PROGRESS: txstart - starting analysis (4/7)
+2019-04-12 17:14:54 | PROGRESS: Classifying Transcription Start Sites - RUNNING
+2019-04-12 17:14:54 | PROGRESS: Classifying Transcription Start Sites : cellcycleM_chrII.bam (1/2)
+[/usr/bin/Rscript /home/pmes/nucleosome_dynamics/bin/txstart.R --output /home/pmes/nucleosome_dynamics_MuGVRE/test/test/../example_run/TSS_cellcycleM_chrII.gff --genome /home/pmes/nucleosome_dynamics_MuGVRE/test/test/../data/refGenomes//R64-1-1/genes.gff --calls /home/pmes/nucleosome_dynamics_MuGVRE/test/test/../example_run/NR_cellcycleM_chrII.gff --open_thresh 215 --window 300]
+-- loading inputs
+-- loading used genome
+-- checking the classes
+chrI
+chrII
+10/389
+20/389
+30/389
+40/389
+50/389
+60/389
+70/389
+80/389
+90/389
+100/389
+110/389
+120/389
+130/389
+140/389
+150/389
+160/389
+170/389
+180/389
+190/389
+200/389
+210/389
+220/389
+230/389
+240/389
+250/389
+260/389
+270/389
+280/389
+290/389
+300/389
+310/389
+320/389
+330/389
+340/389
+350/389
+360/389
+370/389
+380/389
+chrIII
+chrIV
+chrIX
+chrM
+chrV
+chrVI
+chrVII
+chrVIII
+chrX
+chrXI
+chrXII
+chrXIII
+chrXIV
+chrXV
+chrXVI
+-- saving gff output
+2019-04-12 17:15:47 | PROGRESS: Classifying Transcription Start Sites - FINISHED
+==============================================================
+2019-04-12 17:15:47 | PROGRESS: Classifying Transcription Start Sites - RUNNING
+2019-04-12 17:15:47 | PROGRESS: Classifying Transcription Start Sites : cellcycleG2_chrII.bam (2/2)
+[/usr/bin/Rscript /home/pmes/nucleosome_dynamics/bin/txstart.R --output /home/pmes/nucleosome_dynamics_MuGVRE/test/test/../example_run/TSS_cellcycleG2_chrII.gff --genome /home/pmes/nucleosome_dynamics_MuGVRE/test/test/../data/refGenomes//R64-1-1/genes.gff --calls /home/pmes/nucleosome_dynamics_MuGVRE/test/test/../example_run/NR_cellcycleG2_chrII.gff --open_thresh 215 --window 300]
+-- loading inputs
+-- loading used genome
+-- checking the classes
+chrI
+chrII
+10/389
+20/389
+30/389
+40/389
+50/389
+60/389
+70/389
+80/389
+90/389
+100/389
+110/389
+120/389
+130/389
+140/389
+150/389
+160/389
+170/389
+180/389
+190/389
+200/389
+210/389
+220/389
+230/389
+240/389
+250/389
+260/389
+270/389
+280/389
+290/389
+300/389
+310/389
+320/389
+330/389
+340/389
+350/389
+360/389
+370/389
+380/389
+chrIII
+chrIV
+chrIX
+chrM
+chrV
+chrVI
+chrVII
+chrVIII
+chrX
+chrXI
+chrXII
+chrXIII
+chrXIV
+chrXV
+chrXVI
+-- saving gff output
+2019-04-12 17:16:39 | PROGRESS: Classifying Transcription Start Sites - FINISHED
+==============================================================
+2019-04-12 17:16:39 | PROGRESS: Preparing statitics for Transcription Start Sites Classification - RUNNING
+2019-04-12 17:16:39 | PROGRESS: Preparing statitics for Transcription Start Sites Classification : cellcycleM_chrII.bam (1/2)
+[/usr/bin/Rscript /home/pmes/nucleosome_dynamics/statistics/txstart.R --out_gw2 /home/pmes/nucleosome_dynamics_MuGVRE/test/test/../example_run/TSS_cellcycleM_chrII_stats2.png --out_genes /home/pmes/nucleosome_dynamics_MuGVRE/test/test/../example_run/TSS_cellcycleM_chrII_genes_stats.csv --genome /home/pmes/nucleosome_dynamics_MuGVRE/test/test/../data/refGenomes//R64-1-1/genes.gff --out_gw /home/pmes/nucleosome_dynamics_MuGVRE/test/test/../example_run/TSS_cellcycleM_chrII_stats1.png --input /home/pmes/nucleosome_dynamics_MuGVRE/test/test/../example_run/TSS_cellcycleM_chrII.gff]
+-- loading used genome
+-- computing statistics per gene
+-- computing statistics genome-wide
+Warning message:
+NAs introduced by coercion
+Warning message:
+Removed 1 rows containing non-finite values (stat_density).
+2019-04-12 17:16:44 | PROGRESS: Preparing statitics for Transcription Start Sites Classification - FINISHED
+==============================================================
+2019-04-12 17:16:44 | PROGRESS: Preparing statitics for Transcription Start Sites Classification - RUNNING
+2019-04-12 17:16:44 | PROGRESS: Preparing statitics for Transcription Start Sites Classification : cellcycleG2_chrII.bam (2/2)
+[/usr/bin/Rscript /home/pmes/nucleosome_dynamics/statistics/txstart.R --out_gw2 /home/pmes/nucleosome_dynamics_MuGVRE/test/test/../example_run/TSS_cellcycleG2_chrII_stats2.png --out_genes /home/pmes/nucleosome_dynamics_MuGVRE/test/test/../example_run/TSS_cellcycleG2_chrII_genes_stats.csv --genome /home/pmes/nucleosome_dynamics_MuGVRE/test/test/../data/refGenomes//R64-1-1/genes.gff --out_gw /home/pmes/nucleosome_dynamics_MuGVRE/test/test/../example_run/TSS_cellcycleG2_chrII_stats1.png --input /home/pmes/nucleosome_dynamics_MuGVRE/test/test/../example_run/TSS_cellcycleG2_chrII.gff]
+-- loading used genome
+-- computing statistics per gene
+-- computing statistics genome-wide
+Warning message:
+NAs introduced by coercion
+Warning message:
+Removed 1 rows containing non-finite values (stat_density).
+2019-04-12 17:16:49 | PROGRESS: Preparing statitics for Transcription Start Sites Classification - FINISHED
+==============================================================
+2019-04-12 17:16:49 | PROGRESS: periodicity - starting analysis (5/7)
+2019-04-12 17:16:49 | PROGRESS: Computing Nucleosome Phasing on gene bodies - RUNNING
+2019-04-12 17:16:49 | PROGRESS: Computing Nucleosome Phasing on gene bodies : cellcycleM_chrII.bam (1/2)
+[/usr/bin/Rscript /home/pmes/nucleosome_dynamics/bin/periodicity.R --gffOutput /home/pmes/nucleosome_dynamics_MuGVRE/test/test/../example_run/P_cellcycleM_chrII.gff --genes /home/pmes/nucleosome_dynamics_MuGVRE/test/test/../data/refGenomes//R64-1-1/genes.gff --bwOutput /home/pmes/nucleosome_dynamics_MuGVRE/test/test/../example_run/P_cellcycleM_chrII.bw --periodicity 165 --type paired --calls /home/pmes/nucleosome_dynamics_MuGVRE/test/test/../example_run/NR_cellcycleM_chrII.gff --chrom_sizes /home/pmes/nucleosome_dynamics_MuGVRE/test/test/../data/refGenomes//R64-1-1/R64-1-1.fa.chrom.sizes --reads /home/pmes/nucleosome_dynamics_MuGVRE/test/test/../data/cellcycleM_chrII.RData]
+loading genes
+reading calls
+calculating coverage
+identifying first and last nucleosomes
+writing GFF
+writing bigWig output
+2019-04-12 17:17:08 | PROGRESS: Computing Nucleosome Phasing on gene bodies - FINISHED
+==============================================================
+2019-04-12 17:17:08 | PROGRESS: Computing Nucleosome Phasing on gene bodies - RUNNING
+2019-04-12 17:17:08 | PROGRESS: Computing Nucleosome Phasing on gene bodies : cellcycleG2_chrII.bam (2/2)
+[/usr/bin/Rscript /home/pmes/nucleosome_dynamics/bin/periodicity.R --gffOutput /home/pmes/nucleosome_dynamics_MuGVRE/test/test/../example_run/P_cellcycleG2_chrII.gff --genes /home/pmes/nucleosome_dynamics_MuGVRE/test/test/../data/refGenomes//R64-1-1/genes.gff --bwOutput /home/pmes/nucleosome_dynamics_MuGVRE/test/test/../example_run/P_cellcycleG2_chrII.bw --periodicity 165 --type paired --calls /home/pmes/nucleosome_dynamics_MuGVRE/test/test/../example_run/NR_cellcycleG2_chrII.gff --chrom_sizes /home/pmes/nucleosome_dynamics_MuGVRE/test/test/../data/refGenomes//R64-1-1/R64-1-1.fa.chrom.sizes --reads /home/pmes/nucleosome_dynamics_MuGVRE/test/test/../data/cellcycleG2_chrII.RData]
+loading genes
+reading calls
+calculating coverage
+identifying first and last nucleosomes
+writing GFF
+writing bigWig output
+2019-04-12 17:17:30 | PROGRESS: Computing Nucleosome Phasing on gene bodies - FINISHED
+==============================================================
+2019-04-12 17:17:30 | PROGRESS: Preparing statistics for Nucleosome Gene Phasing Analysis - RUNNING
+2019-04-12 17:17:30 | PROGRESS: Preparing statistics for Nucleosome Gene Phasing Analysis : cellcycleM_chrII.bam (1/2)
+[/usr/bin/Rscript /home/pmes/nucleosome_dynamics/statistics/periodicity.R --out_genes /home/pmes/nucleosome_dynamics_MuGVRE/test/test/../example_run/P_cellcycleM_chrII_genes_stats.csv --genome /home/pmes/nucleosome_dynamics_MuGVRE/test/test/../data/refGenomes//R64-1-1/genes.gff --out_gw /home/pmes/nucleosome_dynamics_MuGVRE/test/test/../example_run/P_cellcycleM_chrII_stats.csv --input /home/pmes/nucleosome_dynamics_MuGVRE/test/test/../example_run/P_cellcycleM_chrII.gff]
+-- loading used genome
+-- computing statistics per gene
+-- computing statistics genome-wide
+2019-04-12 17:17:35 | PROGRESS: Preparing statistics for Nucleosome Gene Phasing Analysis - FINISHED
+==============================================================
+2019-04-12 17:17:35 | PROGRESS: Preparing statistics for Nucleosome Gene Phasing Analysis - RUNNING
+2019-04-12 17:17:35 | PROGRESS: Preparing statistics for Nucleosome Gene Phasing Analysis : cellcycleG2_chrII.bam (2/2)
+[/usr/bin/Rscript /home/pmes/nucleosome_dynamics/statistics/periodicity.R --out_genes /home/pmes/nucleosome_dynamics_MuGVRE/test/test/../example_run/P_cellcycleG2_chrII_genes_stats.csv --genome /home/pmes/nucleosome_dynamics_MuGVRE/test/test/../data/refGenomes//R64-1-1/genes.gff --out_gw /home/pmes/nucleosome_dynamics_MuGVRE/test/test/../example_run/P_cellcycleG2_chrII_stats.csv --input /home/pmes/nucleosome_dynamics_MuGVRE/test/test/../example_run/P_cellcycleG2_chrII.gff]
+-- loading used genome
+-- computing statistics per gene
+-- computing statistics genome-wide
+2019-04-12 17:17:39 | PROGRESS: Preparing statistics for Nucleosome Gene Phasing Analysis - FINISHED
+==============================================================
+2019-04-12 17:17:39 | PROGRESS: gausfitting - starting analysis (6/7)
+2019-04-12 17:17:39 | PROGRESS: Estimating Nucleosome Stiffness constants - RUNNING
+2019-04-12 17:17:39 | PROGRESS: Estimating Nucleosome Stiffness constants : cellcycleM_chrII.bam (1/2)
+[/usr/bin/Rscript /home/pmes/nucleosome_dynamics/bin/stiffness.R --output /home/pmes/nucleosome_dynamics_MuGVRE/test/test/../example_run/STF_cellcycleM_chrII.gff --calls /home/pmes/nucleosome_dynamics_MuGVRE/test/test/../example_run/NR_cellcycleM_chrII.gff --reads /home/pmes/nucleosome_dynamics_MuGVRE/test/test/../data/cellcycleM_chrII.RData]
+loading inputs
+performing the fittings
+2019-04-12 17:18:57 | PROGRESS: Estimating Nucleosome Stiffness constants - FINISHED
+==============================================================
+2019-04-12 17:18:57 | PROGRESS: Estimating Nucleosome Stiffness constants - RUNNING
+2019-04-12 17:18:57 | PROGRESS: Estimating Nucleosome Stiffness constants : cellcycleG2_chrII.bam (2/2)
+[/usr/bin/Rscript /home/pmes/nucleosome_dynamics/bin/stiffness.R --output /home/pmes/nucleosome_dynamics_MuGVRE/test/test/../example_run/STF_cellcycleG2_chrII.gff --calls /home/pmes/nucleosome_dynamics_MuGVRE/test/test/../example_run/NR_cellcycleG2_chrII.gff --reads /home/pmes/nucleosome_dynamics_MuGVRE/test/test/../data/cellcycleG2_chrII.RData]
+loading inputs
+performing the fittings
+2019-04-12 17:20:45 | PROGRESS: Estimating Nucleosome Stiffness constants - FINISHED
+==============================================================
+2019-04-12 17:20:45 | PROGRESS: Preparing statistics for Nucleosome Stiffness Analysis - RUNNING
+2019-04-12 17:20:45 | PROGRESS: Preparing statistics for Nucleosome Stiffness Analysis : cellcycleM_chrII.bam (1/2)
+[/usr/bin/Rscript /home/pmes/nucleosome_dynamics/statistics/stiffness.R --out_gw2 /home/pmes/nucleosome_dynamics_MuGVRE/test/test/../example_run/STF_cellcycleM_chrII_stats2.png --out_genes /home/pmes/nucleosome_dynamics_MuGVRE/test/test/../example_run/STF_cellcycleM_chrII_genes_stats.csv --genome /home/pmes/nucleosome_dynamics_MuGVRE/test/test/../data/refGenomes//R64-1-1/genes.gff --out_gw /home/pmes/nucleosome_dynamics_MuGVRE/test/test/../example_run/STF_cellcycleM_chrII_stats1.csv --input /home/pmes/nucleosome_dynamics_MuGVRE/test/test/../example_run/STF_cellcycleM_chrII.gff]
+-- loading used genome
+-- computing statistics per gene
+-- computing statistics genome-wide
+2019-04-12 17:20:51 | PROGRESS: Preparing statistics for Nucleosome Stiffness Analysis - FINISHED
+==============================================================
+2019-04-12 17:20:51 | PROGRESS: Preparing statistics for Nucleosome Stiffness Analysis - RUNNING
+2019-04-12 17:20:51 | PROGRESS: Preparing statistics for Nucleosome Stiffness Analysis : cellcycleG2_chrII.bam (2/2)
+[/usr/bin/Rscript /home/pmes/nucleosome_dynamics/statistics/stiffness.R --out_gw2 /home/pmes/nucleosome_dynamics_MuGVRE/test/test/../example_run/STF_cellcycleG2_chrII_stats2.png --out_genes /home/pmes/nucleosome_dynamics_MuGVRE/test/test/../example_run/STF_cellcycleG2_chrII_genes_stats.csv --genome /home/pmes/nucleosome_dynamics_MuGVRE/test/test/../data/refGenomes//R64-1-1/genes.gff --out_gw /home/pmes/nucleosome_dynamics_MuGVRE/test/test/../example_run/STF_cellcycleG2_chrII_stats1.csv --input /home/pmes/nucleosome_dynamics_MuGVRE/test/test/../example_run/STF_cellcycleG2_chrII.gff]
+-- loading used genome
+-- computing statistics per gene
+-- computing statistics genome-wide
+2019-04-12 17:20:58 | PROGRESS: Preparing statistics for Nucleosome Stiffness Analysis - FINISHED
+==============================================================
+2019-04-12 17:20:58 | PROGRESS: nucDyn - starting analysis (7/7)
+2019-04-12 17:20:58 | PROGRESS: Analysing Nucleosome Dynamics - RUNNING
+2019-04-12 17:20:58 | PROGRESS: Analysing Nucleosome Dynamics : cellcycleG2_chrII.bam & cellcycleM_chrII.bam (1/1)
+[/usr/bin/Rscript /home/pmes/nucleosome_dynamics/bin/nucDyn.R --input2 /home/pmes/nucleosome_dynamics_MuGVRE/test/test/../data/cellcycleM_chrII.RData --indel_threshold 0.05 --calls2 /home/pmes/nucleosome_dynamics_MuGVRE/test/test/../example_run/NR_cellcycleM_chrII.gff --shift_threshold 0.1 --outputGff /home/pmes/nucleosome_dynamics_MuGVRE/test/test/../example_run/ND_cellcycleG2_chrII_cellcycleM_chrII.gff --calls1 /home/pmes/nucleosome_dynamics_MuGVRE/test/test/../example_run/NR_cellcycleG2_chrII.gff --input1 /home/pmes/nucleosome_dynamics_MuGVRE/test/test/../data/cellcycleG2_chrII.RData --range All --indel_min_nreads 3 --genome /home/pmes/nucleosome_dynamics_MuGVRE/test/test/../data/refGenomes//R64-1-1/R64-1-1.fa.chrom.sizes --outputBigWig /home/pmes/nucleosome_dynamics_MuGVRE/test/test/../example_run/ND_cellcycleG2_chrII_cellcycleM_chrII.bw --plotRData /home/pmes/nucleosome_dynamics_MuGVRE/test/test/../example_run/ND_cellcycleG2_chrII_cellcycleM_chrII_plot.RData --shift_min_nreads 3 --maxLen 140 --maxDiff 70]
+loading and subsetting reads
+running NucleosomeDynamics
+Starting chrII
+chrII done
+Combining the calculations from different chromosomes...
+building structure to be saved for future plotting
+loading nucleosome calls
+finding hotspots
+Starting chrII
+chrII done
+calculate p-val
+saving output as gff
+saving bigWig output
+done
+2019-04-12 17:24:06 | PROGRESS: Analysing Nucleosome Dynamics - FINISHED
+==============================================================
+2019-04-12 17:24:06 | PROGRESS: Preparing statistics for Nucleosome Dynamics Analysis - RUNNING
+2019-04-12 17:24:06 | PROGRESS: Preparing statistics for Nucleosome Dynamics Analysis : cellcycleG2_chrII.bam & cellcycleM_chrII.bam (1/1)
+[/usr/bin/Rscript /home/pmes/nucleosome_dynamics/statistics/nucDyn.R --out_genes /home/pmes/nucleosome_dynamics_MuGVRE/test/test/../example_run/ND_cellcycleG2_chrII_cellcycleM_chrII_genes_stats.csv --genome /home/pmes/nucleosome_dynamics_MuGVRE/test/test/../data/refGenomes//R64-1-1/genes.gff --out_gw /home/pmes/nucleosome_dynamics_MuGVRE/test/test/../example_run/ND_cellcycleG2_chrII_cellcycleM_chrII_stats.png --input /home/pmes/nucleosome_dynamics_MuGVRE/test/test/../example_run/ND_cellcycleG2_chrII_cellcycleM_chrII.gff]
+-- loading used genome
+-- computing statistics per gene
+-- computing statistics genome-wide
+2019-04-12 17:24:17 | PROGRESS: Preparing statistics for Nucleosome Dynamics Analysis - FINISHED
+==============================================================
+2019-04-12 17:24:17 | INFO: Writting down output files metadata into /home/pmes/nucleosome_dynamics_MuGVRE/test/test/../example_run/out_metadata.json
