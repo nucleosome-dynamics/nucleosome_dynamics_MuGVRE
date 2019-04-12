@@ -48,17 +48,22 @@ MuGVRE [documentation](http://multiscalegenomics.eu/MuGVRE/instructions/) includ
 
 ##### Running 'Nucleosome Dynamics' tool
 
-MUGVRE platform interacts with `nucleosome_dynamics.py` through a set of configuration JSON files that contains the rellevant information on the web-user input files and arguments for a certain run. Also includes the data for the expected output files. The script sequencially runs 'Nucleosome Dynamics CLI' according these configuration files to end up executing a custom Nucleosome Dynamics workflow.
+'Nucleosome Dynamics' tool is mean to be executed though the MuGVRE web interface. Yet, for checking this code integrity, the 'test/' folder contains a simple bash script and the required sample data that emulates how  MuGVRE server deals with a tool execution. 
+
+MUGVRE platform interacts with a tool through a main wrapper, here `nucleosome_dynamics.py`. It always take as inputs a set of configuration JSON files that contains the rellevant information gathered from the web-user (input files and arguments) for a particular run. Also includes the data for the expected output files. For nucleosome dynamics, the script sequencially runs 'Nucleosome Dynamics CLI' according the given configuration files to end up executing a tailored Nucleosome Dynamics workflow based on the web-user indications.
 
 Arguments
-* config: JSON file containing workflow parameters
-* in_metadata: JSON file containing MuG metadata files
+* config: JSON file containing the run parameters, working directory, analyses to be performed, and their specific arguments 
+* in_metadata: JSON file containing MuG metadata attached to each of the web-user input files
 * out_metadata: Filename for the JSON that will contain output file metadata
 * log_file: Filename for the log file
 
-The following bash script runs `nucleosome_dynamics.py` with the sample MNase-seq data found at `test/data`.
+The following bash script runs the MuGVRE tool (nucleosome_dynamics.py) with the the configuration files set to read the MNase-seq sample data found at `test/data`.
+
 ```sh
-cd test/
+cd test/test
 bash test_0_AnalyseMNaseseqdata.sh
 ```
+
+The `test/test` content has been automatically created by MuGVRE during the tool integration procedure (http://multiscalegenomics.eu/MuGVRE/instructions/) in order to check that VRE prepares the right configuration files based on the given tool definition. In this way, tool developers can easily check whether the MUGVRE tool (here nucleosome_dynamics.py) correctly fits the MuGVRE job processing.
 

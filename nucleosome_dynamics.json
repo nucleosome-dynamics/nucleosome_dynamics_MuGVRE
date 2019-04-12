@@ -36,7 +36,7 @@
     "infrastructure" : {
         "memory" : 50, 
         "cpus" : 2, 
-        "executable" : "/home/pmes/nucleServ/nucleosome_dynamics.py", 
+        "executable" : "/absolute/path/to/nucleosome_dynamics_MuGVRE/nucleosome_dynamics.py", 
         "interpreter" : "python3", 
         "clouds" : {
             "mug-irb" : {

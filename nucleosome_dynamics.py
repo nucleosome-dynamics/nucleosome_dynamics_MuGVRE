@@ -18,7 +18,7 @@ from mg_tool_api.utils import logger
 ###############################################################################
 
 RPATH = "/usr/bin/Rscript"
-BIN_BASE = "/home/pmes/nucleServ"
+BIN_BASE = "/home/pmes/nucleosome_dynamics"
 GENOME_PATH_NAME = "refGenome_chromSizes"
 
 ###############################################################################
@@ -510,7 +510,7 @@ class gauss(IterOnInfs, Bin):
     """
     Gaussian fittness and stiffness constant estimation
     """
-    exec_name = "gausfitting"
+    exec_name = "stiffness"
     exec_descrip = "Estimating Nucleosome Stiffness constants"
     names = "MNaseSeq",
 
